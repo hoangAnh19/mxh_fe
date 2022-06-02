@@ -1,87 +1,87 @@
 <template>
-  <div class="updateProfile">
-      <Header v-bind:user="user"/>
-    <div class="body container">
-     UpdateProfile
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      1
-      <AsideLeft />
-      <Main />
-      <AsideRight />
+    <div class="updateProfile">
+        <Header v-bind:user="user" />
+        <div class="body container">
+            UpdateProfile
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            1
+            <AsideLeft />
+            <Main />
+            <AsideRight />
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -89,18 +89,18 @@
 import Header from "@/components/Header.vue";
 
 export default {
-  name: "UpdateProfile",
-  created() {
-    this.user = JSON.parse(localStorage.getItem("userInfo"))
-  },
-  components: {
-    Header,
-  },
+    name: "UpdateProfile",
+    created() {
+        this.user = JSON.parse(localStorage.getItem("userInfo"));
+    },
+    components: {
+        Header,
+    },
 };
 </script>
 <style scoped lang="scss">
 .body {
-  position: relative;
-  top: 120px;
+    position: relative;
+    top: 120px;
 }
 </style>

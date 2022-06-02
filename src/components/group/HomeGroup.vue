@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+    <div></div>
 </template>
 <script>
 // @ is an alias to /src
@@ -7,27 +7,17 @@
 // import config from "@/config";
 // import EventBus from "@/EventBus.js";
 export default {
-  name: "HomeGroup",
-  props: {
-  },
-  created() {
-  },
-  mounted() {
+    name: "HomeGroup",
+    props: {},
+    created() {},
+    mounted() {},
 
-  },
+    data() {
+        return {};
+    },
+    watch: {},
 
-  data() {
-    return {
-
-    };
-  },
-  watch: {},
-
-  methods: {
-
-  },
+    methods: {},
 };
 </script>
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
