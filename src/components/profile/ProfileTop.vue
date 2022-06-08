@@ -10,15 +10,33 @@
             v-else
             src="@/assets/image/default-user-avatar.png"
         />
+
         <div class="row cover">
             <b-col class="p-0" cols="12">
                 <img
                     v-if="user.cover"
                     class="cover"
-                    :src="'http://127.0.0.1:8000/tmp_images/' + user.cover"
+                    :src="'http://127.0.0.1:80/tmp_images/' + user.cover"
                 />
             </b-col>
         </div>
+        <b-dropdown img src="@/assets/image/default-user-avatar.png" alt="">
+            <button
+                class="btn btn-primary"
+                v-on:click="selectButtonImage"
+                style="width: 100%"
+            >
+                Cập nhật ảnh đại diện
+            </button>
+            <button
+                class="btn btn-secondary"
+                v-on:click="changeModal()"
+                style="width: 100%"
+            >
+                Cập nhật ảnh bìa {{ this.modal }}
+            </button>
+            <button class="btn btn-secondary">{{ this.modal }}</button>
+        </b-dropdown>
         <div class="row content mt-5 pt-4">
             <b-col cols="12">
                 <div class="user-name h3 fw-bold">
@@ -192,6 +210,154 @@
             </b-col>
         </div>
     </div>
+
+    <div>
+        <div class="modal1"></div>
+
+        <div v-if="modal">
+            <div class="modal1"></div>
+            <div class="modal-dialog1">
+                <div class="modal-content1" v-click-outside="closeModal">
+                    <div class="header-form-post">
+                        <b-row>
+                            <b-col class="avatar" cols="1">
+                                <img
+                                    v-if="owner.avatar"
+                                    :src="
+                                        'http://127.0.0.1:80/tmp_images/' +
+                                        owner.avatar
+                                    "
+                                />
+                                <img
+                                    v-else
+                                    src="@/assets/image/default-user-avatar.png"
+                                />
+                            </b-col>
+                            <b-col
+                                class="position-relative"
+                                cols="4"
+                                style="margin-left: 15px"
+                            >
+                                <span style="float: left; font-weight: 600">{{
+                                    fullname
+                                }}</span>
+                                <br />
+                                <button
+                                    v-on:click="hiddenTypeShow = false"
+                                    class="form-control type-show"
+                                >
+                                    <span v-if="type_show == 1"
+                                        ><b-icon icon="globe"></b-icon> Công
+                                        khai</span
+                                    >
+                                    <span v-if="type_show == 2"
+                                        ><b-icon icon="people"></b-icon> Bạn
+                                        bè</span
+                                    >
+                                    <span v-if="type_show == 3"
+                                        ><b-icon icon="lock"></b-icon> Chỉ mình
+                                        tôi</span
+                                    >
+                                    <span v-if="type_show == 4"
+                                        ><b-icon icon="person"></b-icon> Bạn bè
+                                        cụ thể</span
+                                    >
+                                    <span v-if="type_show == 5"
+                                        ><b-icon icon="person-dash"></b-icon>
+                                        Bạn bè trừ</span
+                                    >
+                                </button>
+                                <ul
+                                    v-if="!hiddenTypeShow"
+                                    v-click-outside="hideShow"
+                                    class="list-group list-type-show position-absolute"
+                                >
+                                    <li
+                                        v-on:click="hideShow(1)"
+                                        class="list-item"
+                                    >
+                                        <b-icon icon="globe"></b-icon> Công khai
+                                    </li>
+                                    <li
+                                        v-on:click="hideShow(2)"
+                                        class="list-item"
+                                    >
+                                        <b-icon icon="people"></b-icon> Bạn bè
+                                    </li>
+                                    <li
+                                        v-on:click="hideShow(3)"
+                                        class="list-item"
+                                    >
+                                        <b-icon icon="lock"></b-icon> Chỉ mình
+                                        tôi
+                                    </li>
+                                    <li
+                                        v-on:click="hideShow(4)"
+                                        class="list-item"
+                                    >
+                                        <b-icon icon="person"></b-icon> Bạn bè
+                                        cụ thể
+                                    </li>
+                                    <li
+                                        v-on:click="hideShow(5)"
+                                        class="list-item"
+                                    >
+                                        <b-icon icon="person-dash"></b-icon> Bạn
+                                        bè trừ
+                                    </li>
+                                </ul>
+                            </b-col>
+                            <b-col>
+                                <b-icon
+                                    icon="x-circle"
+                                    v-on:click="closeModal"
+                                    style="float: right"
+                                ></b-icon>
+                            </b-col>
+                        </b-row>
+                    </div>
+                    <div class="content-form-post">
+                        <textarea
+                            v-model="dataPost"
+                            class="content"
+                            placeholder="Bạn đang nghĩ gì"
+                            rows="10"
+                            cols="50"
+                        ></textarea>
+                        <div v-if="images.length">
+                            <img
+                                class="image"
+                                v-for="image in images"
+                                :key="image"
+                                :src="'http://127.0.0.1:80/tmp_images/' + image"
+                            />
+                        </div>
+                    </div>
+                    <div class="footer-form-post">
+                        <button
+                            class="btn btn-primary mt-1"
+                            v-on:click="savePost"
+                            style="width: 100%"
+                        >
+                            Đăng
+                        </button>
+                        <input
+                            ref="inputImage"
+                            hidden
+                            type="file"
+                            v-on:change="uploadImage($event)"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input
+            ref="inputImage"
+            hidden
+            type="file"
+            v-on:change="uploadImage($event)"
+        />
+    </div>
 </template>
 
 <script>
@@ -217,6 +383,12 @@ export default {
             drop_friend: false,
             drop_setting: false,
             component: 1,
+            owner: {},
+            modal: false,
+            type_show: 1,
+            hiddenTypeShow: true,
+            images: [],
+            dataPost: "",
         };
     },
     watch: {},
@@ -357,6 +529,42 @@ export default {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
                 });
         },
+        selectButtonImage() {
+            this.$refs.inputImage.click();
+        },
+        uploadImage(event) {
+            if (
+                !(
+                    event.target.files[0].type === "image/jpeg" ||
+                    event.target.files[0].type === "image/png"
+                )
+            ) {
+                alert("Ảnh không đúng định dạng");
+                return;
+            }
+            var formData = new FormData();
+            formData.append("image", event.target.files[0]);
+            Axios.post("image/upload", formData)
+                .then((response) => {
+                    if (response.data.status == "success") {
+                        this.images.push(response.data.data);
+                    } else {
+                        alert(response.data.message);
+                    }
+                })
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
+                });
+        },
+        closeModal() {
+            this.modal = false;
+            this.hiddenTypeShow = true;
+        },
+        changeModal() {
+            console.log(this.modal);
+            this.modal = true;
+            console.log(this.modal);
+        },
     },
 };
 </script>
@@ -414,5 +622,50 @@ a {
 .drop_setting {
     left: -30px;
     right: -50px;
+}
+
+.modal-dialog1 {
+    margin: auto;
+    z-index: 51;
+    position: fixed;
+    width: 30%;
+    top: 15%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.modal-content1 {
+    position: relative;
+    width: 100%;
+    padding: 10px;
+    min-height: 500px;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.3rem;
+    outline: 0;
+}
+.type-show {
+    // wid
+    height: 30px;
+    padding: 0;
+    width: 85%;
+    text-align: left;
+    padding-left: 10px;
+}
+.content {
+    border: 0;
+    margin-top: 10px;
+    border-top: 1px solid #f5f5ff;
+}
+.content:focus {
+    outline: none;
+}
+.image {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+    float: left;
 }
 </style>

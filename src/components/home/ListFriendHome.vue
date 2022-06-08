@@ -25,7 +25,7 @@
                             <img
                                 v-if="user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:80/tmp_images/' +
                                     user.avatar
                                 "
                             />

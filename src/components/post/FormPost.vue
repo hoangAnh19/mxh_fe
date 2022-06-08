@@ -7,9 +7,7 @@
                 >
                     <img
                         v-if="owner.avatar"
-                        :src="
-                            'http://127.0.0.1:8000/tmp_images/' + owner.avatar
-                        "
+                        :src="'http://127.0.0.1:80/tmp_images/' + owner.avatar"
                     />
                     <img v-else src="@/assets/image/default-user-avatar.png" />
                 </router-link>
@@ -35,7 +33,7 @@
                             <img
                                 v-if="owner.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:80/tmp_images/' +
                                     owner.avatar
                                 "
                             />
@@ -118,13 +116,14 @@
                         placeholder="Bạn đang nghĩ gì"
                         rows="10"
                         cols="50"
+                        style="width: -webkit-fill-available"
                     ></textarea>
                     <div v-if="images.length">
                         <img
                             class="image"
                             v-for="image in images"
                             :key="image"
-                            :src="'http://127.0.0.1:8000/tmp_images/' + image"
+                            :src="'http://127.0.0.1:80/tmp_images/' + image"
                         />
                     </div>
                 </div>

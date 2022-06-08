@@ -4,9 +4,7 @@
             <div class="avatar">
                 <img
                     v-if="post.user.avatar"
-                    :src="
-                        'http://127.0.0.1:8000/tmp_images/' + post.user.avatar
-                    "
+                    :src="'http://127.0.0.1:80/tmp_images/' + post.user.avatar"
                 />
                 <img v-else src="@/assets/image/default-user-avatar.png" />
             </div>
@@ -83,7 +81,7 @@
                             <img
                                 v-if="post.post_share.user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:80/tmp_images/' +
                                     post.post_share.user.avatar
                                 "
                             />
@@ -343,8 +341,7 @@
                         <img
                             v-if="owner.avatar"
                             :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
-                                owner.avatar
+                                'http://127.0.0.1:80/tmp_images/' + owner.avatar
                             "
                         />
                         <img
@@ -378,7 +375,7 @@
                         <img
                             v-if="comment.user.avatar"
                             :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
+                                'http://127.0.0.1:80/tmp_images/' +
                                 comment.user.avatar
                             "
                         />
@@ -436,7 +433,7 @@
                                     <img
                                         v-if="answer.user.avatar"
                                         :src="
-                                            'http://127.0.0.1:8000/tmp_images/' +
+                                            'http://127.0.0.1:80/tmp_images/' +
                                             answer.user.avatar
                                         "
                                     />
@@ -476,7 +473,7 @@
                                 <img
                                     v-if="owner.avatar"
                                     :src="
-                                        'http://127.0.0.1:8000/tmp_images/' +
+                                        'http://127.0.0.1:80/tmp_images/' +
                                         owner.avatar
                                     "
                                 />
@@ -526,7 +523,7 @@
                                 <img
                                     v-if="post.user.avatar"
                                     :src="
-                                        'http://127.0.0.1:8000/tmp_images/' +
+                                        'http://127.0.0.1:80/tmp_images/' +
                                         post.user.avatar
                                     "
                                 />
@@ -723,7 +720,7 @@
                             <img
                                 v-if="item.user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:80/tmp_images/' +
                                     item.user.avatar
                                 "
                             />
@@ -773,7 +770,7 @@
                             <img
                                 v-if="item.user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:80/tmp_images/' +
                                     item.user.avatar
                                 "
                             />

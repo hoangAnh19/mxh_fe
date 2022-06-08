@@ -4,9 +4,7 @@
             <div class="avatar">
                 <img
                     v-if="post.user.avatar"
-                    :src="
-                        'http://127.0.0.1:8000/tmp_images/' + post.user.avatar
-                    "
+                    :src="'http://127.0.0.1:80/tmp_images/' + post.user.avatar"
                 />
                 <img v-else src="@/assets/image/default-user-avatar.png" />
             </div>

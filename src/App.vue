@@ -28,7 +28,7 @@
                             <img
                                 v-if="item.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:80/tmp_images/' +
                                     item.avatar
                                 "
                             />
@@ -262,7 +262,7 @@ export default {
         });
         const token = window.localStorage.getItem("token");
         await axios
-            .get("http://127.0.0.1:8000/api/userInfo", {
+            .get("http://127.0.0.1:80/api/userInfo", {
                 headers: { Authorization: "Bearer " + token },
             })
             .then(() => {
