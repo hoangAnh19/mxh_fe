@@ -7,6 +7,7 @@
             <FriendRequest v-if="component == 2" />
             <FriendSuggestions v-if="component == 3" />
             <Birthday v-if="component == 4" />
+            <TestFriendVue v-if="component == 5" />
         </div>
     </div>
 </template>
@@ -20,6 +21,7 @@ import ListFriend from "@/components/friend/ListFriend.vue";
 import FriendRequest from "@/components/friend/FriendRequest.vue";
 import FriendSuggestions from "@/components/friend/FriendSuggestions.vue";
 import Birthday from "@/components/friend/Birthday.vue";
+import TestFriendVue from "../components/friend/TestFriend.vue";
 export default {
     name: "Friend",
     mounted() {
@@ -30,7 +32,7 @@ export default {
     data() {
         return {
             ajaxLoadFriend: false,
-            component: 1,
+            component: 5,
         };
     },
     created() {
@@ -44,6 +46,7 @@ export default {
         FriendRequest,
         FriendSuggestions,
         Birthday,
+        TestFriendVue,
     },
 };
 </script>

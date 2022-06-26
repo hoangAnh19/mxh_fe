@@ -1,19 +1,22 @@
 <template>
     <div class="nav-left">
         <div v-on:click="changeComponentFriend(1)" class="item">
-            <b-icon class="icon-item" icon="person-lines-fill"></b-icon> Danh
-            sách bạn bè
+            <b-icon class="icon-item" icon="person-lines-fill"></b-icon>
+            Danh sách bạn bè
         </div>
         <div v-on:click="changeComponentFriend(2)" class="item">
-            <b-icon class="icon-item" icon="person-plus-fill"></b-icon> Lời mời
-            kết bạn
+            <b-icon class="icon-item" icon="person-plus-fill"></b-icon>
+            Lời mời kết bạn
         </div>
         <div v-on:click="changeComponentFriend(3)" class="item">
-            <b-icon class="icon-item" icon="plus-square-fill"></b-icon> Gợi ý
-            kết bạn
+            <b-icon class="icon-item" icon="plus-square-fill"></b-icon>
+            Gợi ý kết bạn
         </div>
         <div v-on:click="changeComponentFriend(4)" class="item">
             <b-icon class="icon-item" icon="calendar-fill"></b-icon> Sinh nhật
+        </div>
+        <div v-on:click="changeComponentFriend(5)" class="item">
+            <b-icon class="icon-item" icon="calendar-fill"></b-icon> Test
         </div>
     </div>
 </template>

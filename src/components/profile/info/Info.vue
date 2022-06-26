@@ -117,6 +117,12 @@
                     ><b-icon icon="x-circle"></b-icon> Hủy</b-col
                 >
             </div>
+            <div class="item row">
+                <UploadAvatar></UploadAvatar>
+            </div>
+            <div class="item row">
+                <UploadBackground></UploadBackground>
+            </div>
         </div>
     </b-col>
     <b-col cols="4">
@@ -441,9 +447,12 @@ import Axios from "@/components/Axios.js";
 import validate from "@/validate";
 import parse from "@/parse";
 import EventBus from "@/EventBus.js";
+import UploadAvatar from "./UploadAvatar.vue";
+import UploadBackground from "./UploadBackground.vue";
 
 export default {
     name: "Info",
+    components: { UploadAvatar, UploadBackground },
     created() {
         var user = JSON.parse(localStorage.getItem("userInfo"));
         this.isOwner = user.id == this.user.id ? true : false;

@@ -1,32 +1,16 @@
 <template>
     <div class="form-post">
         <b-row>
-            <b-col class="item avatar" cols="1">
-                <router-link
-                    :to="{ name: 'Profile', params: { userId: owner.id } }"
-                >
-                    <img
-                        v-if="owner.avatar"
-                        :src="'http://127.0.0.1:80/tmp_images/' + owner.avatar"
-                    />
-                    <img v-else src="@/assets/image/default-user-avatar.png" />
-                </router-link>
+            <b-col class="item btn-post" cols="10" v-on:click="modal = !modal">
+                <span>Thay đổi ảnh đại diện</span>
             </b-col>
-            <b-col class="item btn-post" cols="10" v-on:click="modal = true">
-                <span>Đăng bài viết</span>
-            </b-col>
-            <b-col class="item position-relative icon-image" cols="1"
-                ><b-icon
-                    icon="image"
-                    style="font-size: 35px; margin: auto"
-                ></b-icon
-            ></b-col>
         </b-row>
     </div>
+
     <div v-if="modal">
         <div class="modal1"></div>
         <div class="modal-dialog1">
-            <div class="modal-content1" v-click-outside="closeModal">
+            <div class="modal-content1">
                 <div class="header-form-post">
                     <b-row>
                         <b-col class="avatar" cols="1">
@@ -118,6 +102,7 @@
                         cols="50"
                         style="width: -webkit-fill-available"
                     ></textarea>
+                    {{ modal }}
                     <div v-if="images.length">
                         <img
                             class="image"
@@ -148,6 +133,13 @@
                         type="file"
                         v-on:change="uploadImage($event)"
                     />
+                    <button
+                        class="btn btn-primary mt-1"
+                        style="width: 100%"
+                        v-on:click="closeModal"
+                    >
+                        Huỷ bỏ
+                    </button>
                 </div>
             </div>
         </div>
@@ -157,26 +149,30 @@
 <script>
 // @ is an alias to /src
 import Axios from "@/components/Axios.js";
-import EventBus from "@/EventBus.js";
+// import EventBus from "@/EventBus.js";
 
 export default {
-    name: "FormPost",
+    name: "UploadAvatar",
     components: {},
     props: {
         user: {},
         group: {},
+        showModal: Boolean,
     },
     created() {
         this.owner = JSON.parse(localStorage.getItem("userInfo"));
+        console.log("modal", this.showModal);
+        this.modal = this.showModal;
     },
+
     data() {
         return {
             owner: {},
-            modal: false,
             type_show: 1,
             hiddenTypeShow: true,
             images: [],
             dataPost: "",
+            modal: this.showModal,
         };
     },
     methods: {
@@ -184,46 +180,35 @@ export default {
             this.modal = false;
             this.hiddenTypeShow = true;
         },
+
+
+
+
         async savePost() {
             var formData = new FormData();
-            formData.append("data", this.dataPost);
-            formData.append("type_show", this.type_show);
-            this.images.forEach((image) => {
-                formData.append("images[]", image);
-            });
-            formData.append("type_post", this.type_post ?? 1);
-            if ((this.group ?? {}).id)
-                formData.append("group_id", this.group.id);
-            if ((this.user ?? {}).id != this.owner.id && (this.user ?? {}).id)
-                formData.append("user_id_2", (this.user ?? {}).id);
-            if (this.user_id_tags ?? null)
-                formData.append("user_id_tags", this.user_id_tags);
+            formData.append("avatar", this.images[0]);
 
             for (const pair of formData.entries()) {
                 console.log(`${pair[0]}, ${pair[1]}`);
             }
-
-            await Axios.post("post/create", formData)
+            var object = {};
+            object.avatar = this.images[0];
+            console.log(object);
+            await Axios.put("user/uploadAvatar", object)
                 .then((response) => {
                     if (response.data.status == "success") {
                         this.images = [];
-                        this.dataPost = "";
                         this.modal = false;
-                        if ((this.group ?? {}).type == 2)
-                            alert(
-                                "Bài viết đang chờ admin kiểm duyệt, vui lòng chờ"
-                            );
-                        else {
-                            EventBus.$emit("createPost", response.data.data[0]);
-                        }
+                        this.$router.push({ name: "Home" });
                     } else {
                         alert(response.data.message);
                     }
                 })
                 .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau1");
+                    alert("Đã có lỗi xảy ra khi đăng avatar");
                 });
         },
+
         hideShow(type) {
             this.hiddenTypeShow = true;
             if ([1, 2, 3, 4, 5].includes(type)) {
@@ -233,6 +218,7 @@ export default {
         selectButtonImage() {
             this.$refs.inputImage.click();
         },
+
         uploadImage(event) {
             if (
                 !(

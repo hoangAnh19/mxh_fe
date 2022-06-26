@@ -1,6 +1,6 @@
 <template>
     <div class="cover-auth">
-        <img src="@/assets/mxh01599519584086_5.png" alt="" />
+        <img src="@/assets/mxh01599519584086_5.jpg" alt="" />
     </div>
 </template>
 
@@ -16,7 +16,7 @@ export default {
     flex: 1;
 }
 img {
-    width: 100%;
+    width: 90%;
     height: 100vh;
 }
 </style>
