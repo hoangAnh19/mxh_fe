@@ -4,10 +4,8 @@
         <NavbarLeftFriend />
         <div class="body">
             <ListFriend v-if="component == 1" />
-            <FriendRequest v-if="component == 2" />
-            <FriendSuggestions v-if="component == 3" />
-            <Birthday v-if="component == 4" />
-            <TestFriendVue v-if="component == 5" />
+            <Birthday v-if="component == 2" />
+            <TestFriendVue v-if="component == 3" />
         </div>
     </div>
 </template>
@@ -18,8 +16,6 @@ import Header from "@/components/Header.vue";
 import EventBus from "@/EventBus.js";
 import NavbarLeftFriend from "@/components/friend/NavBarLeftFriend.vue";
 import ListFriend from "@/components/friend/ListFriend.vue";
-import FriendRequest from "@/components/friend/FriendRequest.vue";
-import FriendSuggestions from "@/components/friend/FriendSuggestions.vue";
 import Birthday from "@/components/friend/Birthday.vue";
 import TestFriendVue from "../components/friend/TestFriend.vue";
 export default {
@@ -32,7 +28,7 @@ export default {
     data() {
         return {
             ajaxLoadFriend: false,
-            component: 5,
+            component: 1,
         };
     },
     created() {
@@ -43,8 +39,6 @@ export default {
         Header,
         NavbarLeftFriend,
         ListFriend,
-        FriendRequest,
-        FriendSuggestions,
         Birthday,
         TestFriendVue,
     },

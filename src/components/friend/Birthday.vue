@@ -1,191 +1,215 @@
 <template>
     <div class="list-birthday">
-        <div v-if="months['yesterday'].length" class="yesterday form-month">
-            <div class="h4 title">Sinh nhật gần đây</div>
-            <div
-                v-for="(friend, index) in months['yesterday']"
-                :key="index"
-                class="item"
-            >
-                <div class="avatar">
-                    <img
-                        v-if="friend.avatar"
-                        :src="'http://127.0.0.1:80/tmp_images/' + friend.avatar"
-                    />
-                    <img v-else src="@/assets/image/default-user-avatar.png" />
-                </div>
-                <div class="right">
-                    <div class="fw-bold">
-                        {{ friend.first_name + " " + friend.last_name }}
-                    </div>
-                    <div>{{ friend.bird_day }}</div>
-                    <div
-                        contenteditable="true"
-                        placeholder="Viết lên dòng thời gian của anh ấy"
-                        class="form-control"
-                        @keydown.enter.exact.prevent="
-                            sendMessage($event, friend.id)
-                        "
-                        style="width: 100%"
-                    ></div>
-                </div>
-            </div>
+        <div class="top">
+            <h2>Sinh nhật</h2>
         </div>
-        <div v-if="months['now'].length" class="now form-month">
-            <div class="h4 title">Hôm nay</div>
-            <div
-                v-for="(friend, index) in months['now']"
-                :key="index"
-                class="item"
-            >
-                <div class="avatar">
-                    <img
-                        v-if="friend.avatar"
-                        :src="'http://127.0.0.1:80/tmp_images/' + friend.avatar"
-                    />
-                    <img v-else src="@/assets/image/default-user-avatar.png" />
-                </div>
-                <div class="right">
-                    <div class="fw-bold">
-                        {{ friend.first_name + " " + friend.last_name }}
-                    </div>
-                    <div>{{ friend.bird_day }}</div>
-                    <div
-                        contenteditable="true"
-                        placeholder="Viết lên dòng thời gian của anh ấy"
-                        @keydown.enter.exact.prevent="
-                            sendMessage($event, friend.id)
-                        "
-                        class="form-control"
-                        style="width: 100%"
-                    ></div>
-                </div>
-            </div>
-        </div>
-        <div v-if="months['tomorrow'].length" class="tomorrow form-month">
-            <div class="h4 title">Sinh nhật sắp tới</div>
-            <div
-                v-for="(friend, index) in months['tomorrow']"
-                :key="index"
-                class="item"
-            >
-                <div class="avatar">
-                    <img
-                        v-if="friend.avatar"
-                        :src="'http://127.0.0.1:80/tmp_images/' + friend.avatar"
-                    />
-                    <img v-else src="@/assets/image/default-user-avatar.png" />
-                </div>
-                <div class="right">
-                    <div class="fw-bold">
-                        {{ friend.first_name + " " + friend.last_name }}
-                    </div>
-                    <div>{{ friend.bird_day }}</div>
-                </div>
-            </div>
-        </div>
-        <div
-            class="month-next form-month"
-            v-for="index in 12 - month + 1"
-            :key="index"
-        >
-            <div v-if="months[index + month - 1].length">
-                <div class="h4 title">Tháng {{ index + 1 }}</div>
-                <div class="second-title">
-                    <span class="fw-bold">{{
-                        months[index + month - 1][0].first_name +
-                        " " +
-                        months[index + month - 1][0].last_name
-                    }}</span>
-                    <span v-if="months[index + month - 1].length - 1">
-                        và {{ months[index + month - 1].length - 1 }} người
-                        khác</span
-                    >
-                </div>
 
-                <div class="list_avatar">
-                    <div
-                        v-for="friend in months[index + month - 1]"
-                        :key="friend"
-                        class="avatar_"
-                    >
+        <div class="list yesterday form-month">
+            <div v-if="months['yesterday'].length" class="yesterday form-month">
+                <div class="h4 title">Sinh nhật gần đây</div>
+                <div
+                    v-for="(friend, index) in months['yesterday']"
+                    :key="index"
+                    class="item"
+                >
+                    <div class="avatar">
                         <img
                             v-if="friend.avatar"
                             :src="
                                 'http://127.0.0.1:80/tmp_images/' +
                                 friend.avatar
                             "
-                            :title="
-                                friend.bird_day +
-                                ' là ngày sinh của ' +
-                                friend.first_name +
-                                ' ' +
-                                friend.last_name
-                            "
                         />
                         <img
                             v-else
                             src="@/assets/image/default-user-avatar.png"
-                            :title="
-                                friend.bird_day +
-                                ' là ngày sinh của ' +
-                                friend.first_name +
-                                ' ' +
-                                friend.last_name
-                            "
                         />
+                    </div>
+                    <div class="right">
+                        <div class="fw-bold">
+                            {{ friend.first_name + " " + friend.last_name }}
+                        </div>
+                        <div>{{ friend.bird_day }}</div>
+                        <div
+                            contenteditable="true"
+                            placeholder="Viết lên dòng thời gian của anh ấy"
+                            class="form-control"
+                            @keydown.enter.exact.prevent="
+                                sendMessage($event, friend.id)
+                            "
+                            style="width: 100%"
+                        ></div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div
-            class="month-next form-month"
-            v-for="index in month - 1"
-            :key="index"
-        >
-            <div v-if="months[index].length">
-                <div class="title h4">Tháng {{ index }}</div>
-                <div class="second-title">
-                    <span class="fw-bold">{{
-                        months[index][0].first_name +
-                        " " +
-                        months[index][0].last_name
-                    }}</span>
-                    <span v-if="months[index].length - 1">
-                        và {{ months[index].length - 1 }} người khác</span
-                    >
-                </div>
-                <div class="list_avatar">
-                    <div
-                        v-for="friend in months[index]"
-                        :key="friend"
-                        class="avatar_"
-                    >
+            <div v-if="months['now'].length" class="now form-month">
+                <div class="h4 title">Hôm nay</div>
+                <div
+                    v-for="(friend, index) in months['now']"
+                    :key="index"
+                    class="item"
+                >
+                    <div class="avatar">
                         <img
                             v-if="friend.avatar"
                             :src="
                                 'http://127.0.0.1:80/tmp_images/' +
                                 friend.avatar
                             "
-                            :title="
-                                friend.bird_day +
-                                ' là ngày sinh của ' +
-                                friend.first_name +
-                                ' ' +
-                                friend.last_name
+                        />
+                        <img
+                            v-else
+                            src="@/assets/image/default-user-avatar.png"
+                        />
+                    </div>
+                    <div class="right">
+                        <div class="fw-bold">
+                            {{ friend.first_name + " " + friend.last_name }}
+                        </div>
+                        <div>{{ friend.bird_day }}</div>
+                        <div
+                            contenteditable="true"
+                            placeholder="Viết lên dòng thời gian của anh ấy"
+                            @keydown.enter.exact.prevent="
+                                sendMessage($event, friend.id)
+                            "
+                            class="form-control"
+                            style="width: 100%"
+                        ></div>
+                    </div>
+                </div>
+            </div>
+            <div v-if="months['tomorrow'].length" class="tomorrow form-month">
+                <div class="h4 title">Sinh nhật sắp tới</div>
+                <div
+                    v-for="(friend, index) in months['tomorrow']"
+                    :key="index"
+                    class="item"
+                >
+                    <div class="avatar">
+                        <img
+                            v-if="friend.avatar"
+                            :src="
+                                'http://127.0.0.1:80/tmp_images/' +
+                                friend.avatar
                             "
                         />
                         <img
                             v-else
                             src="@/assets/image/default-user-avatar.png"
-                            :title="
-                                friend.bird_day +
-                                ' là ngày sinh của ' +
-                                friend.first_name +
-                                ' ' +
-                                friend.last_name
-                            "
                         />
+                    </div>
+                    <div class="right">
+                        <div class="fw-bold">
+                            {{ friend.first_name + " " + friend.last_name }}
+                        </div>
+                        <div>{{ friend.bird_day }}</div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="month-next form-month"
+                v-for="index in 12 - month + 1"
+                :key="index"
+            >
+                <div v-if="months[index + month - 1].length">
+                    <div class="h4 title">Tháng {{ index + 1 }}</div>
+                    <div class="second-title">
+                        <span class="fw-bold">{{
+                            months[index + month - 1][0].first_name +
+                            " " +
+                            months[index + month - 1][0].last_name
+                        }}</span>
+                        <span v-if="months[index + month - 1].length - 1">
+                            và {{ months[index + month - 1].length - 1 }} người
+                            khác</span
+                        >
+                    </div>
+
+                    <div class="list_avatar">
+                        <div
+                            v-for="friend in months[index + month - 1]"
+                            :key="friend"
+                            class="avatar_"
+                        >
+                            <img
+                                v-if="friend.avatar"
+                                :src="
+                                    'http://127.0.0.1:80/tmp_images/' +
+                                    friend.avatar
+                                "
+                                :title="
+                                    friend.bird_day +
+                                    ' là ngày sinh của ' +
+                                    friend.first_name +
+                                    ' ' +
+                                    friend.last_name
+                                "
+                            />
+                            <img
+                                v-else
+                                src="@/assets/image/default-user-avatar.png"
+                                :title="
+                                    friend.bird_day +
+                                    ' là ngày sinh của ' +
+                                    friend.first_name +
+                                    ' ' +
+                                    friend.last_name
+                                "
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="month-next form-month"
+                v-for="index in month - 1"
+                :key="index"
+            >
+                <div v-if="months[index].length">
+                    <div class="title h4">Tháng {{ index }}</div>
+                    <div class="second-title">
+                        <span class="fw-bold">{{
+                            months[index][0].first_name +
+                            " " +
+                            months[index][0].last_name
+                        }}</span>
+                        <span v-if="months[index].length - 1">
+                            và {{ months[index].length - 1 }} người khác</span
+                        >
+                    </div>
+                    <div class="list_avatar">
+                        <div
+                            v-for="friend in months[index]"
+                            :key="friend"
+                            class="avatar_"
+                        >
+                            <img
+                                v-if="friend.avatar"
+                                :src="
+                                    'http://127.0.0.1:80/tmp_images/' +
+                                    friend.avatar
+                                "
+                                :title="
+                                    friend.bird_day +
+                                    ' là ngày sinh của ' +
+                                    friend.first_name +
+                                    ' ' +
+                                    friend.last_name
+                                "
+                            />
+                            <img
+                                v-else
+                                src="@/assets/image/default-user-avatar.png"
+                                :title="
+                                    friend.bird_day +
+                                    ' là ngày sinh của ' +
+                                    friend.first_name +
+                                    ' ' +
+                                    friend.last_name
+                                "
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -334,5 +358,26 @@ export default {
 .second-title {
     text-align: left;
     padding-left: 15px;
+}
+.top {
+    display: flex;
+    margin-bottom: 20px;
+}
+.form-input {
+    margin-left: auto;
+    display: block;
+    width: 30%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 20px;
 }
 </style>

@@ -58,147 +58,12 @@
                     >
                 </b-row>
             </b-col>
-            <b-col cols="5" offset="1">
-                <b-row>
-                    <b-col
-                        cols="3"
-                        class="cursor-pointer nav-bar-top message py-3 fw-bold"
-                    >
-                        <div v-if="type_follow != null">
-                            <b-icon
-                                icon="chat-fill"
-                                class="text-orange mx-1"
-                            ></b-icon
-                            >Nhắn tin
-                        </div>
-                    </b-col>
-                    <b-col
-                        cols="4"
-                        class="cursor-pointer nav-bar-top follow py-3 fw-bold"
-                    >
-                        <div
-                            v-if="type_follow == 1"
-                            v-on:click="drop_follow = !drop_follow"
-                            class="position-relative"
-                        >
-                            <b-icon
-                                icon="check2"
-                                class="text-orange mx-1"
-                            ></b-icon
-                            >Đang theo dõi
-                            <div
-                                v-if="drop_follow"
-                                v-on:click="unFollow"
-                                class="position-absolute drop_follow"
-                            >
-                                <span>Hủy theo dõi</span>
-                            </div>
-                        </div>
-
-                        <div v-if="type_follow == 2" v-on:click="follow">
-                            <img
-                                src="@/assets/icon/follow-primary.svg"
-                                class="text-orange mx-1"
-                            />Theo dõi
-                        </div>
-                    </b-col>
-                    <b-col
-                        cols="4"
-                        class="cursor-pointer nav-bar-top friend py-3 fw-bold"
-                    >
-                        <div v-if="type_friend == 4" v-on:click="addFriend">
-                            <b-icon
-                                icon="person-plus-fill"
-                                class="text-orange mx-1"
-                            ></b-icon
-                            >Kết bạn
-                        </div>
-                        <div
-                            v-if="type_friend == 1"
-                            v-on:click="drop_friend = !drop_friend"
-                            class="position-relative"
-                        >
-                            <b-icon
-                                icon="check2"
-                                class="text-orange mx-1"
-                            ></b-icon
-                            >Bạn bè
-                            <div
-                                v-if="drop_friend"
-                                v-on:click="unFriend"
-                                class="position-absolute drop_follow"
-                            >
-                                <span>Hủy kết bạn</span>
-                            </div>
-                        </div>
-                        <div
-                            v-if="type_friend == 2"
-                            v-on:click="drop_friend = !drop_friend"
-                            class="position-relative"
-                        >
-                            <b-icon
-                                icon="check2"
-                                class="text-orange mx-1"
-                            ></b-icon
-                            >Đã gửi lời mời
-                            <div
-                                v-if="drop_friend"
-                                v-on:click="unRequestFriend"
-                                class="position-absolute drop_follow"
-                            >
-                                <span>Hủy yêu cầu</span>
-                            </div>
-                        </div>
-
-                        <div
-                            v-if="type_friend == 3"
-                            v-on:click="drop_friend = !drop_friend"
-                            class="position-relative"
-                        >
-                            <b-icon
-                                icon="check2"
-                                class="text-orange mx-1"
-                            ></b-icon
-                            >Phản hồi
-                            <div
-                                v-if="drop_friend"
-                                class="position-absolute drop_follow"
-                            >
-                                <div v-on:click="acceptFriend">Chấp nhận</div>
-                                <br />
-                                <div v-on:click="unRequestFriend">
-                                    Xóa lời mời
-                                </div>
-                            </div>
-                        </div>
-                    </b-col>
-                    <b-col
-                        v-if="type_follow != null"
-                        cols="1"
-                        class="cursor-pointer nav-bar-top drop-down p-3 fw-bold"
-                    >
-                        <div
-                            v-on:click="drop_setting = !drop_setting"
-                            class="position-relative"
-                        >
-                            <b-icon icon="gear"> </b-icon>
-                            <div
-                                v-if="drop_setting"
-                                class="position-absolute drop_setting"
-                            >
-                                <div v-on:click="prevent">Chặn</div>
-                            </div>
-                        </div>
-                    </b-col>
-                </b-row>
-            </b-col>
         </div>
     </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Axios from "@/components/Axios.js";
 import config from "@/config";
 import EventBus from "@/EventBus.js";
 export default {
@@ -207,159 +72,20 @@ export default {
     props: {
         user: Object,
     },
-    created() {
-        this.getRelationship(this.$route.params.userId);
-    },
     data() {
         return {
             config: config,
-            type_follow: null,
-            type_friend: null,
-            is_prevent: false,
-            drop_follow: false,
-            drop_friend: false,
-            drop_setting: false,
             component: 1,
-            showModal: false,
         };
     },
     watch: {},
     mounted() {},
     methods: {
-        getRelationship(id) {
-            Axios.get("relationship/get_relationship?user_id=" + id)
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        var data = response.data.data;
-                        this.type_follow = data.type_follow;
-                        this.type_friend = data.type_friend;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
-        follow() {
-            Axios.post("relationship/follow", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.type_follow = 1;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
-        addFriend() {
-            Axios.post("relationship/request_friend", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.type_friend = 2;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
         changeComponent(index) {
             if (this.component !== index) {
                 this.component = index;
                 EventBus.$emit("changeComponentProfile", index);
             }
-        },
-        unFollow() {
-            Axios.post("relationship/cancel_follow", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.type_follow = 2;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
-        unFriend() {
-            Axios.post("relationship/cancel_friend", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.type_friend = 4;
-                        this.type_follow = 2;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
-        unRequestFriend() {
-            Axios.post("relationship/cancel_request_friend", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.type_friend = 4;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
-        acceptFriend() {
-            Axios.post("relationship/accept_friend", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.type_friend = 1;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
-        prevent() {
-            Axios.post("relationship/prevent", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        alert("Chặn thành công");
-                        this.$router.push({ name: "Home" });
-                    } else {
-                        alert(response.data.message);
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
         },
     },
 };

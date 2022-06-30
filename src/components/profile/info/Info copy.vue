@@ -244,6 +244,39 @@
                     >
                 </div>
             </div>
+            <div class="story p-4 mt-4">
+                <div v-if="!change.story" class="item row">
+                    <b-col class="label fw-bold" cols="4">
+                        <b-icon icon="card-text"></b-icon>
+                        Tiểu sử</b-col
+                    >
+                    <b-col cols="5">{{ user.story ?? "Chưa cập nhập" }}</b-col>
+                    <b-col
+                        style="text-align: right"
+                        v-on:click="update('story')"
+                        v-if="isOwner"
+                        cols="3"
+                        class="change text-success"
+                        ><b-icon icon="pencil"></b-icon> Chỉnh sửa</b-col
+                    >
+                </div>
+                <div v-else class="item row">
+                    <b-col class="label fw-bold" cols="4">
+                        <b-icon icon="card-text"></b-icon>
+                        Tiểu sử</b-col
+                    >
+                    <b-col cols="5"
+                        ><input class="form-control" v-model="userNew.story" />
+                        <span class="text-danger">{{ errors.story }}</span>
+                    </b-col>
+                    <b-col
+                        v-on:click="cancel('story')"
+                        cols="3"
+                        class="change text-success"
+                        ><b-icon icon="x-circle"></b-icon> Hủy</b-col
+                    >
+                </div>
+            </div>
 
             <div class="education p-4 mt-4">
                 <div v-if="!change.education" class="item row">
@@ -283,6 +316,7 @@
                     >
                 </div>
             </div>
+
             <div class="workplace p-4 mt-4">
                 <div v-if="!change.workplace" class="item row">
                     <b-col class="label fw-bold" cols="4">
@@ -343,8 +377,6 @@ export default {
     created() {
         var user = JSON.parse(localStorage.getItem("userInfo"));
         this.isOwner = user.id == this.user.id ? true : false;
-        this.userNew.education = this.user.education;
-        this.userNew.workplace = this.user.workplace;
         this.userNew.first_name = this.user.first_name;
         this.userNew.last_name = this.user.last_name;
         this.userNew.gender = this.user.gender;
@@ -353,6 +385,8 @@ export default {
         this.userNew.address = this.user.address;
         this.userNew.phone = this.user.phone;
         this.userNew.story = this.user.story;
+        this.userNew.education = this.user.education;
+        this.userNew.workplace = this.user.workplace;
     },
     mounted() {},
     data() {
@@ -364,8 +398,6 @@ export default {
                 phone: "",
                 bird_day: "",
                 story: "",
-                education: "",
-                workplace: "",
                 address: "",
                 first_name: "",
                 last_name: "",
@@ -377,9 +409,9 @@ export default {
                 email: false,
                 phone: false,
                 address: false,
-                story: false,
                 education: false,
                 workplace: false,
+                story: false,
             },
 
             day: 31,
@@ -412,11 +444,11 @@ export default {
                 case "story":
                     this.change.story = true;
                     break;
-                case "education":
-                    this.change.education = true;
-                    break;
                 case "workplace":
                     this.change.workplace = true;
+                    break;
+                case "education":
+                    this.change.education = true;
                     break;
             }
         },
@@ -435,14 +467,6 @@ export default {
                     this.change.story = false;
                     this.userNew.story = this.user.story;
                     break;
-                case "education":
-                    this.change.education = false;
-                    this.userNew.education = this.user.education;
-                    break;
-                case "workplace":
-                    this.change.workplace = false;
-                    this.userNew.workplace = this.user.workplace;
-                    break;
                 case "bird_day":
                     this.change.bird_day = false;
                     this.userNew.bird_day = this.user.bird_day;
@@ -459,10 +483,24 @@ export default {
                     this.change.phone = false;
                     this.userNew.phone = this.user.phone;
                     break;
+                case "education":
+                    this.change.education = false;
+                    this.userNew.education = this.user.education;
+                    break;
+                case "workplace":
+                    this.change.workplace = false;
+                    this.userNew.workplace = this.user.workplace;
+                    break;
             }
         },
         parseDate(date) {
             return parse.parseDate(date);
+        },
+        parseEducation(education) {
+            return parse.parseEducation(education);
+        },
+        parseWorkplace(education) {
+            return parse.parseWorkplace(education);
         },
         saveUpdate() {
             if (this.ajaxLock) return;
@@ -471,26 +509,27 @@ export default {
                 phone: "",
                 bird_day: "",
                 story: "",
-                education: "",
-                workplace: "",
                 address: "",
                 first_name: "",
                 last_name: "",
+                education: "",
+                workplace: "",
             }),
                 (this.isErrors = false);
             var object = {};
             if (this.userNew.email) object.email = this.userNew.email;
+            if (this.userNew.phone) object.phone = this.userNew.phone;
             if (this.userNew.bird_day) object.bird_day = this.userNew.bird_day;
 
-            object.phone = this.userNew.phone;
             object.last_name = this.userNew.last_name;
             object.bird_day = this.userNew.bird_day;
             object.story = this.userNew.story;
-            object.education = this.userNew.education;
-            object.workplace = this.userNew.workplace;
             object.address = this.userNew.address;
             object.gender = this.userNew.gender;
             object.first_name = this.userNew.first_name;
+            object.education = this.userNew.education;
+            object.workplace = this.userNew.workplace;
+
             if (!validate.email(object.email)) {
                 this.errors.email = "Vui lòng nhập email";
                 this.isErrors = true;
@@ -529,29 +568,34 @@ export default {
             }
             if (this.isErrors) return;
 
-            Axios.put("user", object).then((response) => {
-                if (response.data.status == "success") {
-                    this.change = {
-                        username: false,
-                        gender: false,
-                        birthday: false,
-                        email: false,
-                        phone: false,
-                        address: false,
-                        story: false,
-                        education: false,
-                        workplace: false,
-                    };
-                    EventBus.$emit("user", response.data.data);
-                } else {
-                    if (response.data.errors.email)
-                        this.errors.email = response.data.errors.email[0];
-                    if (response.data.errors.phone)
-                        this.errors.phone = response.data.errors.phone[0];
-                }
-                this.ajaxLock = false;
-                console.log("clickkk");
-            });
+            Axios.put("user", object)
+                .then((response) => {
+                    if (response.data.status == "success") {
+                        this.change = {
+                            username: false,
+                            gender: false,
+                            birthday: false,
+                            email: false,
+                            phone: false,
+                            address: false,
+                            education: false,
+                            workplace: false,
+                            story: false,
+                        };
+                        EventBus.$emit("user", response.data.data);
+                    } else {
+                        if (response.data.errors.email)
+                            this.errors.email = response.data.errors.email[0];
+                        if (response.data.errors.phone)
+                            this.errors.phone = response.data.errors.phone[0];
+                    }
+                    this.ajaxLock = false;
+                    console.log("clickkk");
+                })
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
+                    this.ajaxLock = false;
+                });
         },
     },
     props: {

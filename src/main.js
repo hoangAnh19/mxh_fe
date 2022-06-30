@@ -18,7 +18,9 @@ router.beforeEach((to, from, next) => {
             if (
                 to.name === "Login" ||
                 to.name === "Register" ||
-                to.name === "ResetPassword"
+                to.name === "ResetPassword" ||
+                to.name === "reset-password" ||
+                to.name === "reset-password-form"
             )
                 next("/");
             else next();
@@ -28,7 +30,9 @@ router.beforeEach((to, from, next) => {
             if (
                 to.name === "Login" ||
                 to.name === "Register" ||
-                to.name === "ResetPassword"
+                to.name === "ResetPassword" ||
+                to.name === "reset-password" ||
+                to.name === "reset-password-form"
             )
                 next();
             else next("/login");

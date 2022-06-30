@@ -10,6 +10,8 @@ import Profile from "../views/Profile.vue";
 import Command from "../views/Command.vue";
 import Post from "../views/Post.vue";
 import ResetPassword from "../views/ResetPassword.vue";
+import ForgotPassword from "../components/auth/ForgotPassword.vue";
+import ResetPasswordForm from "../components/auth/ResetPasswordForm.vue";
 
 const routes = [
     {
@@ -81,6 +83,22 @@ const routes = [
         path: "/resetPassword",
         name: "ResetPassword",
         component: ResetPassword,
+    },
+    {
+        path: "/reset-password",
+        name: "reset-password",
+        component: ForgotPassword,
+        meta: {
+            auth: false,
+        },
+    },
+    {
+        path: "/reset-password/:token",
+        name: "reset-password-form",
+        component: ResetPasswordForm,
+        meta: {
+            auth: false,
+        },
     },
 ];
 

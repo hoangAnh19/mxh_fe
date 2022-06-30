@@ -181,9 +181,6 @@ export default {
             this.hiddenTypeShow = true;
         },
 
-
-
-
         async savePost() {
             var formData = new FormData();
             formData.append("avatar", this.images[0]);

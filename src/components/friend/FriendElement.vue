@@ -86,45 +86,45 @@ import Axios from "@/components/Axios.js";
 export default {
     name: "FriendElement",
     created() {
-        if (this.friend["relationship2"].length) {
-            if (
-                this.friend["relationship2"][0]["type_follow"] == 1 ||
-                this.friend["relationship2"][0]["type_follow"] == 2
-            ) {
-                this.follow_ = 1;
-            } else this.follow_ = 0;
-            this.friend_ = this.friend["relationship2"][0]["type_friend"];
-        } else if (this.friend["relationship1"].length) {
-            if (
-                this.friend["relationship1"][0]["type_follow"] == 1 ||
-                this.friend["relationship1"][0]["type_follow"] == 3
-            ) {
-                this.follow_ = 1;
-            } else this.follow_ = 0;
-            switch (this.friend["relationship1"][0]["type_friend"]) {
-                case 0:
-                    this.friend_ = 0;
-                    break;
-                case 1:
-                    this.friend_ = 1;
-                    break;
-                case 2:
-                    this.friend_ = 3;
-                    break;
-                case 3:
-                    this.friend_ = 2;
-                    break;
-                // case 4:
-                //   this.friend_ = 5;
-                //   break;
-                case 5:
-                    this.friend_ = 4;
-                    break;
-            }
-        } else {
-            this.friend_ = 0;
-            this.follow_ = 0;
-        }
+        // if (this.friend["relationship2"].length) {
+        //     if (
+        //         this.friend["relationship2"][0]["type_follow"] == 1 ||
+        //         this.friend["relationship2"][0]["type_follow"] == 2
+        //     ) {
+        //         this.follow_ = 1;
+        //     } else this.follow_ = 0;
+        //     this.friend_ = this.friend["relationship2"][0]["type_friend"];
+        // } else if (this.friend["relationship1"].length) {
+        //     if (
+        //         this.friend["relationship1"][0]["type_follow"] == 1 ||
+        //         this.friend["relationship1"][0]["type_follow"] == 3
+        //     ) {
+        //         this.follow_ = 1;
+        //     } else this.follow_ = 0;
+        //     switch (this.friend["relationship1"][0]["type_friend"]) {
+        //         case 0:
+        //             this.friend_ = 0;
+        //             break;
+        //         case 1:
+        //             this.friend_ = 1;
+        //             break;
+        //         case 2:
+        //             this.friend_ = 3;
+        //             break;
+        //         case 3:
+        //             this.friend_ = 2;
+        //             break;
+        //         // case 4:
+        //         //   this.friend_ = 5;
+        //         //   break;
+        //         case 5:
+        //             this.friend_ = 4;
+        //             break;
+        //     }
+        // } else {
+        //     this.friend_ = 0;
+        //     this.follow_ = 0;
+        // }
     },
     data() {
         return {

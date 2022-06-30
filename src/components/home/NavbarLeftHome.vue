@@ -20,7 +20,7 @@
                 <div class="div-icon">
                     <b-icon class="icon" icon="people"></b-icon>
                 </div>
-                <div style="margin: auto 10px">Bạn bè</div>
+                <div style="margin: auto 10px">Thành viên</div>
             </router-link>
             <router-link class="d-flex link" :to="{ name: 'Groups' }">
                 <div class="div-icon">
