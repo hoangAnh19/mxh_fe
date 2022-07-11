@@ -1,21 +1,6 @@
 <template>
     <div class="nav-left-home">
         <div class="link-component">
-            <router-link
-                class="d-flex link"
-                :to="{ name: 'Profile', params: { userId: user.id } }"
-            >
-                <div class="avatar">
-                    <img
-                        v-if="user.avatar"
-                        :src="'http://127.0.0.1:80/tmp_images/' + user.avatar"
-                    />
-                    <img v-else src="@/assets/image/default-user-avatar.png" />
-                </div>
-                <div style="margin: auto 10px">
-                    {{ user.first_name + " " + user.last_name }}
-                </div>
-            </router-link>
             <router-link class="d-flex link" :to="{ name: 'Friend' }">
                 <div class="div-icon">
                     <b-icon class="icon" icon="people-fill"></b-icon>
@@ -34,6 +19,7 @@
                 </div>
                 <div style="margin: auto 10px">Giá trị cốt lõi</div>
             </router-link>
+
             <router-link class="d-flex link" :to="{ name: 'Chat' }">
                 <div class="div-icon">
                     <b-icon class="icon" icon="chat-right-dots-fill"></b-icon>
@@ -81,28 +67,12 @@
 
 <script>
 // @ is an alias to /src
-import Axios from "@/components/Axios.js";
 // import EventBus from "@/EventBus.js";
 
 export default {
-    name: "NavbarLeftHome",
+    name: "NavbarLeftAdmin",
     components: {},
-    props: {
-        user: Object,
-    },
-    async created() {
-        await Axios.get("group/get_list_group?page=1")
-            .then((response) => {
-                if (response.data.status == "success") {
-                    this.listGroup = response.data.group;
-                } else {
-                    console.log(this.data.message);
-                }
-            })
-            .catch(() => {
-                alert("Đã có lỗi xảy ra, vui lòng thử lại");
-            });
-    },
+
     data() {
         return {
             listGroup: [],

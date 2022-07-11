@@ -113,7 +113,9 @@ export default {
                         );
                         EventBus.$emit("login");
 
-                        this.$router.push({ name: "Home" });
+                        if (response.data.role === "admin")
+                            this.$router.push({ name: "UpdateProfile" });
+                        else this.$router.push({ name: "Home" });
                     } else {
                         if (response.data.errors.email_or_phone)
                             this.errors.email_or_phone =

@@ -110,17 +110,16 @@
                     <span class="text-danger">{{ errors.bird_day }}</span>
                 </b-col>
                 <b-col
-                    v-if="isOwner"
                     v-on:click="cancel('bird_day')"
                     cols="3"
                     class="change text-success"
                     ><b-icon icon="x-circle"></b-icon> Hủy</b-col
                 >
             </div>
-            <div class="item row">
+            <div class="item row" v-if="isOwner">
                 <UploadAvatar></UploadAvatar>
             </div>
-            <div class="item row">
+            <div class="item row" v-if="isOwner">
                 <UploadBackground></UploadBackground>
             </div>
         </div>

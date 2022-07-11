@@ -90,14 +90,12 @@ export default {
     },
     watch: {},
     methods: {
-        search() {
-            Axios.get("user/searchUser?user_name=" + this.key_search).then(
-                (response) => {
-                    if (response.data.status == "success") {
-                        this.friendsObject = response.data.data;
-                    }
+        search(data) {
+            Axios.get("user/searchUser?user_name=" + data).then((response) => {
+                if (response.data.status == "success") {
+                    this.friendsObject = response.data.data;
                 }
-            );
+            });
         },
 
         getListFriend() {

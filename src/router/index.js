@@ -12,6 +12,8 @@ import Post from "../views/Post.vue";
 import ResetPassword from "../views/ResetPassword.vue";
 import ForgotPassword from "../components/auth/ForgotPassword.vue";
 import ResetPasswordForm from "../components/auth/ResetPasswordForm.vue";
+import CoreValue from "../views/CoreValue.vue";
+import Admin from "../views/Admin.vue";
 
 const routes = [
     {
@@ -100,6 +102,8 @@ const routes = [
             auth: false,
         },
     },
+    { component: CoreValue, path: "/CoreValue", name: "CoreValue" },
+    { component: Admin, path: "/Admin", name: "Admin" },
 ];
 
 const router = createRouter({

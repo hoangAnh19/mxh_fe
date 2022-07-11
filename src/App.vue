@@ -7,6 +7,7 @@
     >
         <div v-if="createNewMessage" class="form-create-new-message">
             <div class="form-create-new-message-title">Tin nhắn mới</div>
+            <!-- {{ listSearch }} -->
             <div class="content-modal-new-message">
                 <div class="form-group d-flex">
                     <label style="margin: auto">Đến:&nbsp;</label>
@@ -135,7 +136,7 @@ export default {
             Axios.get("user/searchUser?user_name=" + data)
                 .then((response) => {
                     if (response.data.status == "success") {
-                        this.listSearch = response.data.friend;
+                        this.listSearch = response.data.data;
                     } else {
                         console.log(this.data.message);
                     }

@@ -194,13 +194,18 @@ export default {
             formData.append("type_post", this.type_post ?? 1);
             if ((this.group ?? {}).id)
                 formData.append("group_id", this.group.id);
-
-            for (const pair of formData.entries()) {
-                console.log(`${pair[0]}, ${pair[1]}`);
-            }
+            if ((this.user ?? {}).id != this.owner.id && (this.user ?? {}).id)
+                formData.append("user_id_2", (this.user ?? {}).id);
+            if (this.user_id_tags ?? null)
+                formData.append("user_id_tags", this.user_id_tags);
 
             await Axios.post("post/create", formData)
                 .then((response) => {
+                    console.log(formData);
+                    for (const pair of formData.entries()) {
+                        console.log(`${pair[0]}, ${pair[1]}`);
+                    }
+
                     if (response.data.status == "success") {
                         this.images = [];
                         this.dataPost = "";
