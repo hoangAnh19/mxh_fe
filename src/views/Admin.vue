@@ -1,16 +1,7 @@
 <template lang="html">
     <div class="body">
         <NavbarLeftAdmin />
-        <div>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Velit,
-            rem. Quas saepe repellat officia laudantium? Pariatur, voluptatem.
-            Blanditiis molestias velit aperiam. Id perspiciatis totam rerum.
-            Odio cumque impedit culpa obcaecati. Lorem ipsum, dolor sit amet
-            consectetur adipisicing elit. Recusandae placeat, accusantium maxime
-            molestiae debitis dolor eum perspiciatis nam officia, asperiores
-            vero quo doloremque exercitationem minus maiores, accusamus autem
-            quidem quod?
-        </div>
+        <div>Admin</div>
     </div>
 </template>
 

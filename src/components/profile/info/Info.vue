@@ -321,7 +321,12 @@
                 </div>
             </div>
 
-            <div v-on:click="saveUpdate" class="px-4" style="text-align: right">
+            <div
+                v-if="isOwner"
+                v-on:click="saveUpdate"
+                class="px-4"
+                style="text-align: right"
+            >
                 <div class="btn btn-primary">Lưu</div>
             </div>
         </div>
@@ -383,7 +388,6 @@ export default {
 
             day: 31,
             isErrors: false,
-            ajaxLock: false,
         };
     },
     watch: {},
@@ -464,7 +468,6 @@ export default {
             return parse.parseDate(date);
         },
         saveUpdate() {
-            if (this.ajaxLock) return;
             (this.errors = {
                 email: "",
                 phone: "",
@@ -548,7 +551,6 @@ export default {
                     if (response.data.errors.phone)
                         this.errors.phone = response.data.errors.phone[0];
                 }
-                this.ajaxLock = false;
                 console.log("clickkk");
             });
         },

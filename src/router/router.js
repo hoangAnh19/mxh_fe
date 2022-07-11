@@ -103,7 +103,12 @@ const routes = [
         },
     },
     { component: CoreValue, path: "/CoreValue", name: "CoreValue" },
-    { component: Admin, path: "/Admin", name: "Admin" },
+    { component: Admin, path: "/admin", name: "Admin" },
+    {
+        path: "/admin/managerUser",
+        name: "ManagerUser",
+        component: () => import("../components/admin/ManagerUser.vue"),
+    },
 ];
 
 const router = createRouter({

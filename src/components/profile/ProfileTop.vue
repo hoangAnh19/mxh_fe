@@ -47,12 +47,6 @@
                     <b-col
                         cols="2"
                         class="cursor-pointer nav-bar-top introduce p-3 fw-bold"
-                        v-on:click="changeComponent(3)"
-                        >Bạn bè</b-col
-                    >
-                    <b-col
-                        cols="2"
-                        class="cursor-pointer nav-bar-top introduce p-3 fw-bold"
                         v-on:click="changeComponent(4)"
                         >Ảnh</b-col
                     >

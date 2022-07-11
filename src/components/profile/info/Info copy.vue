@@ -356,8 +356,13 @@
                 </div>
             </div>
 
-            <div v-on:click="saveUpdate" class="px-4" style="text-align: right">
-                <div class="btn btn-primary">Lưu</div>
+            <div
+                v-show="isOwner"
+                v-on:click="saveUpdate"
+                class="px-4"
+                style="text-align: right"
+            >
+                <div class="btn btn-primary">Lưu {{ isOwner }}</div>
             </div>
         </div>
     </b-col>

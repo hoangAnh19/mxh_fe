@@ -1,74 +1,40 @@
 <template>
     <div class="nav-left-home">
         <div class="link-component">
-            <router-link class="d-flex link" :to="{ name: 'Friend' }">
+            <router-link class="d-flex link" :to="{ name: 'ManagerUser' }">
                 <div class="div-icon">
                     <b-icon class="icon" icon="people-fill"></b-icon>
                 </div>
-                <div style="margin: auto 10px">Thành viên</div>
+                <div style="margin: auto 10px">Quản lý thành viên</div>
             </router-link>
             <router-link class="d-flex link" :to="{ name: 'Groups' }">
                 <div class="div-icon">
                     <b-icon class="icon" icon="globe"></b-icon>
                 </div>
-                <div style="margin: auto 10px">Nhóm</div>
+                <div style="margin: auto 10px">Quản lý nhóm</div>
             </router-link>
             <router-link class="d-flex link" :to="{ name: 'CoreValue' }">
                 <div class="div-icon">
                     <b-icon class="icon" icon="journal-check"></b-icon>
                 </div>
-                <div style="margin: auto 10px">Giá trị cốt lõi</div>
+                <div style="margin: auto 10px">Quản lý bài viết</div>
             </router-link>
 
-            <router-link class="d-flex link" :to="{ name: 'Chat' }">
-                <div class="div-icon">
-                    <b-icon class="icon" icon="chat-right-dots-fill"></b-icon>
-                </div>
-                <div style="margin: auto 10px">Messages</div>
-            </router-link>
-        </div>
-        <div class="shortcuts">
-            <div class="title-shortcuts">Lối tắt của bạn</div>
-            <div class="list_group">
-                <div
-                    v-for="item in listGroup.length < 3 ? listGroup.length : 3"
-                    class="d-flex group_item"
-                    :key="item"
-                >
-                    <div class="cover">
-                        <img
-                            v-if="listGroup[item - 1].cover"
-                            :src="
-                                'http://127.0.0.1:80/tmp_images/' +
-                                listGroup[item - 1].cover
-                            "
-                        />
-                        <img
-                            v-else
-                            src="@/assets/image/default-user-avatar.png"
-                        />
-                    </div>
-                    <div class="mx-2" style="flex: 1">
-                        <router-link
-                            :to="{
-                                name: 'Group',
-                                params: { groupId: listGroup[item - 1].id },
-                            }"
-                            class="link"
-                        >
-                            {{ listGroup[item - 1].name }}
-                        </router-link>
-                    </div>
-                </div>
+            <div
+                style="margin: auto 10px"
+                v-on:click="logoff"
+                class="px-6 my-3 logoff item"
+            >
+                <img src="@/assets/icon/icon-logout.svg" /> Đăng xuất
             </div>
         </div>
     </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import EventBus from "@/EventBus.js";
-
+import Axios from "@/components/Axios.js";
+import EventBus from "@/EventBus.js";
+import socket from "@/plugins/socket";
 export default {
     name: "NavbarLeftAdmin",
     components: {},
@@ -78,7 +44,18 @@ export default {
             listGroup: [],
         };
     },
-    methods: {},
+    methods: {
+        logoff() {
+            socket.disconnect();
+
+            Axios.post("logoff");
+            EventBus.$emit("logoff");
+
+            localStorage.removeItem("token");
+            localStorage.removeItem("userInfor");
+            this.$router.push({ name: "Login" });
+        },
+    },
     computed: {},
 };
 </script>
@@ -138,13 +115,11 @@ export default {
     padding: 10px 0;
     font-weight: 700;
 }
-.cover {
-    display: flex;
+
+.item {
+    text-align: left;
 }
-.cover img {
-    width: 50px;
-    height: 50px;
-    margin: auto;
-    border-radius: 10px;
+.logoff {
+    cursor: pointer;
 }
 </style>

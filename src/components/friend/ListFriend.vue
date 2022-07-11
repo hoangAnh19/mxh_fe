@@ -53,7 +53,6 @@
 <script>
 // @ is an alias to /src
 import Axios from "@/components/Axios.js";
-// import FriendElement from "@/components/friend/FriendElement.vue";
 import config from "@/config";
 
 export default {

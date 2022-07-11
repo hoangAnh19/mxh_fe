@@ -3,7 +3,14 @@
         <div class="row position-relative">
             <b-col class="logo-search" cols="1" md="1" lg="2">
                 <a href="#">
-                    <router-link :to="{ name: 'Home' }">
+                    <router-link v-if="isAdmin" :to="{ name: 'ManagerUser' }">
+                        <img
+                            v-on:click="$router.push({ name: 'ManagerUser' })"
+                            class="logo"
+                            src="@/assets/Logo-Network.jpg"
+                        />
+                    </router-link>
+                    <router-link v-else :to="{ name: 'Home' }">
                         <img
                             v-on:click="$router.push({ name: 'Home' })"
                             class="logo"
@@ -11,7 +18,7 @@
                         />
                     </router-link>
                 </a>
-                <div class="search">
+                <div class="search" v-show="!isAdmin">
                     <b-icon class="icon-search" icon="search"></b-icon>
                     <input placeholder="Tìm kiếm tại đây" />
                 </div>
@@ -23,8 +30,9 @@
                 lg="4"
                 offset-lg="2"
                 offset-md="2"
+                v-show="!isAdmin"
             >
-                <div class="row">
+                <div class="row" v-show="!isAdmin">
                     <b-col class="navbar-main-icon" cols="3">
                         <router-link :to="{ name: 'Home' }">
                             <b-icon icon="house"></b-icon>
@@ -47,7 +55,14 @@
                     </b-col>
                 </div>
             </b-col>
-            <b-col class="navbar-right" cols="1" offset-lg="2" md="3" lg="2">
+            <b-col
+                class="navbar-right"
+                cols="1"
+                offset-lg="2"
+                md="3"
+                lg="2"
+                v-show="!isAdmin"
+            >
                 <div class="row">
                     <b-col class="navbar-right-icon" cols="6">
                         <router-link
@@ -110,12 +125,19 @@ export default {
     components: {
         UserDialog,
     },
+    created() {
+        this.isAdmin =
+            JSON.parse(localStorage.getItem("userInfo")).level === 1
+                ? true
+                : false;
+    },
     props: {
         user: Object,
     },
     data() {
         return {
             modalDialog: false,
+            isAdmin: false,
         };
     },
     mounted() {
@@ -194,8 +216,7 @@ export default {
     height: 15px;
     margin: auto;
 }
-.navbar-main {
-}
+
 .navbar-main > .row,
 .navbar-right > .row {
     height: 100%;
