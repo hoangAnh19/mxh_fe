@@ -245,7 +245,7 @@ export default {
     },
     async created() {
         // alert(1) //thời điểm này sẽ không nhận được gì ở console.
-        // var app = this;
+        var app = this;
         this.countMessage = 0;
         this.list_message = [];
         EventBus.$on("sendMessageHome", (data, id) => {
@@ -259,16 +259,16 @@ export default {
         });
 
         EventBus.$on("login", () => {
-            // app.connected();
+            app.connected();
         });
         const token = window.localStorage.getItem("token");
         await axios
             .get("http://127.0.0.1:80/api/userInfo", {
                 headers: { Authorization: "Bearer " + token },
             })
-            .then(() => {
-                // app.connected();
-                // localStorage.setItem("userInfo", JSON.stringify(response.data));
+            .then((response) => {
+                app.connected();
+                localStorage.setItem("userInfo", JSON.stringify(response.data));
             })
             .catch(() => {
                 localStorage.removeItem("token");

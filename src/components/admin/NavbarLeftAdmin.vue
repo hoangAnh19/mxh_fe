@@ -13,7 +13,7 @@
                 </div>
                 <div style="margin: auto 10px">Quản lý nhóm</div>
             </router-link>
-            <router-link class="d-flex link" :to="{ name: 'CoreValue' }">
+            <router-link class="d-flex link" :to="{ name: 'ManagerPost' }">
                 <div class="div-icon">
                     <b-icon class="icon" icon="journal-check"></b-icon>
                 </div>
@@ -89,7 +89,7 @@ export default {
 .nav-left-home {
     position: fixed;
     left: 0;
-    top: 70px;
+    top: 0;
     padding: 30px 10px;
     margin-top: 10px;
     overflow: auto;

@@ -11,6 +11,18 @@
             <span class="m-2">{{
                 `${user.first_name} ${user.last_name}`
             }}</span>
+            <button
+                type="button"
+                class="close"
+                aria-label="Close"
+                style="
+                    margin-left: auto;
+                    border-radius: 20px;
+                    border: 2px solid white;
+                "
+            >
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
         <div class="body-chat" id="body-chat" ref="bodyChat">
             <div class="list-message">
@@ -100,9 +112,10 @@ export default {
     width: 350px;
 }
 .header {
-    background-color: green;
+    background-color: white;
     padding: 0 10px;
     border-radius: 10px 10px 0 0;
+    border-bottom: solid;
 }
 .avatar {
     display: flex;

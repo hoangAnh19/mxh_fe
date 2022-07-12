@@ -13,10 +13,10 @@
         </div>
         <div class="body">
             <div v-if="!listUser.length" class="no-message">
-                <button class="btn btn-create">
+                <!-- <button class="btn btn-create">
                     <b-icon icon="plus-circle-fill"></b-icon> Tạo cuộc trò
                     chuyện mới
-                </button>
+                </button> -->
             </div>
             <div v-else>
                 <div v-for="user in listUser" :key="user">

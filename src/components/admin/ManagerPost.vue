@@ -5,80 +5,54 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h2>Quản lý <b>Thành viên</b></h2>
+                        <h2>Quản lý <b>Bài viết</b></h2>
                     </div>
                     <div class="col-sm-1s">
                         <input
                             v-model="key_search"
                             v-on:keyup="search(key_search)"
                             class="form-input"
-                            placeholder="Lọc thành viên"
+                            placeholder="Lọc thành bài viết theo nội dung"
                         />
                     </div>
                 </div>
             </div>
-            <!-- {{ friendsObject }} -->
+            <!-- {{ postObject }} -->
             <table class="table table-striped table-hover item">
                 <thead>
                     <tr>
-                        <th>Tên</th>
-                        <th>Email</th>
+                        <th>Post ID</th>
+                        <th>Người đăng</th>
                         <th>Phone</th>
-                        <th>Trạng thái tài khoản</th>
+                        <th>Nội dung</th>
                         <th>Tác vụ</th>
                     </tr>
                 </thead>
-                <tbody v-for="friend in friendsObject" :key="friend">
+                <tbody v-for="post in postObject" :key="post">
                     <tr>
+                        <td>{{ post.id }}</td>
                         <td>
-                            <img
-                                v-if="friend.avatar"
-                                class="avatar"
-                                :src="config.url.image + friend.avatar"
-                            />
-                            <img
-                                class="avatar"
-                                v-else
-                                src="@/assets/image/default-user-avatar.png"
-                            />
+                            {{ post.user.first_name + post.user.last_name }}
+                        </td>
+                        <td>{{ post.user.phone }}</td>
+                        <td>{{ post.data }}</td>
+                        <td>
                             <router-link
+                                class="link"
                                 :to="{
-                                    name: 'Profile',
-                                    params: { userId: friend.id },
+                                    name: 'Post',
+                                    params: { postId: post.id },
                                 }"
-                                class="fw-bold text-decoration-none link-user"
+                                style="padding: 10px"
                             >
-                                {{ friend.first_name + " " + friend.last_name }}
+                                Xem
                             </router-link>
-                        </td>
-                        <td>{{ friend.email }}</td>
 
-                        <td>
-                            {{ friend.phone ? friend.phone : "Chưa cập nhật" }}
-                        </td>
-
-                        <td>
-                            {{
-                                friend.level === 2
-                                    ? "Đang hoạt động"
-                                    : "Vô hiệu hoá"
-                            }}
-                        </td>
-                        <td>
-                            <a
-                                class="edit"
-                                data-toggle="modal"
-                                v-if="friend.level === 2"
-                                v-on:click="banUser(friend.id)"
-                            >
-                                Vô hiệu hoá</a
-                            >
                             <a
                                 class="delete"
                                 data-toggle="modal"
-                                v-if="friend.level !== 2"
-                                v-on:click="activeUser(friend.id)"
-                                >Kích hoạt tài khoản</a
+                                v-on:click="deletePost(post.id)"
+                                >Xoá</a
                             >
                         </td>
                     </tr>
@@ -95,66 +69,79 @@ import Axios from "@/components/Axios.js";
 import config from "@/config";
 
 export default {
-    name: "ManagerUser",
+    name: "ManagerPost",
     created() {
-        this.getListFriend();
+        this.getListPost();
+        window.onscroll = () => {
+            console.log(
+                window.scrollY,
+                window.innerHeight,
+                document.body.scrollHeight,
+                !this.ajaxLock,
+                this.stillPost
+            );
+            if (
+                window.scrollY + window.innerHeight >=
+                    document.body.scrollHeight &&
+                !this.ajaxLock &&
+                this.stillPost
+            ) {
+                this.getList();
+            }
+        };
     },
     components: { NavbarLeftAdmin },
 
     data() {
         return {
             config: config,
-            friendsObject: {},
             errors: "",
             page: 1,
-            stillUser: true,
-            i: 1,
+            stillPost: true,
             key_search: "",
-            id_ban: 1,
+            listPost: [],
+            postObject: {},
         };
     },
     methods: {
         search(data) {
-            Axios.get("user/searchUser?user_name=" + data).then((response) => {
+            Axios.get("post/searchPost?data=" + data).then((response) => {
                 if (response.data.status == "success") {
-                    this.friendsObject = response.data.data;
+                    this.postObject = response.data.data;
                 }
             });
         },
 
-        getListFriend() {
-            Axios.get("relationship/list_friend1?page=" + this.page).then(
-                (response) => {
-                    if (response.data.status == "success") {
-                        this.friendsObject = response.data.data;
-                        console.log("response", response);
-                        console.log("response.data", response.data);
-                        console.log("response.data.data", response.data.data);
-                        this.erros = "";
-                        this.page++;
+        getListPost() {
+            Axios.get("post/get_list_admin").then((response) => {
+                this.postObject = response.data.data;
+            });
+        },
+
+        getPost(id) {
+            Axios.get("post/show?post_id=" + id)
+                .then((response) => {
+                    if (response.data.length) {
+                        console.log(this.post);
+                        this.post = response.data[0];
+                        console.log(this.post);
                     } else {
-                        this.errors = response.data.message;
+                        alert("Bài viết không tồn tại");
+                        this.$router.push({ name: "Home" });
                     }
-                }
-            );
+                })
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
+                });
         },
 
-        async banUser(id) {
-            Axios.put("admin/banUser?id=" + id).then((response) => {
+        async deletePost(id) {
+            Axios.post("admin/deletePostAdmin?id=" + id).then((response) => {
                 if (response.data.status == "success") {
                     console.log("success");
                 }
             });
-            await this.getListFriend();
-        },
-
-        async activeUser(id) {
-            Axios.put("admin/activeUser?id=" + id).then((response) => {
-                if (response.data.status == "success") {
-                    console.log("success");
-                }
-            });
-            await this.getListFriend();
+            await this.getListPost();
         },
     },
 };
@@ -294,7 +281,8 @@ table.table td a:hover {
     color: #2196f3;
 }
 table.table td a.edit {
-    color: #ffc107;
+    color: #2196f3;
+    padding: 10px;
 }
 table.table td a.edit:hover {
     cursor: pointer;

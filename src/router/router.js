@@ -109,6 +109,11 @@ const routes = [
         name: "ManagerUser",
         component: () => import("../components/admin/ManagerUser.vue"),
     },
+    {
+        path: "/admin/managerPost",
+        name: "ManagerPost",
+        component: () => import("../components/admin/ManagerPost.vue"),
+    },
 ];
 
 const router = createRouter({

@@ -15,12 +15,6 @@
             <b-col class="item btn-post" cols="10" v-on:click="modal = true">
                 <span>Đăng bài viết</span>
             </b-col>
-            <b-col class="item position-relative icon-image" cols="1"
-                ><b-icon
-                    icon="image"
-                    style="font-size: 35px; margin: auto"
-                ></b-icon
-            ></b-col>
         </b-row>
     </div>
     <div v-if="modal">
@@ -311,18 +305,19 @@ export default {
     padding: 0 10px;
 }
 .list-type-show li:hover {
-    background: rgb(139, 204, 139);
+    background: #dfa810;
     color: white;
 }
 .btn-post {
     cursor: pointer;
     background-color: #ecf7e7;
     background-clip: content-box;
-    color: #6fbe44 !important;
+    color: #77a7ff !important;
     display: flex;
     font-size: 20px;
     border-radius: 10px;
     font-weight: 700;
+    margin-left: 10px;
 }
 .btn-post span {
     margin: auto;
