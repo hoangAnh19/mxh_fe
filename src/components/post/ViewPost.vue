@@ -4,7 +4,9 @@
             <div class="avatar">
                 <img
                     v-if="post.user.avatar"
-                    :src="'http://127.0.0.1:80/tmp_images/' + post.user.avatar"
+                    :src="
+                        'http://127.0.0.1:8000/tmp_images/' + post.user.avatar
+                    "
                 />
                 <img v-else src="@/assets/image/default-user-avatar.png" />
             </div>
@@ -81,7 +83,7 @@
                             <img
                                 v-if="post.post_share.user.avatar"
                                 :src="
-                                    'http://127.0.0.1:80/tmp_images/' +
+                                    'http://127.0.0.1:8000/tmp_images/' +
                                     post.post_share.user.avatar
                                 "
                             />
@@ -329,7 +331,7 @@
                     style="flex: 1"
                     v-on:click="modal = true"
                 >
-                    <div style="margin: auto">
+                    <div style="margin: auto" v-if="post.group_id === null">
                         <b-icon icon="share" style="font-size: 24px"></b-icon
                         >&nbsp;Chia sẻ
                     </div>
@@ -341,7 +343,8 @@
                         <img
                             v-if="owner.avatar"
                             :src="
-                                'http://127.0.0.1:80/tmp_images/' + owner.avatar
+                                'http://127.0.0.1:8000/tmp_images/' +
+                                owner.avatar
                             "
                         />
                         <img
@@ -375,7 +378,7 @@
                         <img
                             v-if="comment.user.avatar"
                             :src="
-                                'http://127.0.0.1:80/tmp_images/' +
+                                'http://127.0.0.1:8000/tmp_images/' +
                                 comment.user.avatar
                             "
                         />
@@ -433,7 +436,7 @@
                                     <img
                                         v-if="answer.user.avatar"
                                         :src="
-                                            'http://127.0.0.1:80/tmp_images/' +
+                                            'http://127.0.0.1:8000/tmp_images/' +
                                             answer.user.avatar
                                         "
                                     />
@@ -473,7 +476,7 @@
                                 <img
                                     v-if="owner.avatar"
                                     :src="
-                                        'http://127.0.0.1:80/tmp_images/' +
+                                        'http://127.0.0.1:8000/tmp_images/' +
                                         owner.avatar
                                     "
                                 />
@@ -523,7 +526,7 @@
                                 <img
                                     v-if="post.user.avatar"
                                     :src="
-                                        'http://127.0.0.1:80/tmp_images/' +
+                                        'http://127.0.0.1:8000/tmp_images/' +
                                         post.user.avatar
                                     "
                                 />
@@ -631,22 +634,7 @@
                                     ><b-icon icon="globe"></b-icon> Công
                                     khai</span
                                 >
-                                <span v-if="type_show == 2"
-                                    ><b-icon icon="people"></b-icon> Bạn
-                                    bè</span
-                                >
-                                <span v-if="type_show == 3"
-                                    ><b-icon icon="lock"></b-icon> Chỉ mình
-                                    tôi</span
-                                >
-                                <span v-if="type_show == 4"
-                                    ><b-icon icon="person"></b-icon> Bạn bè cụ
-                                    thể</span
-                                >
-                                <span v-if="type_show == 5"
-                                    ><b-icon icon="person-dash"></b-icon> Bạn bè
-                                    trừ</span
-                                >
+
                                 <ul
                                     v-if="!hiddenTypeShow"
                                     v-click-outside="hideShow"
@@ -720,7 +708,7 @@
                             <img
                                 v-if="item.user.avatar"
                                 :src="
-                                    'http://127.0.0.1:80/tmp_images/' +
+                                    'http://127.0.0.1:8000/tmp_images/' +
                                     item.user.avatar
                                 "
                             />
@@ -770,7 +758,7 @@
                             <img
                                 v-if="item.user.avatar"
                                 :src="
-                                    'http://127.0.0.1:80/tmp_images/' +
+                                    'http://127.0.0.1:8000/tmp_images/' +
                                     item.user.avatar
                                 "
                             />

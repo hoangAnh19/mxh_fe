@@ -17,7 +17,7 @@
                             <img
                                 v-if="owner.avatar"
                                 :src="
-                                    'http://127.0.0.1:80/tmp_images/' +
+                                    'http://127.0.0.1:8000/tmp_images/' +
                                     owner.avatar
                                 "
                             />
@@ -108,7 +108,7 @@
                             class="image"
                             v-for="image in images"
                             :key="image"
-                            :src="'http://127.0.0.1:80/tmp_images/' + image"
+                            :src="'http://127.0.0.1:8000/tmp_images/' + image"
                         />
                     </div>
                 </div>

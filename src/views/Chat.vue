@@ -12,11 +12,9 @@
                     />
                 </b-col>
                 <b-col cols="9" style="padding: 0">
-                    <MainChat :user="user" v-bind:chat="selectMessage" />
+                    <MainChat :user="user" :chat="selectMessage" />
                 </b-col>
             </b-row>
-            <!-- <input v-model="message" />
-      <button v-on:click="sendMess">Gửi</button> -->
         </div>
     </div>
 </template>
@@ -33,6 +31,7 @@ export default {
     name: "Chat",
     created() {
         this.getListChat();
+        console.log("listchat", this.listChat);
         EventBus.$on("loadChat", () => {
             this.getListChat();
             this.ajaxListMessage = true;
@@ -76,29 +75,12 @@ export default {
                         alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
                         this.ajaxLock = false;
                     });
-                // Axios.get("user/searchUser?id=" + data.sender_id)
-                //   .then((response) => {
-                //     if (response.data.status == "success") {
-                //       var item = response.data.friend[0];
-                //       item.message = [data];
-                //       item.last_message=data
-                //       item.is_one = true;
-                //       item.last_message.isOne = false
-                //       this.listChat.unshift(item);
-                //     } else {
-                //       console.log(this.data.message);
-                //     }
-                //     this.ajaxLock = false;
-                //   })
-                //   .catch(() => {
-                //     this.ajaxLock = false;
-                //   });
-                // item.message = [];
-                // this.listChat.push(item);
             }
+            console.log("bắt socket Chat", data);
         });
+
         EventBus.$on("message_", (data) => {
-            console.log(this.listChat, data);
+            console.log("onMessage Chat", this.listChat, data);
             var x = data.sender_id;
             data.sender_id = data.receiver_id;
             data.receiver_id = x;
@@ -112,6 +94,7 @@ export default {
                 }
             });
         });
+
         this.user = JSON.parse(localStorage.getItem("userInfo"));
         EventBus.$on("selectMessage", (item) => {
             var x = true;
@@ -125,7 +108,9 @@ export default {
                 this.listChat.unshift(item);
             }
             this.selectMessage = item;
+            alert("Chọn người liên hệ thành công");
         });
+
         EventBus.$on("loadMessage", (data, id) => {
             this.listChat.forEach((item) => {
                 if (item.id === id) {
@@ -139,7 +124,6 @@ export default {
     },
     data() {
         return {
-            message: "",
             user: {},
             listChat: [],
             selectMessage: {},
@@ -169,20 +153,6 @@ export default {
                         this.listChat.push(item_);
                     });
                     this.ajaxListMessage = false;
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                    this.ajaxLock = false;
-                });
-        },
-        sendMess() {
-            Axios.post("chat/send", {
-                receiver_id: 5,
-                data: this.message,
-                time: "2022-02-02",
-            })
-                .then(() => {
-                    this.message = "";
                 })
                 .catch(() => {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại sau");

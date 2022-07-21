@@ -4,7 +4,7 @@
             <div class="avatar">
                 <img
                     v-if="user.avatar"
-                    :src="'http://127.0.0.1:80/tmp_images/' + user.avatar"
+                    :src="'http://127.0.0.1:8000/tmp_images/' + user.avatar"
                 />
                 <img v-else src="@/assets/image/default-user-avatar.png" />
             </div>
@@ -20,6 +20,7 @@
                     border-radius: 20px;
                     border: 2px solid white;
                 "
+                v-on:click="closeDialog"
             >
                 <span aria-hidden="true">&times;</span>
             </button>
@@ -35,7 +36,7 @@
                             <div>{{ messItem.data }}</div>
                         </div>
                     </div>
-                    <div class="left-mess" v-else>
+                    <div v-else class="left-mess">
                         <div class="left-mess-item">
                             <div>{{ messItem.data }}</div>
                         </div>
@@ -63,18 +64,37 @@ export default {
     name: "FormChat",
     mounted() {
         this.scrollToElement();
+        console.log("prop user", this.user);
+        if (this.user.message) this.userMess.message = this.user.message;
+        console.log("prop userMess.message", this.userMess.message);
     },
     props: {
         user: Object,
     },
+    created() {
+        /**
+         * TODO
+         */
+        // if (this.user.message.length) {
+        //     for (let i = 0; i < this.user.message.length; i++) {
+        //         this.userMess.push(this.user.message);
+        //     }
+        // }
+    },
+
     data() {
         return {
             message: "",
             ajaxLock: false,
+            userMess: { message: [] },
         };
     },
     watch: {},
     methods: {
+        closeDialog() {
+            EventBus.$emit("closeUserDialog");
+        },
+
         scrollToElement() {
             const el = this.$refs.bodyChat;
 
@@ -83,6 +103,15 @@ export default {
                 el.scrollIntoView({ behavior: "smooth" });
             }
         },
+
+        revertObj(obj) {
+            let newObj = Object.keys(obj)
+                .sort()
+                .reverse()
+                .map((key) => ({ ...obj[key], key: key }));
+            return newObj;
+        },
+
         async sendMess() {
             if (this.ajaxLock) return;
             if (!this.message) return;
@@ -90,16 +119,17 @@ export default {
             await Axios.post("chat/send", {
                 receiver_id: this.user.id,
                 data: this.message,
-            })
-                .then((res) => {
-                    this.message = "";
-                    this.ajaxLock = false;
-                    EventBus.$emit("sendMessageHome", res.data, this.user.id);
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                    this.ajaxLock = false;
-                });
+            }).then((res) => {
+                console.log(res);
+                this.message = "";
+                this.ajaxLock = false;
+                EventBus.$emit("sendMessageHome", res.data, this.user.id);
+            });
+            // .catch(() => {
+            //     alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
+            //     this.ajaxLock = false;
+            // });
+
             this.isBottom = true;
         },
     },

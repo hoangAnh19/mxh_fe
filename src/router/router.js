@@ -105,6 +105,11 @@ const routes = [
     { component: CoreValue, path: "/CoreValue", name: "CoreValue" },
     { component: Admin, path: "/admin", name: "Admin" },
     {
+        path: "/infoCompany",
+        name: "InfoCompany",
+        component: () => import("../views/InfoCompany.vue"),
+    },
+    {
         path: "/admin/managerUser",
         name: "ManagerUser",
         component: () => import("../components/admin/ManagerUser.vue"),
@@ -113,6 +118,16 @@ const routes = [
         path: "/admin/managerPost",
         name: "ManagerPost",
         component: () => import("../components/admin/ManagerPost.vue"),
+    },
+    {
+        path: "/admin/managerGroup",
+        name: "ManagerGroup",
+        component: () => import("../components/admin/ManagerGroup.vue"),
+    },
+    {
+        path: "/admin/chartManagerGroup",
+        name: "ChartManagerGroup",
+        component: () => import("../components/admin/ChartManagerGroup.vue"),
     },
 ];
 

@@ -10,7 +10,7 @@ import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
 router.beforeEach((to, from, next) => {
     const token = window.localStorage.getItem("token");
     axios
-        .get("http://127.0.0.1:80/api/userInfo", {
+        .get("http://127.0.0.1:8000/api/userInfo", {
             headers: { Authorization: "Bearer " + token },
         })
         .then((response) => {

@@ -16,7 +16,7 @@
                 <img
                     v-if="user.cover"
                     class="cover"
-                    :src="'http://127.0.0.1:80/tmp_images/' + user.cover"
+                    :src="'http://127.0.0.1:8000/tmp_images/' + user.cover"
                 />
             </b-col>
         </div>

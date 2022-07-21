@@ -4,7 +4,7 @@
             <div class="avatar">
                 <img
                     v-if="user.avatar"
-                    :src="'http://127.0.0.1:80/tmp_images/' + user.avatar"
+                    :src="'http://127.0.0.1:8000/tmp_images/' + user.avatar"
                 />
                 <img v-else src="@/assets/image/default-user-avatar.png" />
             </div>
@@ -30,7 +30,7 @@
                 <div class="avatar">
                     <img
                         v-if="item.avatar"
-                        :src="'http://127.0.0.1:80/tmp_images/' + item.avatar"
+                        :src="'http://127.0.0.1:8000/tmp_images/' + item.avatar"
                     />
                     <img v-else src="@/assets/image/default-user-avatar.png" />
                 </div>
@@ -94,7 +94,7 @@
                                 <img
                                     v-if="item.avatar"
                                     :src="
-                                        'http://127.0.0.1:80/tmp_images/' +
+                                        'http://127.0.0.1:8000/tmp_images/' +
                                         item.avatar
                                     "
                                 />
@@ -185,16 +185,21 @@ export default {
             }
         },
         selectNewMessage(item) {
-            EventBus.$emit("selectMessage", item);
-            this.closeModalNewMessage();
+            if (this.user.level + 1 < item.level) {
+                alert("Bạn không có quyền chủ động liên hệ người này");
+            } else {
+                EventBus.$emit("selectMessage", item);
+                this.closeModalNewMessage();
+            }
         },
+
         search(data) {
             if (this.ajaxLock) return;
             this.ajaxLock = true;
             Axios.get("user/searchUser?user_name=" + data)
                 .then((response) => {
                     if (response.data.status == "success") {
-                        this.listSearch = response.data.friend;
+                        this.listSearch = response.data.data;
                     } else {
                         console.log(this.data.message);
                     }

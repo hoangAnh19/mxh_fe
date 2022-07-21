@@ -21,7 +21,7 @@
             <div
                 class="boder border-top border-1 border-dark d-flex flex-column"
             >
-                <router-link :to="{ name: 'Setting' }" class="px-6 my-3 item">
+                <!-- <router-link :to="{ name: 'Setting' }" class="px-6 my-3 item">
                     <img src="@/assets/icon/icon-setting.svg" /> Cài đặt
                 </router-link>
                 <router-link
@@ -30,7 +30,7 @@
                 >
                     <img src="@/assets/icon/icon-edit-profile.svg" /> Chỉnh sửa
                     thông tin
-                </router-link>
+                </router-link> -->
                 <div v-on:click="logoff" class="px-6 my-3 logoff item">
                     <img src="@/assets/icon/icon-logout.svg" /> Đăng xuất
                 </div>

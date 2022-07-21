@@ -3,7 +3,7 @@
         <div class="avatar">
             <img
                 v-if="user.avatar"
-                :src="'http://127.0.0.1:80/tmp_images/' + user.avatar"
+                :src="'http://127.0.0.1:8000/tmp_images/' + user.avatar"
             />
             <img v-else src="@/assets/image/default-user-avatar.png" />
         </div>
@@ -12,67 +12,13 @@
                 :to="{ name: 'Profile', params: { userId: user.id } }"
                 class="user-name fw-bold"
             >
-                {{ user.first_name + " " + user.last_name }}
+                {{ user.first_name + " " + user.last_name }} - Đơn vị :
+                {{ user.workplace }}
             </router-link>
             <div v-if="rol == 1">Quản trị viên</div>
             <div v-if="rol == 2">Kiểm duyệt viên</div>
-            <div v-if="user.count_mutual_friends">
-                {{ user.count_mutual_friends }} bạn chung
-            </div>
         </div>
         <div class="control d-flex">
-            <div v-if="friend_ !== -1" class="item friend">
-                <div
-                    class="btn btn-outline-primary"
-                    v-on:click="addFriend"
-                    v-if="friend_ == 0"
-                >
-                    Kết bạn
-                </div>
-                <div
-                    class="btn btn-outline-success"
-                    v-on:click="optionFriend = true"
-                    v-if="friend_ == 1"
-                    style="position: relative"
-                >
-                    Bạn bè
-                    <div
-                        v-if="optionFriend"
-                        v-click-outside="closeOptionFriend"
-                        class="options-friend"
-                    >
-                        <div v-on:click="unFriend">Hủy kết bạn</div>
-                    </div>
-                </div>
-                <div
-                    class="btn btn-outline-secondary"
-                    v-on:click="unRequestFriend"
-                    v-if="friend_ == 2"
-                >
-                    Hủy yêu cầu
-                </div>
-                <div
-                    class="btn btn-outline-secondary"
-                    v-if="friend_ == 3"
-                    style="position: relative"
-                    v-on:click="optionFeedback = true"
-                >
-                    Phản hồi
-                    <div
-                        v-if="optionFeedback"
-                        v-click-outside="closeOptionFeedback"
-                        class="options-friend"
-                    >
-                        <div
-                            style="border-bottom: 2px solid #f2f2f2"
-                            v-on:click="acceptFriend"
-                        >
-                            Chấp nhận
-                        </div>
-                        <div v-on:click="unRequestFriend">Từ chối</div>
-                    </div>
-                </div>
-            </div>
             <div v-if="isManager && friend_ !== -1">
                 <div
                     class="btn btn-outline-dark mx-2"

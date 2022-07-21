@@ -4,7 +4,7 @@
             <div class="avatar">
                 <img
                     v-if="chat.avatar"
-                    :src="'http://127.0.0.1:80/tmp_images/' + chat.avatar"
+                    :src="'http://127.0.0.1:8000/tmp_images/' + chat.avatar"
                 />
                 <img v-else src="@/assets/image/default-user-avatar.png" />
             </div>
@@ -19,7 +19,8 @@
                         <img
                             v-if="chat.avatar"
                             :src="
-                                'http://127.0.0.1:80/tmp_images/' + chat.avatar
+                                'http://127.0.0.1:8000/tmp_images/' +
+                                chat.avatar
                             "
                         />
                         <img
@@ -119,6 +120,12 @@ export default {
                 .then((res) => {
                     if (res.data.status == "success") {
                         EventBus.$emit("loadMessage", res.data.data, id);
+                        console.log(
+                            "function getMess",
+                            res.data.data,
+                            "chat mess",
+                            this.chat.message
+                        );
                     }
                 })
                 .catch(() => {
@@ -137,6 +144,7 @@ export default {
                     this.message = "";
                     this.ajaxLock = false;
                     EventBus.$emit("message_", res.data);
+                    console.log("function sendMess", res.data);
                 })
                 .catch(() => {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại sau");

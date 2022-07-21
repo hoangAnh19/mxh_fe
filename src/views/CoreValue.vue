@@ -92,6 +92,6 @@ export default {
 
 .list-friend {
     width: 40%;
-    margin: 20px auto 0 auto;
+    margin: -18px auto 0 auto;
 }
 </style>

@@ -1,20 +1,37 @@
 <template>
     <div class="left-groups">
-        <div class="title">Nhóm</div>
+        <div class="title">Các phòng ban</div>
         <div
             class="btn btn-outline-primary"
             style="width: 90%"
             v-on:click="changeComponent(1)"
         >
-            <b-icon icon="card-checklist"></b-icon> Bảng tin
+            <b-icon icon="card-checklist"></b-icon> Quy định
         </div>
 
-        <button class="btn btn-create" v-on:click="changeComponent(2)">
-            <b-icon icon="plus-circle-fill"></b-icon> Tạo nhóm mới
+        <button
+            class="btn btn-create"
+            v-on:click="changeComponent(2)"
+            v-show="isAdmin"
+        >
+            <b-icon icon="plus-circle-fill"></b-icon> Tạo phòng mới
         </button>
+
+        <router-link
+            class="btn btn-create"
+            :to="{ name: 'ManagerGroup' }"
+            v-show="isAdmin"
+        >
+            <div class="div-icon"></div>
+            <div style="margin: auto 10px">
+                <b-icon icon="gear-fill" aria-hidden="true"></b-icon> Quản lý
+                group
+            </div>
+        </router-link>
+
         <div class="manager" v-if="listGroupManager.length">
             <div class="title-1">
-                Nhóm bạn quản lý
+                phòng bạn quản lý
                 <span class="view-all" v-on:click="changeComponent(3)"
                     >Xem tất cả</span
                 >
@@ -31,7 +48,7 @@
                         <img
                             v-if="listGroupManager[item - 1].cover"
                             :src="
-                                'http://127.0.0.1:80/tmp_images/' +
+                                'http://127.0.0.1:8000/tmp_images/' +
                                 listGroupManager[item - 1].cover
                             "
                         />
@@ -62,7 +79,7 @@
         </div>
         <div class="participation" v-if="listGroupNomarl.length">
             <div class="title-1">
-                Nhóm bạn tham gia
+                phòng bạn tham gia
                 <span class="view-all" v-on:click="changeComponent(4)"
                     >Xem tất cả</span
                 >
@@ -79,7 +96,7 @@
                         <img
                             v-if="listGroupNomarl[item - 1].cover"
                             :src="
-                                'http://127.0.0.1:80/tmp_images/' +
+                                'http://127.0.0.1:8000/tmp_images/' +
                                 listGroupNomarl[item - 1].cover
                             "
                         />
@@ -108,6 +125,15 @@
                 </div>
             </div>
         </div>
+
+        <div class="participation">
+            <div class="title-1">
+                Tất cả các phòng
+                <span class="view-all" v-on:click="changeComponent(5)"
+                    >Xem tất cả</span
+                >
+            </div>
+        </div>
     </div>
 </template>
 
@@ -118,13 +144,22 @@ import EventBus from "@/EventBus.js";
 
 export default {
     name: "NavBarLeftGroup",
-    created() {},
+    created() {
+        this.user = JSON.parse(localStorage.getItem("userInfo"));
+        this.isAdmin =
+            JSON.parse(localStorage.getItem("userInfo")).level === 4
+                ? true
+                : false;
+    },
     props: {
         listGroupManager: {},
         listGroupNomarl: {},
+        listAllGroup: {},
     },
     data() {
-        return {};
+        return {
+            isAdmin: false,
+        };
     },
     watch: {},
     methods: {

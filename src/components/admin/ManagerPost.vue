@@ -23,6 +23,7 @@
                     <tr>
                         <th>Post ID</th>
                         <th>Người đăng</th>
+                        <th>Nhóm</th>
                         <th>Phone</th>
                         <th>Nội dung</th>
                         <th>Tác vụ</th>
@@ -34,6 +35,7 @@
                         <td>
                             {{ post.user.first_name + post.user.last_name }}
                         </td>
+                        <td>{{ post.group_id ? post.group_id : "" }}</td>
                         <td>{{ post.user.phone }}</td>
                         <td>{{ post.data }}</td>
                         <td>
@@ -136,12 +138,16 @@ export default {
         },
 
         async deletePost(id) {
-            Axios.post("admin/deletePostAdmin?id=" + id).then((response) => {
-                if (response.data.status == "success") {
-                    console.log("success");
-                }
-            });
-            await this.getListPost();
+            if (confirm("Bạn muốn xoá bài viết này?")) {
+                Axios.post("admin/deletePostAdmin?id=" + id).then(
+                    (response) => {
+                        if (response.data.status == "success") {
+                            console.log("success");
+                        }
+                    }
+                );
+                await this.getListPost();
+            }
         },
     },
 };

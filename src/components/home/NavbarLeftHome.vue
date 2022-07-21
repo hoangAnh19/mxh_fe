@@ -8,7 +8,7 @@
                 <div class="avatar">
                     <img
                         v-if="user.avatar"
-                        :src="'http://127.0.0.1:80/tmp_images/' + user.avatar"
+                        :src="'http://127.0.0.1:8000/tmp_images/' + user.avatar"
                     />
                     <img v-else src="@/assets/image/default-user-avatar.png" />
                 </div>
@@ -26,13 +26,21 @@
                 <div class="div-icon">
                     <b-icon class="icon" icon="globe"></b-icon>
                 </div>
-                <div style="margin: auto 10px">Nhóm</div>
+                <div style="margin: auto 10px">Các phòng ban</div>
             </router-link>
             <router-link class="d-flex link" :to="{ name: 'CoreValue' }">
                 <div class="div-icon">
                     <b-icon class="icon" icon="journal-check"></b-icon>
                 </div>
-                <div style="margin: auto 10px">Giá trị cốt lõi</div>
+                <div style="margin: auto 10px">
+                    Giá trị cốt lõi doanh nghiệp
+                </div>
+            </router-link>
+            <router-link class="d-flex link" :to="{ name: 'InfoCompany' }">
+                <div class="div-icon">
+                    <b-icon class="icon" icon="info-circle-fill"></b-icon>
+                </div>
+                <div style="margin: auto 10px">Tổng quan doanh nghiệp</div>
             </router-link>
             <router-link class="d-flex link" :to="{ name: 'Chat' }">
                 <div class="div-icon">
@@ -42,7 +50,7 @@
             </router-link>
         </div>
         <div class="shortcuts">
-            <div class="title-shortcuts">Lối tắt của bạn</div>
+            <div class="title-shortcuts">Lối tắt nhanh</div>
             <div class="list_group">
                 <div
                     v-for="item in listGroup.length < 3 ? listGroup.length : 3"
@@ -53,7 +61,7 @@
                         <img
                             v-if="listGroup[item - 1].cover"
                             :src="
-                                'http://127.0.0.1:80/tmp_images/' +
+                                'http://127.0.0.1:8000/tmp_images/' +
                                 listGroup[item - 1].cover
                             "
                         />
@@ -150,6 +158,7 @@ export default {
     height: calc(100vh - 80px);
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
+    background: aliceblue;
 }
 .nav-left-home:hover::-webkit-scrollbar {
     width: 5px !important;

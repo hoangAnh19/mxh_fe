@@ -173,7 +173,7 @@ input:focus {
 }
 
 .list-friend {
-    width: 40%;
+    width: 60%;
     margin: 20px auto 0 auto;
 }
 </style>

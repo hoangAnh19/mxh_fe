@@ -5,7 +5,7 @@
                 <img
                     v-if="group.cover"
                     class="cover"
-                    :src="'http://127.0.0.1:80/tmp_images/' + group.cover"
+                    :src="'http://127.0.0.1:8000/tmp_images/' + group.cover"
                 />
             </b-col>
         </div>

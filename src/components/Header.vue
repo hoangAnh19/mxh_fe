@@ -20,7 +20,10 @@
                 </a>
                 <div class="search" v-show="!isAdmin">
                     <b-icon class="icon-search" icon="search"></b-icon>
-                    <input placeholder="Tìm kiếm tại đây" />
+                    <input
+                        style="background: darkseagreen"
+                        placeholder="Tìm kiếm tại đây"
+                    />
                 </div>
             </b-col>
             <!-- d-sm-none -->
@@ -74,7 +77,7 @@
                             <img
                                 v-if="user.avatar"
                                 :src="
-                                    'http://127.0.0.1:80/tmp_images/' +
+                                    'http://127.0.0.1:8000/tmp_images/' +
                                     user.avatar
                                 "
                                 class="rounded-circle bg-secondary"
@@ -127,7 +130,7 @@ export default {
     },
     created() {
         this.isAdmin =
-            JSON.parse(localStorage.getItem("userInfo")).level === 1
+            JSON.parse(localStorage.getItem("userInfo")).level === 5
                 ? true
                 : false;
     },
@@ -149,7 +152,7 @@ export default {
 </script>
 <style scoped lang="scss">
 .header {
-    background-color: white;
+    background-color: darkseagreen;
     top: 0;
     right: 0;
     left: 0;

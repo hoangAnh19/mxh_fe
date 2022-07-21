@@ -17,24 +17,24 @@
                     </div>
                 </div>
             </div>
-            <!-- {{ friendsObject }} -->
+            <!-- {{ usersObject }} -->
             <table class="table table-striped table-hover item">
                 <thead>
                     <tr>
                         <th>Tên</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Trạng thái tài khoản</th>
+                        <th>Quyền tài khoản</th>
                         <th>Tác vụ</th>
                     </tr>
                 </thead>
-                <tbody v-for="friend in friendsObject" :key="friend">
+                <tbody v-for="user in usersObject" :key="user">
                     <tr>
                         <td>
                             <img
-                                v-if="friend.avatar"
+                                v-if="user.avatar"
                                 class="avatar"
-                                :src="config.url.image + friend.avatar"
+                                :src="config.url.image + user.avatar"
                             />
                             <img
                                 class="avatar"
@@ -44,42 +44,57 @@
                             <router-link
                                 :to="{
                                     name: 'Profile',
-                                    params: { userId: friend.id },
+                                    params: { userId: user.id },
                                 }"
                                 class="fw-bold text-decoration-none link-user"
                             >
-                                {{ friend.first_name + " " + friend.last_name }}
+                                {{ user.first_name + " " + user.last_name }}
                             </router-link>
                         </td>
-                        <td>{{ friend.email }}</td>
+                        <td>{{ user.email }}</td>
 
                         <td>
-                            {{ friend.phone ? friend.phone : "Chưa cập nhật" }}
+                            {{ user.phone ? user.phone : "Chưa cập nhật" }}
                         </td>
 
                         <td>
-                            {{
-                                friend.level === 2
-                                    ? "Đang hoạt động"
-                                    : "Vô hiệu hoá"
-                            }}
+                            <div v-if="user.level === 0">Vô hiệu hoá</div>
+                            <div v-if="user.level === 1">LV1-Nhân viên</div>
+                            <div v-if="user.level === 2">
+                                LV2-Phó trưởng phòng/ban
+                            </div>
+                            <div v-if="user.level === 3">
+                                LV3-Trưởng phòng/ban
+                            </div>
+                            <div v-if="user.level === 4">LV4-Ban giám đốc</div>
                         </td>
                         <td>
-                            <a
-                                class="edit"
-                                data-toggle="modal"
-                                v-if="friend.level === 2"
-                                v-on:click="banUser(friend.id)"
+                            <b-dropdown
+                                id="dropdown-1"
+                                text="Phân quyền user"
+                                class="m-md-2"
                             >
-                                Vô hiệu hoá</a
-                            >
-                            <a
-                                class="delete"
-                                data-toggle="modal"
-                                v-if="friend.level !== 2"
-                                v-on:click="activeUser(friend.id)"
-                                >Kích hoạt tài khoản</a
-                            >
+                                <b-dropdown-item v-on:click="assign(user.id, 4)"
+                                    >LV4-Ban giám đốc</b-dropdown-item
+                                >
+                                <b-dropdown-item v-on:click="assign(user.id, 3)"
+                                    >LV3-Trưởng phòng/ban</b-dropdown-item
+                                >
+                                <b-dropdown-item v-on:click="assign(user.id, 2)"
+                                    >LV2-Phó trưởng phòng/ban</b-dropdown-item
+                                >
+                                <b-dropdown-divider></b-dropdown-divider>
+
+                                <b-dropdown-item v-on:click="assign(user.id, 1)"
+                                    >LV1- Nhân viên</b-dropdown-item
+                                >
+                                <b-dropdown-item v-on:click="assign(user.id, 0)"
+                                    >Vô hiệu hoá tài khoản</b-dropdown-item
+                                >
+                                <b-dropdown-item v-on:click="assign(user.id, 1)"
+                                    >Kích hoạt tài khoản</b-dropdown-item
+                                >
+                            </b-dropdown>
                         </td>
                     </tr>
                 </tbody>
@@ -97,36 +112,42 @@ import config from "@/config";
 export default {
     name: "ManagerUser",
     created() {
-        this.getListFriend();
+        this.getListuser();
     },
     components: { NavbarLeftAdmin },
 
     data() {
         return {
             config: config,
-            friendsObject: {},
+            usersObject: {},
             errors: "",
             page: 1,
             stillUser: true,
             i: 1,
             key_search: "",
             id_ban: 1,
+            optionManager: false,
+            user_id: 1,
+            role: 1,
         };
     },
     methods: {
+        confirm() {
+            confirm("Bạn có muốn cho người này làm quản trị viên");
+        },
         search(data) {
             Axios.get("user/searchUser?user_name=" + data).then((response) => {
                 if (response.data.status == "success") {
-                    this.friendsObject = response.data.data;
+                    this.usersObject = response.data.data;
                 }
             });
         },
 
-        getListFriend() {
+        getListuser() {
             Axios.get("relationship/list_friend1?page=" + this.page).then(
                 (response) => {
                     if (response.data.status == "success") {
-                        this.friendsObject = response.data.data;
+                        this.usersObject = response.data.data;
                         console.log("response", response);
                         console.log("response.data", response.data);
                         console.log("response.data.data", response.data.data);
@@ -145,7 +166,7 @@ export default {
                     console.log("success");
                 }
             });
-            await this.getListFriend();
+            await this.getListuser();
         },
 
         async activeUser(id) {
@@ -154,7 +175,63 @@ export default {
                     console.log("success");
                 }
             });
-            await this.getListFriend();
+            await this.getListuser();
+        },
+        async assign($user_id, $role) {
+            this.user_id = $user_id;
+            this.role = $role;
+            var confi;
+            switch (this.role) {
+                case 1:
+                    confi = confirm(
+                        "Bạn có muốn cho người này phân quyền nhân viên"
+                    );
+                    break;
+                case 2:
+                    confi = confirm(
+                        "Bạn có muốn cho người này phân quyền phó phòng/ban"
+                    );
+                    break;
+                case 3:
+                    confi = confirm(
+                        "Bạn có muốn cho người này phân quyền trưởng phòng/ban"
+                    );
+                    break;
+                case 4:
+                    confi = confirm(
+                        "Bạn có muốn cho người này phân quyền ban giám đốc"
+                    );
+                    break;
+                case 0:
+                    confi = confirm("Bạn có muốn vô hiệu hoá tài khoản này");
+                    break;
+                case 5:
+                    confi = confirm("Bạn có muốn kích hoạt tài khoản này");
+                    break;
+                default:
+                    confi = confirm(
+                        "Bạn có muốn gỡ bỏ quyền hiện tại của người này"
+                    );
+                    break;
+            }
+            console.log(confi);
+            if (confi) {
+                Axios.put(
+                    "admin/assignRole?user_id=" +
+                        this.user_id +
+                        "&role=" +
+                        this.role
+                )
+                    .then((response) => {
+                        if (response.data.status == "success") {
+                            alert(response.data.message);
+                        }
+                    })
+                    .catch(() => {
+                        alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
+                    });
+            }
+            await this.getListuser();
         },
     },
 };
@@ -204,7 +281,7 @@ input:focus {
     margin: 20px 0;
 }
 
-.list-friend {
+.list-user {
     width: 60%;
     margin: 20px auto 0 auto;
 }
@@ -435,5 +512,21 @@ table.table .avatar {
 }
 .modal form label {
     font-weight: normal;
+}
+
+.options-user {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    color: black;
+    border: 1px solid #f2f2f2;
+    position: absolute;
+    top: 100%;
+    width: 120px;
+    z-index: 1;
+}
+
+.content {
+    padding: 10px 10px;
 }
 </style>

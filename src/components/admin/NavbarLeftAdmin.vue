@@ -1,13 +1,33 @@
 <template>
     <div class="nav-left-home">
         <div class="link-component">
-            <router-link class="d-flex link" :to="{ name: 'ManagerUser' }">
+            <a href="#">
+                <router-link v-if="isAdmin" :to="{ name: 'ManagerUser' }">
+                    <img
+                        v-on:click="$router.push({ name: 'ManagerUser' })"
+                        class="logo"
+                        src="@/assets/Logo-Network.jpg"
+                    />
+                </router-link>
+                <router-link v-else :to="{ name: 'Home' }">
+                    <img
+                        v-on:click="$router.push({ name: 'Home' })"
+                        class="logo"
+                        src="@/assets/Logo-Network.jpg"
+                    />
+                </router-link>
+            </a>
+            <router-link
+                class="d-flex link"
+                :to="{ name: 'ManagerUser' }"
+                v-if="isAdmin"
+            >
                 <div class="div-icon">
                     <b-icon class="icon" icon="people-fill"></b-icon>
                 </div>
                 <div style="margin: auto 10px">Quản lý thành viên</div>
             </router-link>
-            <router-link class="d-flex link" :to="{ name: 'Groups' }">
+            <router-link class="d-flex link" :to="{ name: 'ManagerGroup' }">
                 <div class="div-icon">
                     <b-icon class="icon" icon="globe"></b-icon>
                 </div>
@@ -20,10 +40,33 @@
                 <div style="margin: auto 10px">Quản lý bài viết</div>
             </router-link>
 
+            <!-- <router-link
+                class="d-flex link"
+                :to="{ name: 'ChartManagerGroup' }"
+            >
+                <div class="div-icon">
+                    <b-icon class="icon" icon="journal-check"></b-icon>
+                </div>
+                <div style="margin: auto 10px">Biều đồ</div>
+            </router-link> -->
+
+            <router-link
+                class="d-flex link"
+                :to="{ name: 'Home' }"
+                v-if="!isAdmin"
+            >
+                <div class="div-icon"></div>
+                <div style="margin: auto 10px">
+                    <img src="@/assets/icon/icon-logout.svg" />Quay lại trang
+                    chủ
+                </div>
+            </router-link>
+
             <div
                 style="margin: auto 10px"
                 v-on:click="logoff"
                 class="px-6 my-3 logoff item"
+                v-if="isAdmin"
             >
                 <img src="@/assets/icon/icon-logout.svg" /> Đăng xuất
             </div>
@@ -38,7 +81,12 @@ import socket from "@/plugins/socket";
 export default {
     name: "NavbarLeftAdmin",
     components: {},
-
+    created() {
+        this.isAdmin =
+            JSON.parse(localStorage.getItem("userInfo")).level === 5
+                ? true
+                : false;
+    },
     data() {
         return {
             listGroup: [],
@@ -62,6 +110,12 @@ export default {
 <style scoped lang="scss">
 .avatar {
     display: flex;
+}
+
+.logo {
+    width: 100px;
+    height: 100px;
+    margin-right: 100px;
 }
 .avatar img {
     width: 30px;

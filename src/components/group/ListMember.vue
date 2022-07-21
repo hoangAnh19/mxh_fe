@@ -32,6 +32,7 @@
                 class="mb-4"
                 v-for="mem in listMember"
                 :key="mem"
+                :status="mem.status"
                 v-bind:role="mem.role"
                 v-bind:isManager="isManager"
                 v-bind:user="mem.user"
@@ -134,5 +135,6 @@ export default {
 .form-control {
     border-radius: 25px;
     margin-top: 10px;
+    background: bottom;
 }
 </style>

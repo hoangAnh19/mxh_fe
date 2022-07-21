@@ -45,10 +45,9 @@
                 </div>
             </div>
         </div>
-        <button v-on:click="logListUser()">.</button>
         <div v-for="userMessage in listUser" :key="userMessage">
             <FormChat
-                v-if="userMessage && userMessage.select && modalDialog"
+                v-if="userMessage && userMessage.select"
                 :user="userMessage"
             />
         </div>
@@ -76,11 +75,6 @@ export default {
     components: {
         FormChat,
         ListFriendHome,
-    },
-    mounted() {
-        EventBus.$on("closeUserDialog", () => {
-            this.modalDialog = false;
-        });
     },
     methods: {
         async getMessage(id, page) {
@@ -117,7 +111,7 @@ export default {
                     }
                 });
             }
-            app.modalDialog = true;
+
             app.listUser[user_id].select = true;
             if (!app.listUser[user_id].message) {
                 Axios.get("chat/getByIdUser?user_id=" + user_id)
@@ -155,13 +149,6 @@ export default {
                     this.ajaxLock = false;
                 });
         },
-        logListUser() {
-            console.log("listUser", this.listUser);
-            console.log("array", this.testArray);
-            this.listUser.forEach((item) => {
-                console.log("item", item);
-            });
-        },
         connected() {
             var app = this;
             socket.auth = { jwt: localStorage.getItem("token") };
@@ -178,7 +165,7 @@ export default {
                     app.countMessage += 1;
                     app.list_message[data.sender_id] = [data];
                 }
-                EventBus.$emit("message", data, data.receiver_id);
+                EventBus.$emit("message", data);
             });
 
             socket.on("laravel_database_online_:online", function (user_id) {
@@ -186,18 +173,12 @@ export default {
                     Axios.get(`user?user_id=${user_id}`).then((response) => {
                         if (response.data.status == "success") {
                             app.listUser[user_id] = { ...response.data.data };
-                            /**
-                             *TODO app.listUser
-                             */
                             console.log(app.listUser[user_id]);
                             app.listUser[user_id].connect = true;
                             app.listUser[user_id].time_of = null;
                             EventBus.$emit("on-off", {
                                 id: user_id,
                                 user: app.listUser[user_id],
-                            });
-                            EventBus.$emit("listUser", {
-                                user: app.listUser,
                             });
                         }
                     });
@@ -257,8 +238,6 @@ export default {
             ajaxLock: false,
             isActiveList: true,
             closeForm: true,
-            testArray: [],
-            modalDialog: false,
         };
     },
     watch: {
@@ -273,17 +252,6 @@ export default {
         var app = this;
         this.countMessage = 0;
         this.list_message = [];
-
-        EventBus.$on("message", (data, id) => {
-            console.log("bắt socket Chat", data, id);
-            this.listUser.forEach((user) => {
-                if (user.id === data.receiver_id) {
-                    if (user.message ?? null) user.message.push(data);
-                    return;
-                }
-            });
-        });
-
         EventBus.$on("sendMessageHome", (data, id) => {
             this.listUser[id].message.push({
                 isOne: this.listUser[id].is_one,
