@@ -37,7 +37,7 @@ const routes = [
         component: Chat,
     },
     {
-        path: "/friend",
+        path: "/member",
         name: "Friend",
         component: Friend,
     },

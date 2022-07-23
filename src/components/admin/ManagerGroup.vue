@@ -196,6 +196,7 @@ export default {
         },
 
         chartBarPost() {
+            console.log("dataCountPostPending", this.dataCountPostPending);
             const ctxBar = document
                 .getElementById("myChartBarPost")
                 .getContext("2d");
@@ -358,7 +359,7 @@ export default {
                                     item.countPostPending =
                                         response.data.data.length;
                                 this.dataCountPostPending.push(
-                                    response.data.data
+                                    response.data.data.length
                                 );
                                 console.log(
                                     "listGroup in method",

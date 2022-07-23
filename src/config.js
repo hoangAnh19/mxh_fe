@@ -4,6 +4,7 @@ var config = {
     },
     url: {
         image: "http://127.0.0.1:8000/tmp_images/",
+        document: "http://127.0.0.1:8000/documents/",
     },
     group: {
         role: {

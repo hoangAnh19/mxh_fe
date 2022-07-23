@@ -155,13 +155,6 @@ export default {
                     this.ajaxLock = false;
                 });
         },
-        logListUser() {
-            console.log("listUser", this.listUser);
-            console.log("array", this.testArray);
-            this.listUser.forEach((item) => {
-                console.log("item", item);
-            });
-        },
         connected() {
             var app = this;
             socket.auth = { jwt: localStorage.getItem("token") };

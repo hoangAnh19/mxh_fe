@@ -42,12 +42,50 @@
                             v-if="chat.is_one == messItem.isOne"
                         >
                             <div class="right-mess-item">
-                                <div>{{ messItem.data }}</div>
+                                <div
+                                    v-if="
+                                        this.arrayFileName.includes(
+                                            messItem.data.slice(-3)
+                                        ) ||
+                                        this.arrayFileName.includes(
+                                            messItem.data.slice(-4)
+                                        )
+                                    "
+                                >
+                                    <a
+                                        :href="
+                                            config.url.document + messItem.data
+                                        "
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        >{{ messItem.data }}</a
+                                    >
+                                </div>
+                                <div v-else>{{ messItem.data }}</div>
                             </div>
                         </div>
                         <div class="left-mess" v-else>
                             <div class="left-mess-item">
-                                <div>{{ messItem.data }}</div>
+                                <div
+                                    v-if="
+                                        this.arrayFileName.includes(
+                                            messItem.data.slice(-3)
+                                        ) ||
+                                        this.arrayFileName.includes(
+                                            messItem.data.slice(-4)
+                                        )
+                                    "
+                                >
+                                    <a
+                                        :href="
+                                            config.url.document + messItem.data
+                                        "
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        >{{ messItem.data }}</a
+                                    >
+                                </div>
+                                <div v-else>{{ messItem.data }}</div>
                             </div>
                         </div>
                     </div>
@@ -56,10 +94,21 @@
             <div class="send-message d-flex">
                 <input v-model="message" class="form-input" />
                 <b-icon
+                    icon="file-earmark-arrow-up"
+                    style="margin: auto; font-size: 30px"
+                    v-on:click="selectButtonImage"
+                ></b-icon>
+                <b-icon
                     v-on:click="sendMess"
                     icon="cursor"
                     style="margin: auto; font-size: 30px; margin: 0 20px"
                 ></b-icon>
+                <input
+                    ref="inputFile"
+                    hidden
+                    type="file"
+                    v-on:change="uploadFile($event)"
+                />
             </div>
         </div>
         <div v-else style="text-align: center; position: relative; top: 40%">
@@ -72,6 +121,7 @@
 // @ is an alias to /src
 import EventBus from "@/EventBus.js";
 import Axios from "@/components/Axios.js";
+import config from "@/config";
 
 export default {
     name: "MainChat",
@@ -100,10 +150,13 @@ export default {
     mounted() {},
     data() {
         return {
+            config: config,
             message: "",
             x: 0,
             isBottom: false,
             ajaxLock: false,
+            file: "",
+            arrayFileName: ["pdf", "docx", "png", "jpg", "mp3", "mp4", "jfif"],
         };
     },
     watch: {
@@ -151,6 +204,28 @@ export default {
                     this.ajaxLock = false;
                 });
             this.isBottom = true;
+        },
+
+        selectButtonImage() {
+            this.$refs.inputFile.click();
+        },
+        uploadFile(event) {
+            var formData = new FormData();
+            formData.append("file", event.target.files[0]);
+            Axios.post("file/upload", formData)
+                .then((response) => {
+                    if (response.data.status == "success") {
+                        this.file = response.data.data;
+                        console.log(this.file);
+                        this.message = response.data.data;
+                        alert("Đã tải file lên thành công");
+                    } else {
+                        alert(response.data.message);
+                    }
+                })
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
+                });
         },
     },
 };

@@ -13,7 +13,7 @@
 
         <div class="list yesterday form-month">
             <div v-for="friend in friendsObject" :key="friend" class="item">
-                <div>
+                <div style="display: flex">
                     <img
                         v-if="friend.avatar"
                         class="avatar"
@@ -30,20 +30,21 @@
                             params: { userId: friend.id },
                         }"
                         class="fw-bold text-decoration-none link-user"
-                        style="margin-left: 20px"
+                        style="margin-left: 20px; min-width: 200px !important"
                     >
                         {{ friend.first_name + " " + friend.last_name }}
                     </router-link>
 
-                    <span
+                    <div
                         v-if="friend.workplace != null"
                         style="
                             margin-left: 20px;
                             font-size: 16px;
                             font-weight: 700;
                         "
-                        >Vị trí công việc : {{ friend.workplace }}</span
                     >
+                        Vị trí công việc : {{ friend.workplace }}
+                    </div>
                 </div>
             </div>
         </div>
