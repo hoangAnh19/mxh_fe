@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
-import Friend from "../views/Friend.vue";
+import ListUser from "../views/ListUser.vue";
 import Chat from "../views/Chat.vue";
 import UpdateProfile from "../views/UpdateProfile.vue";
 import Group from "../views/Group.vue";
@@ -13,7 +13,6 @@ import ResetPassword from "../views/ResetPassword.vue";
 import ForgotPassword from "../components/auth/ForgotPassword.vue";
 import ResetPasswordForm from "../components/auth/ResetPasswordForm.vue";
 import CoreValue from "../views/CoreValue.vue";
-import Admin from "../views/Admin.vue";
 
 const routes = [
     {
@@ -38,8 +37,8 @@ const routes = [
     },
     {
         path: "/member",
-        name: "Friend",
-        component: Friend,
+        name: "ListUser",
+        component: ListUser,
     },
     {
         path: "/profile/:userId",
@@ -103,31 +102,67 @@ const routes = [
         },
     },
     { component: CoreValue, path: "/CoreValue", name: "CoreValue" },
-    { component: Admin, path: "/admin", name: "Admin" },
+    {
+        component: () => import("../components/admin/ManagerUser.vue"),
+        path: "/admin",
+        name: "Admin",
+
+        beforeEnter: (to, from, next) => {
+            const isAdmin = JSON.parse(localStorage.getItem("userInfo")).level;
+            if (isAdmin === 5) next();
+            else next("/");
+            // ...
+        },
+    },
     {
         path: "/infoCompany",
         name: "InfoCompany",
         component: () => import("../views/InfoCompany.vue"),
     },
+
     {
         path: "/admin/managerUser",
         name: "ManagerUser",
         component: () => import("../components/admin/ManagerUser.vue"),
+        beforeEnter: (to, from, next) => {
+            const isAdmin = JSON.parse(localStorage.getItem("userInfo")).level;
+            if (isAdmin === 5) next();
+            else next("/");
+            // ...
+        },
     },
     {
         path: "/admin/managerPost",
         name: "ManagerPost",
         component: () => import("../components/admin/ManagerPost.vue"),
+        beforeEnter: (to, from, next) => {
+            const isAdmin = JSON.parse(localStorage.getItem("userInfo")).level;
+            if (isAdmin === 5) next();
+            else next("/");
+            // ...
+        },
     },
     {
         path: "/admin/managerGroup",
         name: "ManagerGroup",
         component: () => import("../components/admin/ManagerGroup.vue"),
+        beforeEnter: (to, from, next) => {
+            const isAdmin = JSON.parse(localStorage.getItem("userInfo")).level;
+            if (isAdmin === 4 || isAdmin === 5) next();
+            else next("/");
+            // ...
+        },
     },
     {
         path: "/admin/chartManagerGroup",
         name: "ChartManagerGroup",
         component: () => import("../components/admin/ChartManagerGroup.vue"),
+        beforeEnter: (to, from, next) => {
+            const isAdmin = JSON.parse(localStorage.getItem("userInfo")).level;
+            if (isAdmin === 5) next();
+            else next("/");
+            // ...
+        },
     },
 ];
 

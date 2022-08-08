@@ -19,12 +19,27 @@
                     </router-link>
                 </a>
                 <div class="search" v-show="!isAdmin">
-                    <b-icon class="icon-search" icon="search"></b-icon>
+                    <!-- <b-icon class="icon-search" icon="search"></b-icon> -->
                     <input
-                        style="background: darkseagreen"
+                        style="background: darkseagreen; min-width: 200px"
                         placeholder="Tìm kiếm tại đây"
+                        v-model="key_search"
                     />
+                    <b-icon class="icon-search" icon="search"></b-icon>
                 </div>
+
+                <button
+                    style="
+                        background: darkseagreen;
+                        min-width: 120px;
+                        margin-left: 10px;
+                        font-weight: 700;
+                        border: aliceblue;
+                    "
+                    v-on:click="search()"
+                >
+                    Tìm kiếm
+                </button>
             </b-col>
             <!-- d-sm-none -->
             <b-col
@@ -42,7 +57,7 @@
                         </router-link>
                     </b-col>
                     <b-col class="navbar-main-icon" cols="3">
-                        <router-link :to="{ name: 'Friend' }">
+                        <router-link :to="{ name: 'ListUser' }">
                             <b-icon icon="people"></b-icon>
                         </router-link>
                     </b-col>
@@ -94,7 +109,16 @@
                         </router-link>
                     </b-col>
                     <b-col class="navbar-right-icon" cols="3">
-                        <div class="notification"></div>
+                        <div
+                            class="notification"
+                            style="display: flex"
+                            v-on:click="showListShare()"
+                        >
+                            <b-icon icon="bell-fill"> </b-icon>
+                            <span v-if="numNoti" class="icon-button__badge">{{
+                                numNoti
+                            }}</span>
+                        </div>
                     </b-col>
                     <b-col class="navbar-right-icon" cols="3">
                         <div class="drop-down">
@@ -109,6 +133,7 @@
                                     user.first_name + ' ' + user.last_name
                                 "
                                 v-bind:userId="user.id"
+                                v-bind:user="user"
                             />
                         </div>
                     </b-col>
@@ -116,11 +141,138 @@
             </b-col>
         </div>
     </div>
+    <div v-if="modal_share">
+        <div class="modal-dialog1">
+            <div class="modal-content1" v-click-outside="closeModalListShare">
+                <div class="share-header">
+                    <span class="fw-bold fs-3">Danh sách thông báo</span>
+                </div>
+                <div v-for="item in listNoti" :key="item" class="listNoti">
+                    <span>
+                        <router-link
+                            v-if="item.type != 4"
+                            class="link"
+                            :to="{
+                                name: 'Post',
+                                params: { postId: item.post_id },
+                            }"
+                        >
+                            <div class="d-flex">
+                                <img
+                                    v-if="item.user_2.avatar"
+                                    :src="
+                                        'http://127.0.0.1:8000/tmp_images/' +
+                                        item.user_2.avatar
+                                    "
+                                    class="rounded-circle bg-secondary"
+                                    style="width: 60px; height: 60px"
+                                />
+                                <img
+                                    class="rounded-circle bg-secondary"
+                                    style="width: 60px; height: 60px"
+                                    v-else
+                                    src="@/assets/image/default-user-avatar.png"
+                                />
+                                <div
+                                    class="ms-3"
+                                    v-on:click="updateNoti(item.id)"
+                                >
+                                    <span class="fw-bold fs-5">
+                                        {{
+                                            item.user_2.first_name +
+                                            " " +
+                                            item.user_2.last_name
+                                        }}</span
+                                    >
+                                    <b-icon
+                                        v-if="item.seen == 0"
+                                        icon="record-fill"
+                                    ></b-icon>
+                                    <br />
+                                    <span v-if="item.type === 1"
+                                        >Đã like bài viết của bạn</span
+                                    >
+                                    <span v-if="item.type === 2"
+                                        >Đã bình luận bài viết của bạn</span
+                                    >
+                                    <span v-if="item.type === 3"
+                                        >Đã share bài viết của bạn</span
+                                    >
+
+                                    <br />
+                                    <span class="fst-italic">{{
+                                        parseDate(item.created_at)
+                                    }}</span>
+                                    <br />
+                                </div>
+                            </div>
+                        </router-link>
+                        <router-link
+                            v-else
+                            class="link"
+                            :to="{
+                                name: 'Profile',
+                                params: { userId: user.id },
+                            }"
+                        >
+                            <div
+                                class="d-flex"
+                                v-on:click="updateNoti(item.id)"
+                            >
+                                <img
+                                    v-if="item.user_2.avatar"
+                                    :src="
+                                        'http://127.0.0.1:8000/tmp_images/' +
+                                        item.user_2.avatar
+                                    "
+                                    class="rounded-circle bg-secondary"
+                                    style="width: 60px; height: 60px"
+                                />
+                                <img
+                                    class="rounded-circle bg-secondary"
+                                    style="width: 60px; height: 60px"
+                                    v-else
+                                    src="@/assets/image/default-user-avatar.png"
+                                />
+                                <div class="ms-3">
+                                    <span class="fw-bold fs-5">
+                                        {{
+                                            item.user_2.first_name +
+                                            " " +
+                                            item.user_2.last_name
+                                        }}</span
+                                    >
+                                    <b-icon
+                                        v-if="item.seen == 0"
+                                        icon="record-fill"
+                                    ></b-icon>
+                                    <br />
+                                    <span v-if="item.type === 4"
+                                        >Đã đăng bài viết trên trang cá nhân
+                                        bạn</span
+                                    >
+
+                                    <br />
+                                    <span class="fst-italic">{{
+                                        parseDate(item.created_at)
+                                    }}</span>
+                                    <br />
+                                </div>
+                            </div>
+                        </router-link>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import UserDialog from "@/components/header/UserDialog.vue";
+import Axios from "@/components/Axios.js";
+// import parse from "@/parse";
+
 import EventBus from "@/EventBus.js";
 
 export default {
@@ -133,20 +285,78 @@ export default {
             JSON.parse(localStorage.getItem("userInfo")).level === 5
                 ? true
                 : false;
+        this.getNoti();
+
+        EventBus.$on("newPost", () => {
+            this.numNoti = 0;
+            this.getNoti();
+            console.log("Envenbus on new post");
+        });
+
+        EventBus.$on("newComment", () => {
+            this.numNoti = 0;
+            this.getNoti();
+        });
     },
     props: {
         user: Object,
     },
     data() {
         return {
+            user_id: 0,
             modalDialog: false,
             isAdmin: false,
+            key_search: "",
+            modal_share: false,
+            numNoti: 0,
+            listNoti: [],
         };
     },
     mounted() {
         EventBus.$on("closeUserDialog", () => {
+            console.log("Evenbus_On_closeUser in Header file");
             this.modalDialog = false;
         });
+    },
+    methods: {
+        parseDate(date) {
+            return date.slice(11, 20) + date.slice(0, 10);
+        },
+        search() {
+            EventBus.$emit("searchPost", this.key_search);
+        },
+        showListShare() {
+            this.modal_share = true;
+        },
+        closeModalListShare() {
+            this.modal_share = false;
+        },
+        getNoti() {
+            Axios.get("notification/get?user_id=" + this.user.id)
+                .then((response) => {
+                    if (response.data.status == "success") {
+                        this.listNoti = response.data.data;
+                        this.listNoti.forEach((item) => {
+                            if (item.seen === 0) this.numNoti += 1;
+                            console.log(this.numNoti);
+                        });
+                        console.log("aaaaaaaaaaaa", this.listNoti);
+                    } else {
+                        console.log(this.data.message);
+                    }
+                })
+                .catch(() => {});
+        },
+
+        updateNoti(id) {
+            Axios.post("notification/update", {
+                noti_id: id,
+            })
+                .then(() => {})
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại");
+                });
+        },
     },
 };
 </script>
@@ -230,5 +440,67 @@ export default {
     height: 370px;
     position: absolute;
     border-radius: 10px;
+}
+.icon-button__badge {
+    position: absolute;
+    top: 5px;
+    width: 25px;
+    height: 25px;
+    background: red;
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+}
+.modal1 {
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    opacity: 0.6;
+    opacity: 0.6;
+    background: #000;
+}
+.modal-dialog1 {
+    margin-left: auto;
+    z-index: 51;
+    position: fixed;
+    width: 30%;
+    top: 10%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+.modal-content1 {
+    position: relative;
+    width: 70%;
+    pointer-events: auto;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, 0);
+    border-radius: 1.3rem;
+    outline: 0;
+    background: aliceblue;
+    height: 65%;
+    overflow: auto !important;
+}
+.listNoti {
+    margin-bottom: 10px;
+    border-bottom: 1px;
+}
+
+.online {
+    position: absolute;
+    background-color: green;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    bottom: 0;
+    right: 0;
 }
 </style>

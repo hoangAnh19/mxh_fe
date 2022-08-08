@@ -23,7 +23,7 @@
                     <tr>
                         <th>Post ID</th>
                         <th>Người đăng</th>
-                        <th>Nhóm</th>
+                        <th>phòng/ban</th>
                         <th>Phone</th>
                         <th>Nội dung</th>
                         <th>Tác vụ</th>
@@ -35,7 +35,8 @@
                         <td>
                             {{ post.user.first_name + post.user.last_name }}
                         </td>
-                        <td>{{ post.group_id ? post.group_id : "" }}</td>
+                        <!-- <td>{{ post.group.name ? post.group.name : "" }}</td> -->
+                        <td>{{ post.group ? post.group.name : "" }}</td>
                         <td>{{ post.user.phone }}</td>
                         <td>{{ post.data }}</td>
                         <td>
@@ -60,6 +61,15 @@
                     </tr>
                 </tbody>
             </table>
+            <paginate
+                :page-count="sumPage"
+                :click-handler="getListPost"
+                :prev-text="'Prev'"
+                :next-text="'Next'"
+                :container-class="'pagination'"
+                :page-class="'page-item'"
+            >
+            </paginate>
         </div>
     </div>
 </template>
@@ -69,30 +79,14 @@
 import NavbarLeftAdmin from "@/components/admin/NavbarLeftAdmin.vue";
 import Axios from "@/components/Axios.js";
 import config from "@/config";
+import Paginate from "vuejs-paginate-next";
 
 export default {
     name: "ManagerPost",
     created() {
-        this.getListPost();
-        window.onscroll = () => {
-            console.log(
-                window.scrollY,
-                window.innerHeight,
-                document.body.scrollHeight,
-                !this.ajaxLock,
-                this.stillPost
-            );
-            if (
-                window.scrollY + window.innerHeight >=
-                    document.body.scrollHeight &&
-                !this.ajaxLock &&
-                this.stillPost
-            ) {
-                this.getList();
-            }
-        };
+        this.getListPost(1);
     },
-    components: { NavbarLeftAdmin },
+    components: { NavbarLeftAdmin, Paginate },
 
     data() {
         return {
@@ -103,6 +97,7 @@ export default {
             key_search: "",
             listPost: [],
             postObject: {},
+            sumPage: 10,
         };
     },
     methods: {
@@ -114,10 +109,20 @@ export default {
             });
         },
 
-        getListPost() {
-            Axios.get("post/get_list_admin").then((response) => {
-                this.postObject = response.data.data;
-            });
+        getListPost(pageNumber) {
+            Axios.get("post/get_list_admin?page=" + pageNumber).then(
+                (response) => {
+                    if (response.data.status == "success") {
+                        this.postObject = response.data.data[0];
+                        this.sumPage = Math.floor(
+                            response.data.data[1] / 6 + 1
+                        );
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                    } else {
+                        this.errors = response.data.message;
+                    }
+                }
+            );
         },
 
         getPost(id) {

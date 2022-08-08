@@ -19,6 +19,7 @@ export default {
         EventBus.$on("createPost", (post) => {
             this.listPost.unshift(post);
         });
+
         window.onscroll = () => {
             console.log(
                 window.scrollY,
@@ -37,16 +38,7 @@ export default {
             }
         };
     },
-    watch: {
-        user: function () {
-            this.page = 1;
-            this.getList();
-        },
-        group: function () {
-            this.page = 1;
-            this.getList();
-        },
-    },
+
     components: {
         FormPost,
         ViewPost,
@@ -62,11 +54,46 @@ export default {
             page: 1,
             ajaxLock: false,
             stillPost: true,
+            i: 0,
         };
+    },
+    mounted() {
+        EventBus.$on("searchPost", (keySearch) => {
+            console.log("EventBus.$on   searchPost", keySearch);
+
+            if (!keySearch) {
+                this.page = 1;
+                this.listPost = [];
+                this.getList();
+                console.log("page- listpost", this.page, this.listPost);
+            } else {
+                this.listPost = [];
+                this.getListSearch(keySearch);
+            }
+        });
+
+        EventBus.$on("newPost", (data) => {
+            console.log("new post", data);
+            this.page = 1;
+            this.listPost = [];
+
+            // if (data !== JSON.parse(localStorage.getItem("userInfo")).id)
+            this.getList();
+
+            console.log("Envenbus on new post");
+        });
+
+        EventBus.$on("newComment", (data) => {
+            console.log("new comment", data);
+            this.page = 1;
+            this.listPost = [];
+            if (data != JSON.parse(localStorage.getItem("userInfo")).id)
+                this.getList();
+            console.log("Envenbus on new comment");
+        });
     },
     methods: {
         getList() {
-            if (this.ajaxLock) return;
             this.ajaxLock = true;
 
             var url;
@@ -102,6 +129,40 @@ export default {
                     }
                     this.page++;
                     this.ajaxLock = false;
+                })
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
+                    this.ajaxLock = false;
+                });
+        },
+
+        getListSearch(keySearch) {
+            this.ajaxLock = true;
+
+            var url;
+            switch (this.type_) {
+                case "home":
+                    url = "post/get_list_search?" + "keySearch=" + keySearch;
+
+                    break;
+                case "group":
+                    url =
+                        "post/get_list_search?group_id=" +
+                        this.group.id +
+                        "&keySearch=" +
+                        keySearch;
+
+                    break;
+            }
+            Axios.get(url)
+                .then((response) => {
+                    this.listPost = [];
+                    response.data.data.forEach((item) => {
+                        this.listPost.push(item);
+                    });
+                    this.ajaxLock = false;
+                    // if (this.type_ === "home")
+                    //     window.scrollTo({ bottom: 200, behavior: "smooth" });
                 })
                 .catch(() => {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại sau");

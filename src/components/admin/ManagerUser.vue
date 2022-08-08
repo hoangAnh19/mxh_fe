@@ -99,6 +99,15 @@
                     </tr>
                 </tbody>
             </table>
+            <paginate
+                :page-count="sumPage"
+                :click-handler="getListuser"
+                :prev-text="'Prev'"
+                :next-text="'Next'"
+                :container-class="'pagination'"
+                :page-class="'page-item'"
+            >
+            </paginate>
         </div>
     </div>
 </template>
@@ -108,16 +117,19 @@
 import NavbarLeftAdmin from "@/components/admin/NavbarLeftAdmin.vue";
 import Axios from "@/components/Axios.js";
 import config from "@/config";
+import Paginate from "vuejs-paginate-next";
 
 export default {
     name: "ManagerUser",
     created() {
-        this.getListuser();
+        this.getListuser(1);
     },
-    components: { NavbarLeftAdmin },
+    components: { NavbarLeftAdmin, Paginate },
 
     data() {
         return {
+            sumPage: 10,
+            currenPage: 1,
             config: config,
             usersObject: {},
             errors: "",
@@ -143,21 +155,17 @@ export default {
             });
         },
 
-        getListuser() {
-            Axios.get("relationship/list_friend1?page=" + this.page).then(
-                (response) => {
-                    if (response.data.status == "success") {
-                        this.usersObject = response.data.data;
-                        console.log("response", response);
-                        console.log("response.data", response.data);
-                        console.log("response.data.data", response.data.data);
-                        this.erros = "";
-                        this.page++;
-                    } else {
-                        this.errors = response.data.message;
-                    }
+        getListuser(pageNumber) {
+            Axios.get("user/list_user?page=" + pageNumber).then((response) => {
+                if (response.data.status == "success") {
+                    this.usersObject = response.data.data[0];
+                    this.sumPage = Math.floor(response.data.data[1] / 6 + 1);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                    this.erros = "";
+                } else {
+                    this.errors = response.data.message;
                 }
-            );
+            });
         },
 
         async banUser(id) {

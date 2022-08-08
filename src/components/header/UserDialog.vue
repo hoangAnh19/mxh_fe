@@ -7,10 +7,12 @@
             :to="{ name: 'Profile', params: { userId: userId } }"
             class="avatar"
         >
-            <b-icon
-                icon="person"
-                class="rounded-circle bg-secondary p-2"
-            ></b-icon>
+            <img
+                v-if="user.avatar"
+                :src="'http://127.0.0.1:8000/tmp_images/' + user.avatar"
+                class="rounded-circle bg-secondary"
+                style="width: 110px; height: 110px"
+            />
         </router-link>
         <router-link
             :to="{ name: 'Profile', params: { userId: userId } }"
@@ -50,6 +52,7 @@ export default {
     props: {
         username: Object,
         userId: Number,
+        user: Object,
     },
     data() {
         return {};

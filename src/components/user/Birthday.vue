@@ -241,7 +241,7 @@ export default {
             (this.months["now"] = []),
             (this.months["tomorrow"] = []),
             (this.months["yesterday"] = []),
-            Axios.get("relationship/list_friend_birth_day").then((response) => {
+            Axios.get("relationship/list_user_birth_day").then((response) => {
                 if (response.data.status == "success") {
                     this.friends = response.data.data;
                     var date = new Date();

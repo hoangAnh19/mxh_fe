@@ -35,7 +35,7 @@
                             <div v-else>
                                 Chào mừng bạn đã đến với group, hãy tham gia
                                 group để có thể trao đổi với các thành viên
-                                trong nhóm
+                                trong phòng/ban
                             </div>
                         </b-col>
                         <b-col cols="4">

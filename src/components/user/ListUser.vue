@@ -1,5 +1,5 @@
 <template>
-    <div class="list-friend" id="list-friend">
+    <div class="list-user" id="list-user">
         <div class="top">
             <h2>Thành viên</h2>
 
@@ -9,15 +9,25 @@
                 class="form-input"
                 placeholder="Lọc thành viên"
             />
+            <button
+                type="button"
+                class="btn btn-secondary ms-3"
+                v-on:click="
+                    getListuser(1);
+                    this.key_search = '';
+                "
+            >
+                Tất cả
+            </button>
         </div>
 
         <div class="list yesterday form-month">
-            <div v-for="friend in friendsObject" :key="friend" class="item">
+            <div v-for="user in usersObject" :key="user" class="item">
                 <div style="display: flex">
                     <img
-                        v-if="friend.avatar"
+                        v-if="user.avatar"
                         class="avatar"
-                        :src="config.url.image + friend.avatar"
+                        :src="config.url.image + user.avatar"
                     />
                     <img
                         class="avatar"
@@ -27,26 +37,47 @@
                     <router-link
                         :to="{
                             name: 'Profile',
-                            params: { userId: friend.id },
+                            params: { userId: user.id },
                         }"
                         class="fw-bold text-decoration-none link-user"
                         style="margin-left: 20px; min-width: 200px !important"
                     >
-                        {{ friend.first_name + " " + friend.last_name }}
+                        {{ user.first_name + " " + user.last_name }}
                     </router-link>
 
                     <div
-                        v-if="friend.workplace != null"
                         style="
+                            min-width: 200px !important;
                             margin-left: 20px;
                             font-size: 16px;
                             font-weight: 700;
                         "
                     >
-                        Vị trí công việc : {{ friend.workplace }}
+                        Vị trí : {{ posis(user.level) }}
+                    </div>
+                    <div
+                        v-if="user.workplace != null"
+                        style="
+                            min-width: 200px !important;
+                            margin-left: 20px;
+                            font-size: 16px;
+                            font-weight: 700;
+                        "
+                    >
+                        Đơn vị : {{ user.workplace }}
                     </div>
                 </div>
             </div>
+            <paginate
+                :page-count="sumPage"
+                :click-handler="getListuser"
+                :prev-text="'Prev'"
+                :next-text="'Next'"
+                :container-class="'pagination'"
+                :page-class="'page-item'"
+                style="margin-left: 310px"
+            >
+            </paginate>
         </div>
     </div>
 </template>
@@ -55,74 +86,56 @@
 // @ is an alias to /src
 import Axios from "@/components/Axios.js";
 import config from "@/config";
+import Paginate from "vuejs-paginate-next";
 
 export default {
-    name: "ListFriend",
+    name: "ListUser",
     created() {
-        this.getListFriend();
-        window.onscroll = () => {
-            if (
-                window.scrollY + window.innerHeight >=
-                    document.body.scrollHeight + 80 &&
-                !this.ajaxLock &&
-                this.stillUser
-            ) {
-                this.getListFriend();
-            }
-        };
+        this.getListuser(1);
     },
     props: {},
     data() {
         return {
+            sumPage: 10,
             config: config,
-            friendsObject: {},
-            friends: {},
+            usersObject: {},
             errors: "",
-            page: 1,
-            ajaxLock: false,
             stillUser: true,
             i: 1,
             key_search: "",
         };
     },
     components: {
-        // FriendElement,
+        Paginate,
     },
     watch: {},
     methods: {
         search(data) {
             Axios.get("user/searchUser?user_name=" + data).then((response) => {
                 if (response.data.status == "success") {
-                    this.friendsObject = response.data.data;
+                    this.usersObject = response.data.data;
                 }
             });
         },
 
-        getListFriend() {
-            if (this.ajaxLock) return;
-            this.ajaxLock = true;
-            Axios.get("relationship/list_friend1?page=" + this.page).then(
-                (response) => {
-                    if (response.data.status == "success") {
-                        this.friendsObject = response.data.data;
-                        console.log("response", response);
-                        console.log("response.data", response.data);
-                        console.log("response.data.data", response.data.data);
+        getListuser(pageNumber) {
+            Axios.get("user/list_user?page=" + pageNumber).then((response) => {
+                if (response.data.status == "success") {
+                    this.usersObject = response.data.data[0];
+                    this.sumPage = Math.floor(response.data.data[1] / 6 + 1);
 
-                        response.data.data.forEach((x) => {
-                            this.friends.push(x);
-                            console.log(x);
-                        });
-                        console.log("friends[]", this.friends);
-
-                        this.erros = "";
-                        this.page++;
-                    } else {
-                        this.errors = response.data.message;
-                    }
-                    this.ajaxLock = false;
+                    this.erros = "";
+                } else {
+                    this.errors = response.data.message;
                 }
-            );
+            });
+        },
+
+        posis(id) {
+            if (id === 4) return "Ban giám đốc";
+            if (id === 3) return "Trưởng phòng";
+            if (id === 2) return "Phó phòng";
+            if (id === 1) return "Nhân viên";
         },
     },
 };
@@ -173,8 +186,8 @@ input:focus {
     margin: 20px 0;
 }
 
-.list-friend {
-    width: 60%;
+.list-user {
+    width: 75%;
     margin: 20px auto 0 auto;
 }
 </style>

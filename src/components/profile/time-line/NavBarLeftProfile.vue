@@ -18,6 +18,11 @@
                 <span class="title"> Vị trí công việc </span>
                 {{ user.workplace ? user.workplace : "chưa cập nhật" }}
             </div>
+            <div class="item">
+                <b-icon class="icon border-info" icon="briefcase-fill"></b-icon>
+                <span class="title"> Đơn vị </span>
+                {{ user.workplace ? user.workplace : "chưa cập nhật" }}
+            </div>
 
             <div class="item">
                 <b-icon class="icon" icon="gift-fill"></b-icon>

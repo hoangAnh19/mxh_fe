@@ -77,7 +77,7 @@
                             v-on:click="kickMember"
                             v-if="sta !== config.member.status.prevent"
                         >
-                            Kick khỏi nhóm
+                            Kick khỏi phòng/ban
                         </div>
                         <div
                             v-on:click="preventMember"
@@ -188,7 +188,7 @@ export default {
             }
         },
         kickMember() {
-            if (confirm("Bạn có muốn kick thành viên này khỏi nhóm")) {
+            if (confirm("Bạn có muốn kick thành viên này khỏi phòng/ban")) {
                 Axios.post("group/kick-member", {
                     member_id: this.user.id,
                     group_id: this.$route.params.groupId,

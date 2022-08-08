@@ -2,16 +2,18 @@
     <div>Test friend</div>
     <div>danh sach</div>
     <!-- <li v-for="friend in friends" :key="friend.id"> -->
-    {{ friends }}
     <!-- </li> -->
+    <textarea class="form-control" v-model="count"></textarea>
+    <br />
+    {{ count }}
 </template>
 <script>
 import Axios from "../Axios";
 
 export default {
     name: "Test",
-    create() {
-        this.getListFriend();
+    created() {
+        // this.getlistUser();
         window.onscroll = () => {
             if (
                 window.scrollY + window.innerHeight >=
@@ -19,7 +21,7 @@ export default {
                 !this.ajaxLock &&
                 this.stillUser
             ) {
-                this.getListFriend();
+                this.getlistUser();
             }
         };
     },
@@ -32,34 +34,33 @@ export default {
             page: 1,
             ajaxLock: false,
             stillUser: true,
+            count: 0,
         };
     },
-    watch: {},
+    watch: {
+        count: function () {
+            console.log("thay doi gia", this.count);
+        },
+    },
+    mounted() {
+        setInterval(() => {
+            console.log("mouted");
+            this.count++;
+        }, 3000);
+        console.log("mouted");
+    },
     methods: {
-        //     getlistFriend() {
-        //         console.log("goi ham list friend");
-        //         if (this.ajaxLock) return;
-        //         this.ajaxLock = true;
-        //         Axios.get("relationship/list_friend")
-        //             .then((response) => {
-        //                 console.log("response", response);
-        //                 console.log("response.data", response.data);
-        //                 console.log("response.data.data", response.data.data);
-        //                 if (response.data.status == "success") {
-        //                     response.data.data.forEach((x) => {
-        //                         this.friends.push(x);
-        //                     });
-        //                 }
-        //             })
-        //             .catch(() => {
-        //                 this.ajaxLock = false;
-        //                 alert("Đã có lỗi xảy ra, vui lòng thử lại");
-        //             });
-        //     },
-        getListFriend() {
+        getCount() {
+            setInterval(function () {
+                this.count++;
+            }, 3000);
+            console.log("dang goi ham");
+        },
+
+        getlistUser() {
             if (this.ajaxLock) return;
             this.ajaxLock = true;
-            Axios.get("relationship/list_friend?page=" + this.page)
+            Axios.get("user/list_user?page=" + this.page)
                 .then((response) => {
                     console.log("response", response);
                     console.log("response.data", response.data);

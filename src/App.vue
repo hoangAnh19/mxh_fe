@@ -79,6 +79,7 @@ export default {
     },
     mounted() {
         EventBus.$on("closeUserDialog", () => {
+            console.log("Evenbus_On_closeUserDialog");
             this.modalDialog = false;
         });
     },
@@ -164,7 +165,8 @@ export default {
                     .then()
                     .catch();
             });
-            socket.on("laravel_database_chat:message", function (data) {
+            socket.on("laravel_database_chat:messageEvent", function (data) {
+                console.log("data socket ", [data]);
                 if (app.list_message[data.sender_id] ?? null) {
                     app.list_message[data.sender_id].push(data);
                 } else {
@@ -174,35 +176,58 @@ export default {
                 EventBus.$emit("message", data, data.receiver_id);
             });
 
-            socket.on("laravel_database_online_:online", function (user_id) {
-                if (!app.listUser[user_id]) {
-                    Axios.get(`user?user_id=${user_id}`).then((response) => {
-                        if (response.data.status == "success") {
-                            app.listUser[user_id] = { ...response.data.data };
-                            /**
-                             *TODO app.listUser
-                             */
-                            console.log(app.listUser[user_id]);
-                            app.listUser[user_id].connect = true;
-                            app.listUser[user_id].time_of = null;
-                            EventBus.$emit("on-off", {
-                                id: user_id,
-                                user: app.listUser[user_id],
-                            });
-                            EventBus.$emit("listUser", {
-                                user: app.listUser,
-                            });
-                        }
-                    });
-                } else {
-                    app.listUser[user_id].connect = true;
-                    app.listUser[user_id].time_of = null;
-                    EventBus.$emit("on-off", {
-                        id: user_id,
-                        user: app.listUser[user_id],
-                    });
+            socket.on(
+                "laravel_database_post_channel:postEvent",
+                function (data) {
+                    console.log("data socket ", data.user_id);
+                    EventBus.$emit("newPost", data.user_id);
                 }
-            });
+            );
+
+            socket.on(
+                "laravel_database_comment_channel:commentEvent",
+                function (data) {
+                    console.log("data socket ", data.user_id);
+                    EventBus.$emit("newComment", data.user_id);
+                }
+            );
+
+            socket.on(
+                "laravel_database_online_channel:onlineEvent",
+                function (user_id) {
+                    if (!app.listUser[user_id]) {
+                        Axios.get(`user?user_id=${user_id}`).then(
+                            (response) => {
+                                if (response.data.status == "success") {
+                                    app.listUser[user_id] = {
+                                        ...response.data.data,
+                                    };
+                                    /**
+                                     *TODO app.listUser
+                                     */
+                                    console.log(app.listUser[user_id]);
+                                    app.listUser[user_id].connect = true;
+                                    app.listUser[user_id].time_of = null;
+                                    EventBus.$emit("on-off", {
+                                        id: user_id,
+                                        user: app.listUser[user_id],
+                                    });
+                                    EventBus.$emit("listUser", {
+                                        user: app.listUser,
+                                    });
+                                }
+                            }
+                        );
+                    } else {
+                        app.listUser[user_id].connect = true;
+                        app.listUser[user_id].time_of = null;
+                        EventBus.$emit("on-off", {
+                            id: user_id,
+                            user: app.listUser[user_id],
+                        });
+                    }
+                }
+            );
             socket.on("offline", function (user_id) {
                 if (app.listUser[user_id]) {
                     app.listUser[user_id].connect = false;
@@ -234,7 +259,21 @@ export default {
                 }
             });
             EventBus.$on("get_list_on_off", () => {
+                console.log("Evenbus_on_get_list_on_off");
                 EventBus.$emit("list_on_off", app.listUser);
+            });
+            EventBus.$on("message", (data, id) => {
+                console.log(
+                    "Evenbus_On_Message bắt socket Chat in file App in method",
+                    data,
+                    id
+                );
+                this.listUser.forEach((user) => {
+                    if (user.id === data.receiver_id) {
+                        if (user.message ?? null) user.message.push(data);
+                        return;
+                    }
+                });
             });
         },
     },
@@ -268,7 +307,11 @@ export default {
         this.list_message = [];
 
         EventBus.$on("message", (data, id) => {
-            console.log("bắt socket Chat", data, id);
+            console.log(
+                "Evenbus_On_Message bắt socket Chat in file App in created",
+                data,
+                id
+            );
             this.listUser.forEach((user) => {
                 if (user.id === data.receiver_id) {
                     if (user.message ?? null) user.message.push(data);
@@ -288,6 +331,7 @@ export default {
         });
 
         EventBus.$on("login", () => {
+            console.log("Evenbus_on_login");
             app.connected();
         });
         const token = window.localStorage.getItem("token");

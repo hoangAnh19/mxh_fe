@@ -200,7 +200,7 @@ export default {
                     if (response.data.status == "success") {
                         this.images = [];
                         this.modal = false;
-                        this.$router.push({ name: "Home" });
+                        this.$router.go();
                     } else {
                         alert(response.data.message);
                     }

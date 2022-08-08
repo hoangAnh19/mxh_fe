@@ -31,16 +31,20 @@
                 <div class="div-icon">
                     <b-icon class="icon" icon="globe"></b-icon>
                 </div>
-                <div style="margin: auto 10px">Quản lý nhóm</div>
+                <div style="margin: auto 10px">Quản lý phòng/ban</div>
             </router-link>
-            <router-link class="d-flex link" :to="{ name: 'ManagerPost' }">
+            <router-link
+                class="d-flex link"
+                :to="{ name: 'ManagerPost' }"
+                v-if="isAdmin"
+            >
                 <div class="div-icon">
                     <b-icon class="icon" icon="journal-check"></b-icon>
                 </div>
                 <div style="margin: auto 10px">Quản lý bài viết</div>
             </router-link>
 
-            <!-- <router-link
+            <router-link
                 class="d-flex link"
                 :to="{ name: 'ChartManagerGroup' }"
             >
@@ -48,7 +52,7 @@
                     <b-icon class="icon" icon="journal-check"></b-icon>
                 </div>
                 <div style="margin: auto 10px">Biều đồ</div>
-            </router-link> -->
+            </router-link>
 
             <router-link
                 class="d-flex link"

@@ -22,6 +22,7 @@
                 class="content"
                 :disabled="this.change"
             ></b-form-textarea>
+            <br />
         </div>
 
         <b-form-textarea

@@ -3,7 +3,7 @@
         <div class="name-group">{{ group.name }}</div>
 
         <div class="manager">
-            <div class="title">Quản trị nhóm</div>
+            <div class="title">Quản trị phòng/ban</div>
             <div class="list">
                 <div class="item" v-on:click="changeComponent(1)">
                     <b-icon icon="house"></b-icon>
@@ -26,7 +26,7 @@
                         icon="gear"
                         v-if="member.role === config.group.role.admin"
                     ></b-icon>
-                    Cài đặt nhóm
+                    Cài đặt phòng/ban
                 </div>
             </div>
         </div>

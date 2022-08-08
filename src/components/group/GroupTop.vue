@@ -19,10 +19,10 @@
                         class="type-group"
                         v-if="group.type == config.group.type.public"
                     >
-                        <b-icon icon="globe"></b-icon> Nhóm công khai
+                        <b-icon icon="globe"></b-icon> phòng/ban công khai
                     </div>
                     <div v-else class="type-group">
-                        <b-icon icon="lock"></b-icon> Nhóm riêng tư
+                        <b-icon icon="lock"></b-icon> phòng/ban riêng tư
                     </div>
                     <div class="mx-4">{{ count.person }} thành viên</div>
                     <div>{{ count.post }} bài viết</div>
@@ -33,7 +33,7 @@
                     style="float: left"
                     v-on:click="answerGroup()"
                 >
-                    Tham gia nhóm
+                    Tham gia phòng/ban
                 </button>
                 <button
                     v-if="member.status == config.member.status.pending"
@@ -49,7 +49,7 @@
                     style="float: left"
                     v-on:click="confirmOutGroup()"
                 >
-                    Rời khỏi nhóm
+                    Rời khỏi phòng/ban
                 </button>
             </b-col>
         </div>
@@ -206,7 +206,7 @@ export default {
                 });
         },
         confirmOutGroup() {
-            var a = confirm("Bạn có chắc là sẽ rời nhóm");
+            var a = confirm("Bạn có chắc là sẽ rời phòng/ban");
             if (a) {
                 this.outGroup();
             }

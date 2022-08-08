@@ -76,11 +76,18 @@ export default {
                         this.ajaxLock = false;
                     });
             }
-            console.log("bắt socket Chat", data);
+            console.log(
+                " Evenbus_On_Message bắt socket Chat in file Chat",
+                data
+            );
         });
 
         EventBus.$on("message_", (data) => {
-            console.log("onMessage Chat", this.listChat, data);
+            console.log(
+                "Evenbus_on_Message1 in file chat",
+                this.listChat,
+                data
+            );
             var x = data.sender_id;
             data.sender_id = data.receiver_id;
             data.receiver_id = x;

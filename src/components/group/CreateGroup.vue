@@ -1,14 +1,14 @@
 <template>
     <div class="create-group">
-        <div class="title">Tạo nhóm mới</div>
+        <div class="title">Tạo phòng/ban mới</div>
         <div class="body">
             <b-row>
                 <b-col cols="4">
                     <div class="form-group">
-                        <label class="fw-bold"> Tên nhóm</label>
+                        <label class="fw-bold"> Tên phòng/ban</label>
                         <input
                             class="form-control"
-                            placeholder="Nhập tên nhóm"
+                            placeholder="Nhập tên phòng/ban"
                             v-model="nameGroup"
                         />
                         <span class="text-danger">{{
@@ -20,13 +20,13 @@
                         <label class="fw-bold"> Giới thiệu</label>
                         <input
                             class="form-control"
-                            placeholder="Viết lời giới thiệu về nhóm"
+                            placeholder="Viết lời giới thiệu về phòng/ban"
                             v-model="intro"
                         />
                     </div>
 
                     <div class="form-group">
-                        <label class="fw-bold"> Loại nhóm</label>
+                        <label class="fw-bold"> Loại phòng/ban</label>
                         <br />
                         <div class="form-check d-inline-block p-0">
                             <input
@@ -107,7 +107,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="fw-bold"> Nội quy nhóm</label>
+                        <label class="fw-bold"> Nội quy phòng/ban</label>
                         <textarea
                             v-model="regulations"
                             class="form-control"
@@ -141,7 +141,7 @@
                 </b-col>
             </b-row>
             <button class="btn btn-success" v-on:click="createGroup">
-                Tạo nhóm
+                Tạo phòng/ban
             </button>
         </div>
     </div>
@@ -187,7 +187,7 @@ export default {
             };
             this.isErrors = false;
             if (!validate.required(this.nameGroup)) {
-                this.errors.nameGroup = "Vui lòng nhập tên nhóm";
+                this.errors.nameGroup = "Vui lòng nhập tên phòng/ban";
                 this.isErrors = true;
             }
             if (this.typeGroup == 2 && this.countQues) {

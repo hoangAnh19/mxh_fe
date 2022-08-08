@@ -16,7 +16,7 @@
                     {{ user.first_name + " " + user.last_name }}
                 </div>
             </router-link>
-            <router-link class="d-flex link" :to="{ name: 'Friend' }">
+            <router-link class="d-flex link" :to="{ name: 'ListUser' }">
                 <div class="div-icon">
                     <b-icon class="icon" icon="people-fill"></b-icon>
                 </div>

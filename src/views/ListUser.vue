@@ -1,11 +1,11 @@
 <template>
-    <div class="friend">
+    <div class="User">
         <Header v-bind:user="user" />
-        <NavbarLeftFriend />
+        <NavbarLeftUser />
         <div class="body">
-            <ListFriend v-if="component == 1" />
+            <ListUser v-if="component == 1" />
             <Birthday v-if="component == 2" />
-            <TestFriendVue v-if="component == 3" />
+            <TestUserVue v-if="component == 3" />
         </div>
     </div>
 </template>
@@ -14,20 +14,19 @@
 // @ is an alias to /src
 import Header from "@/components/Header.vue";
 import EventBus from "@/EventBus.js";
-import NavbarLeftFriend from "@/components/friend/NavBarLeftFriend.vue";
-import ListFriend from "@/components/friend/ListFriend.vue";
-import Birthday from "@/components/friend/Birthday.vue";
-import TestFriendVue from "../components/friend/TestFriend.vue";
+import NavbarLeftUser from "@/components/user/NavBarLeftUser.vue";
+import ListUser from "@/components/user/ListUser.vue";
+import Birthday from "@/components/user/Birthday.vue";
+import TestUserVue from "../components/user/TestUser.vue";
 export default {
-    name: "Friend",
+    name: "User",
     mounted() {
-        EventBus.$on("changeComponentFriend", (type) => {
+        EventBus.$on("changeComponentUser", (type) => {
             this.component = type;
         });
     },
     data() {
         return {
-            ajaxLoadFriend: false,
             component: 1,
         };
     },
@@ -37,10 +36,10 @@ export default {
     methods: {},
     components: {
         Header,
-        NavbarLeftFriend,
-        ListFriend,
+        NavbarLeftUser,
+        ListUser,
         Birthday,
-        TestFriendVue,
+        TestUserVue,
     },
 };
 </script>

@@ -634,46 +634,6 @@
                                     ><b-icon icon="globe"></b-icon> Công
                                     khai</span
                                 >
-
-                                <ul
-                                    v-if="!hiddenTypeShow"
-                                    v-click-outside="hideShow"
-                                    class="list-group list-type-show position-absolute"
-                                >
-                                    <li
-                                        v-on:click="hideShow(1)"
-                                        class="list-item"
-                                    >
-                                        <b-icon icon="globe"></b-icon> Công khai
-                                    </li>
-                                    <li
-                                        v-on:click="hideShow(2)"
-                                        class="list-item"
-                                    >
-                                        <b-icon icon="people"></b-icon> Bạn bè
-                                    </li>
-                                    <li
-                                        v-on:click="hideShow(3)"
-                                        class="list-item"
-                                    >
-                                        <b-icon icon="lock"></b-icon> Chỉ mình
-                                        tôi
-                                    </li>
-                                    <li
-                                        v-on:click="hideShow(4)"
-                                        class="list-item"
-                                    >
-                                        <b-icon icon="person"></b-icon> Bạn bè
-                                        cụ thể
-                                    </li>
-                                    <li
-                                        v-on:click="hideShow(5)"
-                                        class="list-item"
-                                    >
-                                        <b-icon icon="person-dash"></b-icon> Bạn
-                                        bè trừ
-                                    </li>
-                                </ul>
                             </button>
                         </b-col>
                         <b-col offset="6" cols="3">
@@ -867,6 +827,7 @@ export default {
             )
                 .then((res) => {
                     if (res.data.status == "success") {
+                        this.list_like = [];
                         console.log(res.data.data);
                         this.list_like = this.list_like.concat(res.data.data);
                     } else {
@@ -936,6 +897,15 @@ export default {
                 .catch(() => {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại");
                 });
+            Axios.post("notification/create", {
+                post_id: this.post.id,
+                user_id: this.post.user.id,
+                type: 1,
+            })
+                .then(() => {})
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại");
+                });
         },
         hideShow(type) {
             this.hiddenTypeShow = true;
@@ -998,6 +968,15 @@ export default {
                         alert("Đã có lỗi xảy ra, vui lòng thử lại");
                     });
             }
+            Axios.post("notification/create", {
+                post_id: this.post.id,
+                user_id: this.post.user.id,
+                type: 2,
+            })
+                .then(() => {})
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại");
+                });
         },
         sharePost() {
             var post = {};
@@ -1017,6 +996,15 @@ export default {
                 })
                 .catch(() => {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại sau3");
+                });
+            Axios.post("notification/create", {
+                post_id: this.post.id,
+                user_id: this.post.user.id,
+                type: 3,
+            })
+                .then(() => {})
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại");
                 });
         },
         sendAnswer(comment) {
@@ -1042,6 +1030,11 @@ export default {
                     .catch(() => {
                         alert("Đã có lỗi xảy ra, vui lòng thử lại");
                     });
+                Axios.post("notification/create", {
+                    post_id: this.post.id,
+                    user_id: this.post.user.id,
+                    type: 3,
+                });
             }
         },
         getComment(options) {

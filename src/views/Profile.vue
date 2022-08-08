@@ -21,10 +21,8 @@
                     <div v-if="component == 2" class="row mt-4">
                         <Info v-bind:user="user1" />
                     </div>
+
                     <div v-if="component == 3" class="row mt-4">
-                        <ListFriend v-bind:userId="user1.id" />
-                    </div>
-                    <div v-if="component == 4" class="row mt-4">
                         <b-col cols="8" offset="2">
                             <ListImage v-bind:user="user1.id" />
                         </b-col>
@@ -42,7 +40,6 @@ import ProfileTop from "@/components/profile/ProfileTop.vue";
 import ListImage from "@/components/image/ListImage.vue";
 import TimeLine from "@/components/profile/time-line/TimeLine.vue";
 import Info from "@/components/profile/info/Info.vue";
-import ListFriend from "@/components/profile/listFriend/ListFriend.vue";
 import NavBarLeftProfile from "@/components/profile/time-line/NavBarLeftProfile.vue";
 import Axios from "@/components/Axios.js";
 import EventBus from "@/EventBus.js";
@@ -110,7 +107,6 @@ export default {
         NavBarLeftProfile,
         TimeLine,
         Info,
-        ListFriend,
         ListImage,
     },
 };

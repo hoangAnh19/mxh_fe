@@ -12,13 +12,13 @@
                 <div class="px-2">{{ group.regulations }}</div>
             </div>
             <div class="my-3" v-if="group.type == config.group.type.public">
-                <b-icon icon="globe"></b-icon> Nhóm công khai
+                <b-icon icon="globe"></b-icon> phòng/ban công khai
             </div>
             <div v-else class="my-3">
-                <b-icon icon="lock"></b-icon> Nhóm riêng tư
+                <b-icon icon="lock"></b-icon> phòng/ban riêng tư
             </div>
             <div class="my-3">
-                <b-icon icon="clock"></b-icon> Đã tạo nhóm vào
+                <b-icon icon="clock"></b-icon> Đã tạo phòng/ban vào
                 {{ historyGroup }}
             </div>
             <div class="my-3">

@@ -1,13 +1,13 @@
 <template>
     <div class="nav-left">
-        <div v-on:click="changeComponentFriend(1)" class="item">
+        <div v-on:click="changeComponentUser(1)" class="item">
             <b-icon class="icon-item" icon="person-lines-fill"></b-icon>
             Thành viên
         </div>
-        <div v-on:click="changeComponentFriend(2)" class="item">
+        <div v-on:click="changeComponentUser(2)" class="item">
             <b-icon class="icon-item" icon="calendar-fill"></b-icon> Sinh nhật
         </div>
-        <div v-on:click="changeComponentFriend(3)" class="item">
+        <div v-on:click="changeComponentUser(3)" class="item">
             <b-icon class="icon-item" icon="calendar-fill"></b-icon> Test
         </div>
     </div>
@@ -18,7 +18,7 @@
 import EventBus from "@/EventBus.js";
 
 export default {
-    name: "NavBarLeftFriend",
+    name: "NavBarLeftUser",
     created() {},
     props: {},
     data() {
@@ -26,8 +26,8 @@ export default {
     },
     watch: {},
     methods: {
-        changeComponentFriend(index) {
-            EventBus.$emit("changeComponentFriend", index);
+        changeComponentUser(index) {
+            EventBus.$emit("changeComponentUser", index);
         },
     },
 };

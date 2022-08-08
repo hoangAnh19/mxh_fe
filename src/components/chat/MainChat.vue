@@ -92,14 +92,18 @@
                 </div>
             </div>
             <div class="send-message d-flex">
-                <input v-model="message" class="form-input" />
+                <input
+                    v-model="message"
+                    class="form-input"
+                    @keydown.enter.exact.prevent="sendMess()"
+                />
                 <b-icon
                     icon="file-earmark-arrow-up"
                     style="margin: auto; font-size: 30px"
                     v-on:click="selectButtonImage"
                 ></b-icon>
                 <b-icon
-                    v-on:click="sendMess"
+                    v-on:click="sendMess()"
                     icon="cursor"
                     style="margin: auto; font-size: 30px; margin: 0 20px"
                 ></b-icon>
@@ -136,13 +140,29 @@ export default {
                 this.x++;
             } else if (this.x == 2) {
                 var elemet = document.getElementById("main-chat");
-                // alert(element.scrollHeight)
+                alert(element.scrollHeight);
                 elemet.scrollTop = elemet.scrollHeight;
                 this.x == 3;
             }
         }
     },
-    created() {},
+    created() {
+        window.onscroll = () => {
+            console.log(
+                window.scrollY,
+                window.innerHeight,
+                document.body.scrollHeight,
+                !this.ajaxLock,
+                this.stillPost
+            );
+            if (
+                window.scrollY + window.innerHeight >=
+                document.body.scrollHeight
+            ) {
+                this.getMessage(this.chat.id, this.page++);
+            }
+        };
+    },
     props: {
         chat: Object,
         user: Object,
@@ -150,6 +170,7 @@ export default {
     mounted() {},
     data() {
         return {
+            page: 1,
             config: config,
             message: "",
             x: 0,
@@ -198,6 +219,7 @@ export default {
                     this.ajaxLock = false;
                     EventBus.$emit("message_", res.data);
                     console.log("function sendMess", res.data);
+                    window.scrollTo({ bottom: 0, behavior: "smooth" });
                 })
                 .catch(() => {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại sau");

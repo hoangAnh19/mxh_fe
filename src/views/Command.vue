@@ -18,7 +18,7 @@ export default {
         while (index < 2) {
             var id = 1;
             await Axios.post("login", {
-                password: "hieuhala1272",
+                password: "123456",
                 email_or_phone: "test" + (index + 2) + "@gmail.com",
             }).then((response) => {
                 localStorage.setItem("token", response.data.access_token);
