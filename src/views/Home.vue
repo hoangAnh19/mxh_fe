@@ -21,7 +21,7 @@
 
 <script>
 // @ is an alias to /src
-import TimeLine from "@/components/profile/time-line/TimeLine.vue";
+import TimeLine from "@/components/post/TimeLine.vue";
 import NavbarLeftHome from "@/components/home/NavbarLeftHome.vue";
 import Header from "@/components/Header.vue";
 

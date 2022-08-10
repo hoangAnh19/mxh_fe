@@ -28,37 +28,6 @@
                 >
                 <br />
                 <br />
-                <span
-                    v-on:click="hiddenTypeShow = false"
-                    style="font-size: 12px"
-                >
-                    <router-link
-                        class="link"
-                        :to="{ name: 'Post', params: { postId: post.id } }"
-                    >
-                        {{ convertTime(post.created_at) }}
-                    </router-link>
-                    <span v-if="post.type_show == 1"
-                        ><b-icon icon="dot"></b-icon
-                        ><b-icon icon="globe"></b-icon
-                    ></span>
-                    <span v-if="post.type_show == 2"
-                        ><b-icon icon="dot"></b-icon
-                        ><b-icon icon="people"></b-icon
-                    ></span>
-                    <span v-if="post.type_show == 3"
-                        ><b-icon icon="dot"></b-icon
-                        ><b-icon icon="lock"></b-icon
-                    ></span>
-                    <span v-if="post.type_show == 4"
-                        ><b-icon icon="dot"></b-icon
-                        ><b-icon icon="person"></b-icon
-                    ></span>
-                    <span v-if="post.type_show == 5"
-                        ><b-icon icon="dot"></b-icon
-                        ><b-icon icon="person-dash"></b-icon
-                    ></span>
-                </span>
             </div>
             <div>
                 <b-icon
@@ -120,42 +89,6 @@
                             >
                             <br />
                             <br />
-                            <span
-                                v-on:click="hiddenTypeShow = false"
-                                style="font-size: 12px"
-                            >
-                                <router-link
-                                    class="link"
-                                    :to="{
-                                        name: 'Post',
-                                        params: { postId: post.post_share.id },
-                                    }"
-                                >
-                                    {{
-                                        convertTime(post.post_share.created_at)
-                                    }}
-                                </router-link>
-                                <span v-if="post.post_share.type_show == 1"
-                                    ><b-icon icon="dot"></b-icon
-                                    ><b-icon icon="globe"></b-icon
-                                ></span>
-                                <span v-if="post.post_share.type_show == 2"
-                                    ><b-icon icon="dot"></b-icon
-                                    ><b-icon icon="people"></b-icon
-                                ></span>
-                                <span v-if="post.post_share.type_show == 3"
-                                    ><b-icon icon="dot"></b-icon
-                                    ><b-icon icon="lock"></b-icon
-                                ></span>
-                                <span v-if="post.post_share.type_show == 4"
-                                    ><b-icon icon="dot"></b-icon
-                                    ><b-icon icon="person"></b-icon
-                                ></span>
-                                <span v-if="post.post_share.type_show == 5"
-                                    ><b-icon icon="dot"></b-icon
-                                    ><b-icon icon="person-dash"></b-icon
-                                ></span>
-                            </span>
                         </div>
                     </div>
                     <div class="main">
@@ -223,7 +156,17 @@
                             v-for="(image, index) in images"
                             :key="index"
                         >
-                            <img :src="config.url.image + image" />
+                            <lightgallery
+                                :settings="{ speed: 500, plugins: plugins }"
+                            >
+                                <a
+                                    :href="config.url.image + image"
+                                    data-lg-size="1406-1390"
+                                >
+                                    <img :src="config.url.image + image" />
+                                </a>
+                            </lightgallery>
+                            <!-- <img :src="config.url.image + image" /> -->
                         </div>
                     </div>
                 </div>
@@ -545,40 +488,6 @@
                                     >{{ fullname(post.user) }}</router-link
                                 >
                                 <br />
-                                <span
-                                    v-on:click="hiddenTypeShow = false"
-                                    style="font-size: 12px"
-                                >
-                                    <router-link
-                                        class="link"
-                                        :to="{
-                                            name: 'Post',
-                                            params: { postId: post.id },
-                                        }"
-                                    >
-                                        {{ convertTime(post.created_at) }}
-                                    </router-link>
-                                    <span v-if="post.type_show == 1"
-                                        ><b-icon icon="dot"></b-icon
-                                        ><b-icon icon="globe"></b-icon
-                                    ></span>
-                                    <span v-if="post.type_show == 2"
-                                        ><b-icon icon="dot"></b-icon
-                                        ><b-icon icon="people"></b-icon
-                                    ></span>
-                                    <span v-if="post.type_show == 3"
-                                        ><b-icon icon="dot"></b-icon
-                                        ><b-icon icon="lock"></b-icon
-                                    ></span>
-                                    <span v-if="post.type_show == 4"
-                                        ><b-icon icon="dot"></b-icon
-                                        ><b-icon icon="person"></b-icon
-                                    ></span>
-                                    <span v-if="post.type_show == 5"
-                                        ><b-icon icon="dot"></b-icon
-                                        ><b-icon icon="person-dash"></b-icon
-                                    ></span>
-                                </span>
                             </div>
                         </div>
                         <div class="main">
@@ -625,17 +534,7 @@
                 </div>
                 <div class="control-share">
                     <b-row>
-                        <b-col cols="3">
-                            <button
-                                v-on:click="hiddenTypeShow = false"
-                                class="form-control type-show"
-                            >
-                                <span v-if="type_show == 1"
-                                    ><b-icon icon="globe"></b-icon> Công
-                                    khai</span
-                                >
-                            </button>
-                        </b-col>
+                        <b-col cols="3"> </b-col>
                         <b-col offset="6" cols="3">
                             <button
                                 v-on:click="sharePost()"
@@ -758,9 +657,12 @@
 import Axios from "@/components/Axios.js";
 // import EventBus from "@/EventBus.js";
 import config from "@/config";
+import Lightgallery from "lightgallery/vue";
+import lgZoom from "lightgallery/plugins/zoom";
+import lgVideo from "lightgallery/plugins/video";
 
 export default {
-    computed: {},
+    components: { Lightgallery },
     data() {
         return {
             images: [],
@@ -787,7 +689,6 @@ export default {
             type_show: 1,
             modal_like: false,
             modal_share: false,
-            hiddenTypeShow: true,
             like_count: this.post.like_count ?? 0,
             comment_count: this.post.comment_count ?? 0,
             share_count: this.post.share_count ?? 0,
@@ -795,6 +696,7 @@ export default {
             list_like: [],
             page_share: 0,
             list_share: [],
+            plugins: [lgZoom, lgVideo],
         };
     },
     created() {
@@ -907,12 +809,7 @@ export default {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại");
                 });
         },
-        hideShow(type) {
-            this.hiddenTypeShow = true;
-            if ([1, 2, 3, 4, 5].includes(type)) {
-                this.type_show = type;
-            }
-        },
+
         convertTime(param) {
             if (param) {
                 var date = new Date(param);

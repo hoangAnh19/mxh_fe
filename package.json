@@ -6,7 +6,8 @@
         "serve": "vue-cli-service serve",
         "build": "vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "deploy": "sh deploy.sh"
+        "deploy": "sh deploy.sh",
+        "start": "node server.js"
     },
     "dependencies": {
         "@vuelidate/core": "^2.0.0-alpha.33",
@@ -19,11 +20,13 @@
         "core-js": "^3.6.5",
         "install": "^0.13.0",
         "laravel-echo": "^1.11.3",
+        "lightgallery": "^2.5.0",
         "npm": "^8.15.0",
         "socket.io": "^4.4.1",
         "socket.io-client": "^4.4.1",
         "tiny-emitter": "^2.1.0",
         "v-click-outside": "^3.1.2",
+        "v-viewer": "^1.6.4",
         "vue": "^3.0.0",
         "vue-3-socket.io": "^1.0.4",
         "vue-chart-3": "^3.1.8",

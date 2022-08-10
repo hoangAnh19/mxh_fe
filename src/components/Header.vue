@@ -19,7 +19,6 @@
                     </router-link>
                 </a>
                 <div class="search" v-show="!isAdmin">
-                    <!-- <b-icon class="icon-search" icon="search"></b-icon> -->
                     <input
                         style="background: darkseagreen; min-width: 200px"
                         placeholder="Tìm kiếm tại đây"
@@ -37,6 +36,7 @@
                         border: aliceblue;
                     "
                     v-on:click="search()"
+                    v-show="!isAdmin"
                 >
                     Tìm kiếm
                 </button>
@@ -84,6 +84,7 @@
                 <div class="row">
                     <b-col class="navbar-right-icon" cols="6">
                         <router-link
+                            v-if="user.id"
                             :to="{
                                 name: 'Profile',
                                 params: { userId: user.id },
@@ -112,7 +113,7 @@
                         <div
                             class="notification"
                             style="display: flex"
-                            v-on:click="showListShare()"
+                            v-on:click="showListNoti()"
                         >
                             <b-icon icon="bell-fill"> </b-icon>
                             <span v-if="numNoti" class="icon-button__badge">{{
@@ -325,7 +326,7 @@ export default {
         search() {
             EventBus.$emit("searchPost", this.key_search);
         },
-        showListShare() {
+        showListNoti() {
             this.modal_share = true;
         },
         closeModalListShare() {
@@ -340,7 +341,7 @@ export default {
                             if (item.seen === 0) this.numNoti += 1;
                             console.log(this.numNoti);
                         });
-                        console.log("aaaaaaaaaaaa", this.listNoti);
+                        console.log("get listNoti", this.listNoti);
                     } else {
                         console.log(this.data.message);
                     }

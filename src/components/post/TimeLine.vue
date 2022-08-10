@@ -15,9 +15,47 @@ import EventBus from "@/EventBus.js";
 export default {
     name: "TimeLine",
     created() {
+        console.log("created timeline", this.type_);
         this.getList();
         EventBus.$on("createPost", (post) => {
             this.listPost.unshift(post);
+        });
+        EventBus.$on("searchPost", (keySearch) => {
+            console.log("EventBus.$on   searchPost", keySearch);
+
+            if (!keySearch) {
+                this.page = 1;
+                this.listPost = [];
+                console.log("get list");
+
+                this.getList();
+                console.log("page- listpost", this.page, this.listPost);
+            } else {
+                this.listPost = [];
+                console.log("get search");
+
+                this.getListSearch(keySearch);
+            }
+        });
+
+        EventBus.$on("newPost", (data) => {
+            console.log("new post", data);
+            this.page = 1;
+            this.listPost = [];
+
+            // if (data !== JSON.parse(localStorage.getItem("userInfo")).id)
+            this.getList();
+
+            console.log("Envenbus on new post");
+        });
+
+        EventBus.$on("newComment", (data) => {
+            console.log("new comment", data);
+            this.page = 1;
+            this.listPost = [];
+            if (data != JSON.parse(localStorage.getItem("userInfo")).id)
+                this.getList();
+            console.log("Envenbus on new comment");
         });
 
         window.onscroll = () => {
@@ -57,41 +95,7 @@ export default {
             i: 0,
         };
     },
-    mounted() {
-        EventBus.$on("searchPost", (keySearch) => {
-            console.log("EventBus.$on   searchPost", keySearch);
-
-            if (!keySearch) {
-                this.page = 1;
-                this.listPost = [];
-                this.getList();
-                console.log("page- listpost", this.page, this.listPost);
-            } else {
-                this.listPost = [];
-                this.getListSearch(keySearch);
-            }
-        });
-
-        EventBus.$on("newPost", (data) => {
-            console.log("new post", data);
-            this.page = 1;
-            this.listPost = [];
-
-            // if (data !== JSON.parse(localStorage.getItem("userInfo")).id)
-            this.getList();
-
-            console.log("Envenbus on new post");
-        });
-
-        EventBus.$on("newComment", (data) => {
-            console.log("new comment", data);
-            this.page = 1;
-            this.listPost = [];
-            if (data != JSON.parse(localStorage.getItem("userInfo")).id)
-                this.getList();
-            console.log("Envenbus on new comment");
-        });
-    },
+    updated() {},
     methods: {
         getList() {
             this.ajaxLock = true;

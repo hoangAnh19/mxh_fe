@@ -148,11 +148,15 @@ export default {
             confirm("Bạn có muốn cho người này làm quản trị viên");
         },
         search(data) {
-            Axios.get("user/searchUser?user_name=" + data).then((response) => {
-                if (response.data.status == "success") {
-                    this.usersObject = response.data.data;
-                }
-            });
+            if (!data) this.getLisUser(1);
+            else
+                Axios.get("user/searchUser?user_name=" + data).then(
+                    (response) => {
+                        if (response.data.status == "success") {
+                            this.usersObject = response.data.data;
+                        }
+                    }
+                );
         },
 
         getListuser(pageNumber) {

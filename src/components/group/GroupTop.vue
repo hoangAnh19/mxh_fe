@@ -2,11 +2,27 @@
     <div class="group-top">
         <div class="row cover">
             <b-col class="p-0" cols="12">
-                <img
+                <lightgallery
+                    :settings="{ speed: 500, plugins: plugins }"
                     v-if="group.cover"
-                    class="cover"
-                    :src="'http://127.0.0.1:8000/tmp_images/' + group.cover"
-                />
+                >
+                    <a
+                        class="gallery-item"
+                        :href="
+                            'http://127.0.0.1:8000/tmp_images/' + group.cover
+                        "
+                        data-lg-size="1406-1390"
+                    >
+                        <img
+                            v-if="group.cover"
+                            class="cover"
+                            :src="
+                                'http://127.0.0.1:8000/tmp_images/' +
+                                group.cover
+                            "
+                        />
+                    </a>
+                </lightgallery>
             </b-col>
         </div>
         <div class="row content mt-5 pt-4">
@@ -152,8 +168,13 @@
 import Axios from "@/components/Axios.js";
 import config from "@/config";
 import EventBus from "@/EventBus.js";
+import Lightgallery from "lightgallery/vue";
+import lgZoom from "lightgallery/plugins/zoom";
+import lgVideo from "lightgallery/plugins/video";
 export default {
     name: "GroupTop",
+    components: { Lightgallery },
+
     props: {
         count: Object,
         group_: Object,
@@ -171,6 +192,7 @@ export default {
             questions: JSON.parse(this.group_.question),
             group: this.group_,
             member: this.member_,
+            plugins: [lgZoom, lgVideo],
         };
     },
     watch: {},

@@ -19,12 +19,11 @@
                                 v-on:click="
                                     {
                                         chartBarMember();
-                                        chartPieMember();
                                     }
                                 "
                                 >Biểu đồ phân tích Member</b-dropdown-item
                             >
-                            <b-dropdown-item v-on:click="chartBarPost"
+                            <b-dropdown-item v-on:click="chartBarPost()"
                                 >Biểu đồ phân tích Bài viết</b-dropdown-item
                             >
                             <b-dropdown-item v-on:click="assign(user.id, 4)"
@@ -34,7 +33,6 @@
                     </div>
                 </div>
             </div>
-            <!-- {{ postObject }} -->
             <table class="table table-striped table-hover item">
                 <thead>
                     <tr>
@@ -86,17 +84,6 @@ export default {
 
     async created() {
         await this.getListGroup();
-        this.getListPost();
-
-        window.onscroll = () => {
-            console.log(
-                window.scrollY,
-                window.innerHeight,
-                document.body.scrollHeight,
-                !this.ajaxLock,
-                this.stillPost
-            );
-        };
     },
     components: { NavbarLeftAdmin },
 
@@ -108,7 +95,6 @@ export default {
             stillPost: true,
             key_search: "",
             listPost: [],
-            postObject: {},
             listGroup: [],
             labelMemberBar: [],
             dataCountMemberBar: [],
@@ -120,6 +106,7 @@ export default {
     },
     methods: {
         chartBarMember() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
             let ctxBar = document
                 .getElementById("myChartBarMember")
                 .getContext("2d");
@@ -193,9 +180,11 @@ export default {
                 },
             });
             myChartBarMember;
+            window.scrollTo(0, document.body.scrollHeight);
         },
 
         chartBarPost() {
+            window.scrollTo({ bottom: 0, behavior: "smooth" });
             console.log("dataCountPostPending", this.dataCountPostPending);
             const ctxBar = document
                 .getElementById("myChartBarPost")
@@ -270,6 +259,7 @@ export default {
             });
 
             myChartBarPost;
+            window.scrollTo(0, document.body.scrollHeight);
         },
         chartPieMember() {
             let ctxPie = document
@@ -298,15 +288,7 @@ export default {
             myChartPieMember;
         },
 
-        search(data) {
-            Axios.get("post/searchPost?data=" + data).then((response) => {
-                if (response.data.status == "success") {
-                    this.postObject = response.data.data;
-                }
-            });
-        },
-
-        async getListGroup() {
+        getListGroup() {
             Axios.get("group/get_fullList_group").then((response) => {
                 if (response.data.status == "success") {
                     this.listGroup = response.data.group;
@@ -381,11 +363,6 @@ export default {
             });
         },
 
-        getListPost() {
-            Axios.get("post/get_list_admin").then((response) => {
-                this.postObject = response.data.data;
-            });
-        },
         getCountMember() {
             this.listGroup.forEach((item) => {
                 Axios.get(

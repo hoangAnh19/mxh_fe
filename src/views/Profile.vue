@@ -38,9 +38,9 @@
 import Header from "@/components/Header.vue";
 import ProfileTop from "@/components/profile/ProfileTop.vue";
 import ListImage from "@/components/image/ListImage.vue";
-import TimeLine from "@/components/profile/time-line/TimeLine.vue";
+import TimeLine from "@/components/post/TimeLine.vue";
 import Info from "@/components/profile/info/Info.vue";
-import NavBarLeftProfile from "@/components/profile/time-line/NavBarLeftProfile.vue";
+import NavBarLeftProfile from "@/components/profile/NavBarLeftProfile.vue";
 import Axios from "@/components/Axios.js";
 import EventBus from "@/EventBus.js";
 

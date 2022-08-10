@@ -82,7 +82,7 @@
 <script>
 // @ is an alias to /src
 
-import TimeLine from "@/components/profile/time-line/TimeLine.vue";
+import TimeLine from "@/components/post/TimeLine.vue";
 import ListPostBrowse from "@/components/post/ListPostBrowse.vue";
 import Header from "@/components/Header.vue";
 import ManagerGroup from "@/components/group/ManagerGroup.vue";

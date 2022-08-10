@@ -1,91 +1,65 @@
-<template lang="">
-    <div>Test friend</div>
-    <div>danh sach</div>
-    <!-- <li v-for="friend in friends" :key="friend.id"> -->
-    <!-- </li> -->
-    <textarea class="form-control" v-model="count"></textarea>
-    <br />
-    {{ count }}
+<template>
+    <lightgallery
+        :settings="{ speed: 500, plugins: plugins }"
+        :onInit="onInit"
+        :onBeforeSlide="onBeforeSlide"
+    >
+        <a
+            data-lg-size="1406-1390"
+            class="gallery-item"
+            data-src="https://images.unsplash.com/photo-1581894158358-5ecd2c518883?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1406&q=80"
+        >
+            <img
+                class="img-responsive"
+                src="https://images.unsplash.com/photo-1581894158358-5ecd2c518883?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=240&q=80"
+            />
+        </a>
+
+        <a
+            class="gallery-item"
+            data-video='{"source": [{"src":"https://www.lightgalleryjs.com/videos/video1.mp4", "type":"video/mp4"}], "attributes": {"preload": false, "controls": true}}'
+            data-poster=""
+            data-sub-html="<h4>Photo by - <a href='https://unsplash.com/@katherine_xx11' >Katherine Gu </a></h4><p> For all those years we were alone and helpless.</p>"
+        >
+            <img
+                width="200"
+                class="img-responsive"
+                src="https://www.lightgalleryjs.com/images/demo/html5-video-poster.jpg"
+            />
+        </a>
+    </lightgallery>
 </template>
+
 <script>
-import Axios from "../Axios";
+import Lightgallery from "lightgallery/vue";
+import lgZoom from "lightgallery/plugins/zoom";
+import lgVideo from "lightgallery/plugins/video";
 
 export default {
-    name: "Test",
-    created() {
-        // this.getlistUser();
-        window.onscroll = () => {
-            if (
-                window.scrollY + window.innerHeight >=
-                    document.body.scrollHeight + 80 &&
-                !this.ajaxLock &&
-                this.stillUser
-            ) {
-                this.getlistUser();
-            }
-        };
+    name: "TestUser",
+    components: {
+        Lightgallery,
     },
-    props: {},
-
     data() {
         return {
-            friends: [],
-            errors: "",
-            page: 1,
-            ajaxLock: false,
-            stillUser: true,
-            count: 0,
+            plugins: [lgZoom, lgVideo],
         };
     },
-    watch: {
-        count: function () {
-            console.log("thay doi gia", this.count);
-        },
-    },
-    mounted() {
-        setInterval(() => {
-            console.log("mouted");
-            this.count++;
-        }, 3000);
-        console.log("mouted");
-    },
     methods: {
-        getCount() {
-            setInterval(function () {
-                this.count++;
-            }, 3000);
-            console.log("dang goi ham");
+        onInit: () => {
+            console.log("lightGallery has been initialized");
         },
-
-        getlistUser() {
-            if (this.ajaxLock) return;
-            this.ajaxLock = true;
-            Axios.get("user/list_user?page=" + this.page)
-                .then((response) => {
-                    console.log("response", response);
-                    console.log("response.data", response.data);
-                    console.log("response.data.data", response.data.data);
-
-                    if (response.data.status == "success") {
-                        if (response.data.data.length < 18) {
-                            this.stillUser = false;
-                        }
-                        response.data.data.forEach((x) => {
-                            this.friends.push(x);
-                        });
-                        this.erros = "";
-                        this.page++;
-                    } else {
-                        this.errors = response.data.message;
-                    }
-                    this.ajaxLock = false;
-                })
-                .catch(() => {
-                    this.ajaxLock = false;
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại");
-                });
+        onBeforeSlide: () => {
+            console.log("calling before slide");
         },
     },
 };
 </script>
-<style lang=""></style>
+<style lang="css">
+body {
+    margin: 0;
+}
+.gallery-item {
+    margin: 5px;
+}
+</style>

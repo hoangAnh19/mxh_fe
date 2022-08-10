@@ -13,6 +13,11 @@
                 class="rounded-circle bg-secondary"
                 style="width: 110px; height: 110px"
             />
+            <img
+                class="rounded-circle bg-secondary"
+                v-else
+                src="@/assets/image/default-user-avatar.png"
+            />
         </router-link>
         <router-link
             :to="{ name: 'Profile', params: { userId: userId } }"

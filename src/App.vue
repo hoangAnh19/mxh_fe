@@ -1,87 +1,18 @@
 <template>
     <router-view></router-view>
-    <div
-        id="form-chat"
-        class="d-flex"
-        v-if="!['Login', 'Register', 'Chat'].includes($route.name)"
-    >
-        <div v-if="createNewMessage" class="form-create-new-message">
-            <div class="form-create-new-message-title">Tin nhắn mới</div>
-            <!-- {{ listSearch }} -->
-            <div class="content-modal-new-message">
-                <div class="form-group d-flex">
-                    <label style="margin: auto">Đến:&nbsp;</label>
-                    <input
-                        v-model="key_search"
-                        v-on:keyup="search(key_search)"
-                        class="form-input"
-                        placeholder="Nhập bạn bè"
-                    />
-                </div>
-                <div class="list-search">
-                    <div
-                        v-for="item in listSearch"
-                        :key="item"
-                        class="d-flex item-search"
-                        v-on:click="selectNewMessage(item)"
-                    >
-                        <div class="avatar">
-                            <img
-                                v-if="item.avatar"
-                                :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
-                                    item.avatar
-                                "
-                            />
-                            <img
-                                v-else
-                                src="@/assets/image/default-user-avatar.png"
-                            />
-                        </div>
-                        <div class="fw-bold" style="flex: 1; margin: auto 10px">
-                            {{ item.first_name + " " + item.last_name }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button v-on:click="logListUser()">.</button>
-        <div v-for="userMessage in listUser" :key="userMessage">
-            <FormChat
-                v-if="userMessage && userMessage.select && modalDialog"
-                :user="userMessage"
-            />
-        </div>
-
-        <div class="create-new-message">
-            <b-icon
-                v-on:click="createNewMessage = !createNewMessage"
-                class="icon-create-new-message"
-                icon="pencil-square"
-            ></b-icon>
-        </div>
-    </div>
-    <ListFriendHome v-bind:class="{ activeList: !isActiveList }" />
+    <ListUserHome v-bind:class="{ activeList: !isActiveList }" />
 </template>
 <script>
 // @ is an alias to /src
 import axios from "axios";
-import FormChat from "@/components/chat/FormChat.vue";
 import socket from "@/plugins/socket";
 import EventBus from "@/EventBus.js";
 import Axios from "@/components/Axios.js";
-import ListFriendHome from "@/components/home/ListFriendHome.vue";
+import ListUserHome from "@/components/home/ListUserHome.vue";
 
 export default {
     components: {
-        FormChat,
-        ListFriendHome,
-    },
-    mounted() {
-        EventBus.$on("closeUserDialog", () => {
-            console.log("Evenbus_On_closeUserDialog");
-            this.modalDialog = false;
-        });
+        ListUserHome,
     },
     methods: {
         async getMessage(id, page) {

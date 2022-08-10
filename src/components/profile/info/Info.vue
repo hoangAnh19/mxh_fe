@@ -117,10 +117,10 @@
                 >
             </div>
             <div class="item row" v-if="isOwner">
-                <UploadAvatar></UploadAvatar>
+                <UploadAvatar v-bind:typeImage="1"></UploadAvatar>
             </div>
             <div class="item row" v-if="isOwner">
-                <UploadBackground></UploadBackground>
+                <UploadAvatar v-bind:typeImage="2"></UploadAvatar>
             </div>
         </div>
     </b-col>
@@ -339,11 +339,10 @@ import validate from "@/validate";
 import parse from "@/parse";
 import EventBus from "@/EventBus.js";
 import UploadAvatar from "./UploadAvatar.vue";
-import UploadBackground from "./UploadBackground.vue";
 
 export default {
     name: "Info",
-    components: { UploadAvatar, UploadBackground },
+    components: { UploadAvatar },
     created() {
         var user = JSON.parse(localStorage.getItem("userInfo"));
         this.isOwner = user.id == this.user.id ? true : false;

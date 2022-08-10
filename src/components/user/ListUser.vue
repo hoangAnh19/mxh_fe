@@ -111,11 +111,15 @@ export default {
     watch: {},
     methods: {
         search(data) {
-            Axios.get("user/searchUser?user_name=" + data).then((response) => {
-                if (response.data.status == "success") {
-                    this.usersObject = response.data.data;
-                }
-            });
+            if (!data) this.getListuser(1);
+            else
+                Axios.get("user/searchUser?user_name=" + data).then(
+                    (response) => {
+                        if (response.data.status == "success") {
+                            this.usersObject = response.data.data;
+                        }
+                    }
+                );
         },
 
         getListuser(pageNumber) {

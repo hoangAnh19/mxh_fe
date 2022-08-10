@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-8 offset-2">
                 <div class="form-group">
-                    <label for="email_or_phone">Email / Số điện thoại:</label>
+                    <label for="email_or_phone">Email:</label>
                     <input
                         v-model="email_or_phone"
                         class="form-control"
@@ -84,8 +84,7 @@ export default {
                     validate.phone(this.email_or_phone)
                 )
             ) {
-                this.errors.email_or_phone =
-                    "Vui lòng nhập email hoặc số điện thoại";
+                this.errors.email_or_phone = "Vui lòng nhập email ";
                 this.isErrors = true;
             }
 

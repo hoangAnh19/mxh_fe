@@ -1,7 +1,7 @@
 <template>
     <div class="login">
         <div class="form">
-            <img src="../assets/Logo-Network.jpg" alt="" />
+            <HeaderAuth />
             <h1 class="mt-2 fw-bold">Đăng kí tài khoản</h1>
             <FormRegister />
             <div style="min-height: 20px"></div>
@@ -14,15 +14,16 @@
 <script>
 // @ is an alias to /src
 import FormRegister from "@/components/auth/FormRegister.vue";
+import HeaderAuth from "@/components/auth/HeaderAuth.vue";
 import Footer from "@/components/Footer.vue";
 import CoverAuth from "@/components/auth/CoverAuth.vue";
-
 export default {
     name: "Register",
     components: {
         FormRegister,
         CoverAuth,
         Footer,
+        HeaderAuth,
     },
 };
 </script>

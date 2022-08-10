@@ -1,23 +1,41 @@
 <template>
     <div class="profile-top">
-        <img
-            v-if="user.avatar"
-            class="avatar"
-            :src="config.url.image + user.avatar"
-        />
-        <img
-            class="avatar"
-            v-else
-            src="@/assets/image/default-user-avatar.png"
-        />
+        <lightgallery :settings="{ speed: 500, plugins: plugins }">
+            <a
+                class="gallery-item"
+                :href="config.url.image + user.avatar"
+                data-lg-size="1406-1390"
+            >
+                <img
+                    v-if="user.avatar"
+                    class="avatar"
+                    :src="config.url.image + user.avatar"
+                />
+                <img
+                    class="avatar"
+                    v-else
+                    src="@/assets/image/default-user-avatar.png"
+                />
+            </a>
+        </lightgallery>
 
         <div class="row cover">
             <b-col class="p-0" cols="12">
-                <img
-                    v-if="user.cover"
-                    class="cover"
-                    :src="'http://127.0.0.1:8000/tmp_images/' + user.cover"
-                />
+                <lightgallery :settings="{ speed: 500, plugins: plugins }">
+                    <a
+                        class="gallery-item"
+                        :href="'http://127.0.0.1:8000/tmp_images/' + user.cover"
+                        data-lg-size="1406-1390"
+                    >
+                        <img
+                            v-if="user.cover"
+                            class="cover"
+                            :src="
+                                'http://127.0.0.1:8000/tmp_images/' + user.cover
+                            "
+                        />
+                    </a>
+                </lightgallery>
             </b-col>
         </div>
 
@@ -60,14 +78,20 @@
 // @ is an alias to /src
 import config from "@/config";
 import EventBus from "@/EventBus.js";
+import Lightgallery from "lightgallery/vue";
+import lgZoom from "lightgallery/plugins/zoom";
+import lgVideo from "lightgallery/plugins/video";
+
 export default {
     name: "ProfileTop",
+    components: { Lightgallery },
 
     props: {
         user: Object,
     },
     data() {
         return {
+            plugins: [lgZoom, lgVideo],
             config: config,
             component: 1,
         };
@@ -75,6 +99,12 @@ export default {
     watch: {},
     mounted() {},
     methods: {
+        onInit: () => {
+            console.log("lightGallery has been initialized");
+        },
+        onBeforeSlide: () => {
+            console.log("calling before slide");
+        },
         changeComponent(index) {
             if (this.component !== index) {
                 this.component = index;
@@ -85,6 +115,9 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+@import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lightgallery.css");
+@import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-zoom.css");
+@import url("https://cdn.jsdelivr.net/npm/lightgallery@2.0.0-beta.4/css/lg-video.css");
 .text-orange {
     color: #ffa500;
 }
@@ -138,5 +171,8 @@ a {
 .drop_setting {
     left: -30px;
     right: -50px;
+}
+.gallery-item {
+    margin: 5px;
 }
 </style>

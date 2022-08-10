@@ -2,7 +2,9 @@
     <div class="form-post">
         <b-row>
             <b-col class="item btn-post" cols="10" v-on:click="modal = !modal">
-                <span>Thay đổi ảnh đại diện</span>
+                <!-- <span>Thay đổi ảnh đại diện {{ this.typeImage }}</span> -->
+                <span v-if="this.typeImage === 1">Thay đổi ảnh đại diện</span>
+                <span v-if="this.typeImage === 2">Thay đổi ảnh bìa</span>
             </b-col>
         </b-row>
     </div>
@@ -35,54 +37,6 @@
                                 fullname
                             }}</span>
                             <br />
-                            <button
-                                v-on:click="hiddenTypeShow = false"
-                                class="form-control type-show"
-                            >
-                                <span v-if="type_show == 1"
-                                    ><b-icon icon="globe"></b-icon> Công
-                                    khai</span
-                                >
-                                <span v-if="type_show == 2"
-                                    ><b-icon icon="people"></b-icon> Bạn
-                                    bè</span
-                                >
-                                <span v-if="type_show == 3"
-                                    ><b-icon icon="lock"></b-icon> Chỉ mình
-                                    tôi</span
-                                >
-                                <span v-if="type_show == 4"
-                                    ><b-icon icon="person"></b-icon> Bạn bè cụ
-                                    thể</span
-                                >
-                                <span v-if="type_show == 5"
-                                    ><b-icon icon="person-dash"></b-icon> Bạn bè
-                                    trừ</span
-                                >
-                            </button>
-                            <ul
-                                v-if="!hiddenTypeShow"
-                                v-click-outside="hideShow"
-                                class="list-group list-type-show position-absolute"
-                            >
-                                <li v-on:click="hideShow(1)" class="list-item">
-                                    <b-icon icon="globe"></b-icon> Công khai
-                                </li>
-                                <li v-on:click="hideShow(2)" class="list-item">
-                                    <b-icon icon="people"></b-icon> Bạn bè
-                                </li>
-                                <li v-on:click="hideShow(3)" class="list-item">
-                                    <b-icon icon="lock"></b-icon> Chỉ mình tôi
-                                </li>
-                                <li v-on:click="hideShow(4)" class="list-item">
-                                    <b-icon icon="person"></b-icon> Bạn bè cụ
-                                    thể
-                                </li>
-                                <li v-on:click="hideShow(5)" class="list-item">
-                                    <b-icon icon="person-dash"></b-icon> Bạn bè
-                                    trừ
-                                </li>
-                            </ul>
                         </b-col>
                         <b-col>
                             <b-icon
@@ -102,7 +56,6 @@
                         cols="50"
                         style="width: -webkit-fill-available"
                     ></textarea>
-                    {{ modal }}
                     <div v-if="images.length">
                         <img
                             class="image"
@@ -149,7 +102,7 @@
 <script>
 // @ is an alias to /src
 import Axios from "@/components/Axios.js";
-// import EventBus from "@/EventBus.js";
+import EventBus from "@/EventBus.js";
 
 export default {
     name: "UploadAvatar",
@@ -158,6 +111,7 @@ export default {
         user: {},
         group: {},
         showModal: Boolean,
+        typeImage: Number,
     },
     created() {
         this.owner = JSON.parse(localStorage.getItem("userInfo"));
@@ -183,19 +137,51 @@ export default {
 
         async savePost() {
             var formData = new FormData();
-            formData.append("avatar", this.images[0]);
+            formData.append("images[]", this.images[0]);
+            formData.append("data", this.dataPost);
 
             for (const pair of formData.entries()) {
                 console.log(`${pair[0]}, ${pair[1]}`);
             }
             var object = {};
-            object.avatar = this.images[0];
+            if (this.typeImage === 1) object.avatar = this.images[0];
+            else object.cover = this.images[0];
             console.log(object);
             await Axios.put("user/uploadAvatar", object)
                 .then((response) => {
                     if (response.data.status == "success") {
                         this.images = [];
                         this.modal = false;
+                        Axios.post("post/create", formData)
+                            .then((response) => {
+                                console.log(formData);
+                                for (const pair of formData.entries()) {
+                                    console.log(`${pair[0]}, ${pair[1]}`);
+                                }
+
+                                if (response.data.status == "success") {
+                                    this.images = [];
+                                    this.dataPost = "";
+                                    this.modal = false;
+                                    if ((this.group ?? {}).type == 2)
+                                        alert(
+                                            "Bài viết đang chờ admin kiểm duyệt, vui lòng chờ"
+                                        );
+                                    else {
+                                        EventBus.$emit(
+                                            "createPost",
+                                            response.data.data[0]
+                                        );
+                                    }
+                                } else {
+                                    alert(response.data.message);
+                                }
+                            })
+                            .catch(() => {
+                                alert(
+                                    "Đã có lỗi xảy ra, vui lòng thử lại sau1"
+                                );
+                            });
                         this.$router.go();
                     } else {
                         alert(response.data.message);

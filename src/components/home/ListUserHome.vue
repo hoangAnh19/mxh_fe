@@ -1,9 +1,8 @@
 <template>
     <div class="list-friend-home">
         <div class="header d-flex justify-content-between">
-            <div class="title">Danh bạ</div>
+            <div class="title">Danh bạ trực tuyến</div>
             <div class="d-flex">
-                <b-icon class="search" icon="search"></b-icon>
                 <b-icon
                     icon="three-dots"
                     class="setting"
@@ -12,12 +11,7 @@
             </div>
         </div>
         <div class="body">
-            <div v-if="!listUser.length" class="no-message">
-                <button class="btn btn-create">
-                    <b-icon icon="plus-circle-fill"></b-icon> Tạo cuộc trò
-                    chuyện mới
-                </button>
-            </div>
+            <div v-if="!listUser.length" class="no-message"></div>
             <div v-else>
                 <div
                     v-for="user in listUser"
@@ -52,12 +46,6 @@
                     </div>
                 </div>
             </div>
-            <div v-for="userMessage in listUserClick" :key="userMessage">
-                <!-- <FormChat
-                    v-if="userMessage && userMessage.select && modalDialog"
-                    :user="userMessage"
-                /> -->
-            </div>
         </div>
     </div>
 </template>
@@ -66,12 +54,10 @@
 // @ is an alias to /src
 // import Axios from "@/components/Axios.js";
 import EventBus from "@/EventBus.js";
-import FormChat from "@/components/chat/FormChat.vue";
 import Axios from "@/components/Axios.js";
 
 export default {
-    name: "ListFriendHome",
-    FormChat,
+    name: "ListUserHome",
     components: {},
     props: {
         user: Object,
@@ -168,6 +154,7 @@ export default {
 .title {
     text-align: left;
     font-weight: 600;
+    font-size: 16px;
 }
 .list-friend-home {
     position: fixed;
