@@ -9,16 +9,6 @@
                 class="form-input"
                 placeholder="Lọc thành viên"
             />
-            <button
-                type="button"
-                class="btn btn-secondary ms-3"
-                v-on:click="
-                    getListuser(1);
-                    this.key_search = '';
-                "
-            >
-                Tất cả
-            </button>
         </div>
 
         <div class="list yesterday form-month">
@@ -126,7 +116,7 @@ export default {
             Axios.get("user/list_user?page=" + pageNumber).then((response) => {
                 if (response.data.status == "success") {
                     this.usersObject = response.data.data[0];
-                    this.sumPage = Math.floor(response.data.data[1] / 6 + 1);
+                    this.sumPage = Math.floor(response.data.data[1] / 9 + 1);
 
                     this.erros = "";
                 } else {

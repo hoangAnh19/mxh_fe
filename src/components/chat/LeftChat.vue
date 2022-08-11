@@ -4,7 +4,7 @@
             <div class="avatar">
                 <img
                     v-if="user.avatar"
-                    :src="'http://127.0.0.1:8000/tmp_images/' + user.avatar"
+                    :src="'http://127.0.0.1:8000/file_upload/' + user.avatar"
                 />
                 <img v-else src="@/assets/image/default-user-avatar.png" />
             </div>
@@ -30,7 +30,9 @@
                 <div class="avatar">
                     <img
                         v-if="item.avatar"
-                        :src="'http://127.0.0.1:8000/tmp_images/' + item.avatar"
+                        :src="
+                            'http://127.0.0.1:8000/file_upload/' + item.avatar
+                        "
                     />
                     <img v-else src="@/assets/image/default-user-avatar.png" />
                 </div>
@@ -94,7 +96,7 @@
                                 <img
                                     v-if="item.avatar"
                                     :src="
-                                        'http://127.0.0.1:8000/tmp_images/' +
+                                        'http://127.0.0.1:8000/file_upload/' +
                                         item.avatar
                                     "
                                 />

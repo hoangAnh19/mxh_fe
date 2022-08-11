@@ -243,7 +243,7 @@ input:focus {
     margin: 20px 0;
 }
 
-.list-friend {
+.list-user {
     width: 60%;
     margin: 20px auto 0 auto;
 }

@@ -9,7 +9,7 @@
                     <a
                         class="gallery-item"
                         :href="
-                            'http://127.0.0.1:8000/tmp_images/' + group.cover
+                            'http://127.0.0.1:8000/file_upload/' + group.cover
                         "
                         data-lg-size="1406-1390"
                     >
@@ -17,7 +17,7 @@
                             v-if="group.cover"
                             class="cover"
                             :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
+                                'http://127.0.0.1:8000/file_upload/' +
                                 group.cover
                             "
                         />

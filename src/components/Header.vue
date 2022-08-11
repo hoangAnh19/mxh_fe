@@ -93,7 +93,7 @@
                             <img
                                 v-if="user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:8000/file_upload/' +
                                     user.avatar
                                 "
                                 class="rounded-circle bg-secondary"
@@ -162,7 +162,7 @@
                                 <img
                                     v-if="item.user_2.avatar"
                                     :src="
-                                        'http://127.0.0.1:8000/tmp_images/' +
+                                        'http://127.0.0.1:8000/file_upload/' +
                                         item.user_2.avatar
                                     "
                                     class="rounded-circle bg-secondary"
@@ -223,7 +223,7 @@
                                 <img
                                     v-if="item.user_2.avatar"
                                     :src="
-                                        'http://127.0.0.1:8000/tmp_images/' +
+                                        'http://127.0.0.1:8000/file_upload/' +
                                         item.user_2.avatar
                                     "
                                     class="rounded-circle bg-secondary"

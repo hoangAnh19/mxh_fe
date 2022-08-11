@@ -48,7 +48,7 @@
                         <img
                             v-if="listGroupManager[item - 1].cover"
                             :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
+                                'http://127.0.0.1:8000/file_upload/' +
                                 listGroupManager[item - 1].cover
                             "
                         />
@@ -96,7 +96,7 @@
                         <img
                             v-if="listGroupNomarl[item - 1].cover"
                             :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
+                                'http://127.0.0.1:8000/file_upload/' +
                                 listGroupNomarl[item - 1].cover
                             "
                         />

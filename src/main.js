@@ -7,6 +7,8 @@ import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
 import vClickOutside from "click-outside-vue3";
 import "bootstrap-vue-3/dist/bootstrap-vue-3.css";
+import VueVideoPlayer from "@videojs-player/vue";
+import "video.js/dist/video-js.css";
 
 router.beforeEach((to, from, next) => {
     const token = window.localStorage.getItem("token");
@@ -50,4 +52,5 @@ createApp(App)
     .use(store)
     .use(router)
     .use(BootstrapVue3)
+    .use(VueVideoPlayer)
     .mount("#app");

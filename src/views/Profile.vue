@@ -81,9 +81,7 @@ export default {
         getUserInfo(id) {
             var user = JSON.parse(localStorage.getItem("userInfo"));
             if (id == JSON.parse(localStorage.getItem("userInfo")).id) {
-                this.is_prevent = 2;
                 this.user1 = user;
-                return;
             }
             this.user = JSON.parse(localStorage.getItem("userInfo"));
             Axios.get("user?user_id=" + id)

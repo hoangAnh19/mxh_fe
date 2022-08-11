@@ -65,13 +65,8 @@
                 <b-col v-if="componentManager == 3">
                     <ListPostBrowse v-bind:group_id="group.id" />
                 </b-col>
+
                 <b-col v-if="componentManager == 4">
-                    <ListPrevent
-                        v-bind:count="count.prevent"
-                        v-bind:member="member"
-                    />
-                </b-col>
-                <b-col v-if="componentManager == 5">
                     <SettingGroup v-bind:group="group" />
                 </b-col>
             </b-row>
@@ -88,7 +83,6 @@ import Header from "@/components/Header.vue";
 import ManagerGroup from "@/components/group/ManagerGroup.vue";
 import ListMember from "@/components/group/ListMember.vue";
 import ListPending from "@/components/group/ListPending.vue";
-import ListPrevent from "@/components/group/ListPrevent.vue";
 import GroupTop from "@/components/group/GroupTop.vue";
 import SettingGroup from "@/components/group/SettingGroup.vue";
 import IntroduceGroup from "@/components/group/IntroduceGroup.vue";
@@ -206,7 +200,6 @@ export default {
         IntroduceGroup,
         ListMember,
         ListPending,
-        ListPrevent,
         SettingGroup,
         TimeLine,
         ListPostBrowse,

@@ -102,11 +102,13 @@ export default {
     },
     methods: {
         search(data) {
-            Axios.get("post/searchPost?data=" + data).then((response) => {
-                if (response.data.status == "success") {
-                    this.postObject = response.data.data;
+            Axios.get("post/get_list_search_admin?data=" + data).then(
+                (response) => {
+                    if (response.data.status == "success") {
+                        this.postObject = response.data.data;
+                    }
                 }
-            });
+            );
         },
 
         getListPost(pageNumber) {
@@ -142,16 +144,15 @@ export default {
                 });
         },
 
-        async deletePost(id) {
+        deletePost(id) {
             if (confirm("Bạn muốn xoá bài viết này?")) {
-                Axios.post("admin/deletePostAdmin?id=" + id).then(
-                    (response) => {
-                        if (response.data.status == "success") {
-                            console.log("success");
-                        }
+                Axios.post("post/delete?id=" + id).then((response) => {
+                    if (response.data.status == "success") {
+                        console.log("success");
+                        alert("Xoá bài viết thành công");
                     }
-                );
-                await this.getListPost();
+                });
+                this.getListPost(1);
             }
         },
     },
@@ -202,7 +203,7 @@ input:focus {
     margin: 20px 0;
 }
 
-.list-friend {
+.list-user {
     width: 60%;
     margin: 20px auto 0 auto;
 }

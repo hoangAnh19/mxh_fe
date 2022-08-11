@@ -24,14 +24,17 @@
                 <lightgallery :settings="{ speed: 500, plugins: plugins }">
                     <a
                         class="gallery-item"
-                        :href="'http://127.0.0.1:8000/tmp_images/' + user.cover"
+                        :href="
+                            'http://127.0.0.1:8000/file_upload/' + user.cover
+                        "
                         data-lg-size="1406-1390"
                     >
                         <img
                             v-if="user.cover"
                             class="cover"
                             :src="
-                                'http://127.0.0.1:8000/tmp_images/' + user.cover
+                                'http://127.0.0.1:8000/file_upload/' +
+                                user.cover
                             "
                         />
                     </a>

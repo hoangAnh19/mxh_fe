@@ -16,7 +16,7 @@
             <div class="item">
                 <b-icon class="icon border-info" icon="briefcase-fill"></b-icon>
                 <span class="title"> Vị trí công việc </span>
-                {{ user.workplace ? user.workplace : "chưa cập nhật" }}
+                {{ posis(user.level) }}
             </div>
             <div class="item">
                 <b-icon class="icon border-info" icon="briefcase-fill"></b-icon>
@@ -66,6 +66,12 @@ export default {
     },
     methods: {
         reload() {},
+        posis(id) {
+            if (id === 4) return "Ban giám đốc";
+            if (id === 3) return "Trưởng phòng";
+            if (id === 2) return "Phó phòng";
+            if (id === 1) return "Nhân viên";
+        },
 
         parseDate(date) {
             return parse.parseDate(date);

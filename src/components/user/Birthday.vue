@@ -4,159 +4,113 @@
             <h2>Sinh nhật</h2>
         </div>
 
-        <div class="list yesterday form-month">
-            <div v-if="months['yesterday'].length" class="yesterday form-month">
-                <div class="h4 title">Sinh nhật gần đây</div>
-                <div
-                    v-for="(friend, index) in months['yesterday']"
-                    :key="index"
-                    class="item"
-                >
-                    <div class="avatar">
-                        <img
-                            v-if="friend.avatar"
-                            :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
-                                friend.avatar
-                            "
-                        />
-                        <img
-                            v-else
-                            src="@/assets/image/default-user-avatar.png"
-                        />
-                    </div>
-                    <div class="right">
-                        <div class="fw-bold">
-                            {{ friend.first_name + " " + friend.last_name }}
-                        </div>
-                        <div>{{ friend.bird_day }}</div>
-                        <div
-                            contenteditable="true"
-                            placeholder="Viết lên dòng thời gian của anh ấy"
-                            class="form-control"
-                            @keydown.enter.exact.prevent="
-                                sendMessage($event, friend.id)
-                            "
-                            style="width: 100%"
-                        ></div>
-                    </div>
-                </div>
-            </div>
-            <div v-if="months['now'].length" class="now form-month">
-                <div class="h4 title">Hôm nay</div>
-                <div
-                    v-for="(friend, index) in months['now']"
-                    :key="index"
-                    class="item"
-                >
-                    <div class="avatar">
-                        <img
-                            v-if="friend.avatar"
-                            :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
-                                friend.avatar
-                            "
-                        />
-                        <img
-                            v-else
-                            src="@/assets/image/default-user-avatar.png"
-                        />
-                    </div>
-                    <div class="right">
-                        <div class="fw-bold">
-                            {{ friend.first_name + " " + friend.last_name }}
-                        </div>
-                        <div>{{ friend.bird_day }}</div>
-                        <div
-                            contenteditable="true"
-                            placeholder="Viết lên dòng thời gian của anh ấy"
-                            @keydown.enter.exact.prevent="
-                                sendMessage($event, friend.id)
-                            "
-                            class="form-control"
-                            style="width: 100%"
-                        ></div>
-                    </div>
-                </div>
-            </div>
+        <div class="form-month">
             <div v-if="months['tomorrow'].length" class="tomorrow form-month">
-                <div class="h4 title">Sinh nhật sắp tới</div>
+                <div class="h4 title">Sinh nhật trong tháng {{ month }}</div>
                 <div
-                    v-for="(friend, index) in months['tomorrow']"
+                    v-for="(user, index) in months['tomorrow']"
                     :key="index"
                     class="item"
                 >
-                    <div class="avatar">
-                        <img
-                            v-if="friend.avatar"
-                            :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
-                                friend.avatar
-                            "
-                        />
-                        <img
-                            v-else
-                            src="@/assets/image/default-user-avatar.png"
-                        />
-                    </div>
-                    <div class="right">
-                        <div class="fw-bold">
-                            {{ friend.first_name + " " + friend.last_name }}
-                        </div>
-                        <div>{{ friend.bird_day }}</div>
-                    </div>
-                </div>
-            </div>
-            <div
-                class="month-next form-month"
-                v-for="index in 12 - month + 1"
-                :key="index"
-            >
-                <div v-if="months[index + month - 1].length">
-                    <div class="h4 title">Tháng {{ index + 1 }}</div>
-                    <div class="second-title">
-                        <span class="fw-bold">{{
-                            months[index + month - 1][0].first_name +
-                            " " +
-                            months[index + month - 1][0].last_name
-                        }}</span>
-                        <span v-if="months[index + month - 1].length - 1">
-                            và {{ months[index + month - 1].length - 1 }} người
-                            khác</span
-                        >
-                    </div>
+                    <div class="second-title fw-bold">
+                        <a href=""></a>
 
-                    <div class="list_avatar">
-                        <div
-                            v-for="friend in months[index + month - 1]"
-                            :key="friend"
-                            class="avatar_"
+                        {{ user.first_name + " " + user.last_name }}
+                    </div>
+                    <div class="avatar">
+                        <router-link
+                            :to="{
+                                name: 'Profile',
+                                params: { userId: user.id },
+                            }"
                         >
                             <img
-                                v-if="friend.avatar"
+                                v-if="user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
-                                    friend.avatar
+                                    'http://127.0.0.1:8000/file_upload/' +
+                                    user.avatar
                                 "
                                 :title="
-                                    friend.bird_day +
+                                    user.bird_day +
                                     ' là ngày sinh của ' +
-                                    friend.first_name +
+                                    user.first_name +
                                     ' ' +
-                                    friend.last_name
+                                    user.last_name
                                 "
                             />
                             <img
                                 v-else
                                 src="@/assets/image/default-user-avatar.png"
                                 :title="
-                                    friend.bird_day +
+                                    user.bird_day +
                                     ' là ngày sinh của ' +
-                                    friend.first_name +
+                                    user.first_name +
                                     ' ' +
-                                    friend.last_name
+                                    user.last_name
                                 "
                             />
+                        </router-link>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="month-next form-month"
+                v-for="index in 12 - month - 1"
+                :key="index"
+            >
+                <div v-if="months[index + month + 1].length">
+                    <div class="h4 title">Tháng {{ index + month + 1 }}</div>
+                    <div class="second-title">
+                        <span class="fw-bold">{{
+                            months[index + month + 1][0].first_name +
+                            " " +
+                            months[index + month + 1][0].last_name
+                        }}</span>
+                        <span v-if="months[index + month + 1].length - 1">
+                            và {{ months[index + month + 1].length - 1 }} người
+                            khác</span
+                        >
+                    </div>
+
+                    <div class="list_avatar">
+                        <div
+                            v-for="(user, index) in months[index + month + 1]"
+                            :key="index"
+                            class="avatar_"
+                        >
+                            <router-link
+                                :to="{
+                                    name: 'Profile',
+                                    params: { userId: user.id },
+                                }"
+                            >
+                                <img
+                                    v-if="user.avatar"
+                                    :src="
+                                        'http://127.0.0.1:8000/file_upload/' +
+                                        user.avatar
+                                    "
+                                    :title="
+                                        user.bird_day +
+                                        ' là ngày sinh của ' +
+                                        user.first_name +
+                                        ' ' +
+                                        user.last_name
+                                    "
+                                />
+                                <img
+                                    v-else
+                                    src="@/assets/image/default-user-avatar.png"
+                                    :title="
+                                        user.bird_day +
+                                        ' là ngày sinh của ' +
+                                        user.first_name +
+                                        ' ' +
+                                        user.last_name
+                                    "
+                                />
+                            </router-link>
+                            <br v-if="index % 4 === 0" />
                         </div>
                     </div>
                 </div>
@@ -178,35 +132,36 @@
                             và {{ months[index].length - 1 }} người khác</span
                         >
                     </div>
+
                     <div class="list_avatar">
                         <div
-                            v-for="friend in months[index]"
-                            :key="friend"
+                            v-for="(user, index) in months[index]"
+                            :key="index"
                             class="avatar_"
                         >
                             <img
-                                v-if="friend.avatar"
+                                v-if="user.avatar && index < 7"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
-                                    friend.avatar
+                                    'http://127.0.0.1:8000/file_upload/' +
+                                    user.avatar
                                 "
                                 :title="
-                                    friend.bird_day +
+                                    user.bird_day +
                                     ' là ngày sinh của ' +
-                                    friend.first_name +
+                                    user.first_name +
                                     ' ' +
-                                    friend.last_name
+                                    user.last_name
                                 "
                             />
                             <img
-                                v-else
+                                v-if="!user.avatar && index < 7"
                                 src="@/assets/image/default-user-avatar.png"
                                 :title="
-                                    friend.bird_day +
+                                    user.bird_day +
                                     ' là ngày sinh của ' +
-                                    friend.first_name +
+                                    user.first_name +
                                     ' ' +
-                                    friend.last_name
+                                    user.last_name
                                 "
                             />
                         </div>
@@ -226,7 +181,6 @@ export default {
     name: "Birthday",
     created() {
         (this.months[1] = []),
-            (this.months[1] = []),
             (this.months[2] = []),
             (this.months[3] = []),
             (this.months[4] = []),
@@ -241,28 +195,28 @@ export default {
             (this.months["now"] = []),
             (this.months["tomorrow"] = []),
             (this.months["yesterday"] = []),
-            Axios.get("relationship/list_user_birth_day").then((response) => {
+            Axios.get("user/list_user_birth_day").then((response) => {
                 if (response.data.status == "success") {
-                    this.friends = response.data.data;
+                    this.users = response.data.data;
                     var date = new Date();
                     var day = date.getDate();
                     var month = date.getMonth() + 1;
                     this.month = month;
                     var offset, date1;
-                    this.friends.forEach((friend) => {
-                        date1 = new Date(friend.bird_day);
-                        this.months[date1.getMonth() + 1].push(friend);
+                    this.users.forEach((user) => {
+                        date1 = new Date(user.bird_day);
+                        this.months[date1.getMonth() + 1].push(user);
 
                         if (month === date1.getMonth() + 1) {
                             offset = date1.getDate() - day;
                             if (offset == 0) {
-                                this.months["now"].push(friend);
+                                this.months["now"].push(user);
                             } else if (offset == -1) {
-                                this.months["yesterday"].push(friend);
+                                this.months["yesterday"].push(user);
                             } else if (offset < 4) {
-                                this.months["tomorrow"].push(friend);
+                                this.months["tomorrow"].push(user);
                             } else {
-                                this.months[date1.getMonth() + 1].push(friend);
+                                this.months[date1.getMonth() + 1].push(user);
                             }
                         }
                     });
@@ -316,7 +270,7 @@ export default {
     margin: 20px 0;
 }
 .item {
-    display: flex;
+    display: block;
     padding: 10px;
 }
 .item .right {

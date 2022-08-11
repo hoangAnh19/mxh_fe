@@ -49,12 +49,17 @@ export default {
             console.log("Envenbus on new post");
         });
 
+        EventBus.$on("deletPost", () => {
+            this.page = 1;
+            this.listPost = [];
+            this.getList();
+        });
+
         EventBus.$on("newComment", (data) => {
             console.log("new comment", data);
             this.page = 1;
             this.listPost = [];
-            if (data != JSON.parse(localStorage.getItem("userInfo")).id)
-                this.getList();
+            this.getList();
             console.log("Envenbus on new comment");
         });
 

@@ -17,11 +17,8 @@
                     <img src="@/assets/icon/icon-pending-posts.svg" /> Bài viết
                     chờ duyệt
                 </div>
+
                 <div class="item" v-on:click="changeComponent(4)">
-                    <img src="@/assets/icon/icon-block.svg" /> Danh sách thành
-                    viên bị chặn
-                </div>
-                <div class="item" v-on:click="changeComponent(5)">
                     <b-icon
                         icon="gear"
                         v-if="member.role === config.group.role.admin"

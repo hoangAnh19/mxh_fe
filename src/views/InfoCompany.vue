@@ -1,5 +1,5 @@
 <template>
-    <div class="list-friend" id="list-friend">
+    <div class="list-user" id="list-user">
         <Header v-bind:user="user" />
 
         <NavbarLeftHome v-bind:user="user" />
@@ -56,7 +56,7 @@
 
 <script>
 // @ is an alias to /src
-import Axios from "@/components/Axios.js";
+// import Axios from "@/components/Axios.js";
 import config from "@/config";
 import NavbarLeftHome from "@/components/home/NavbarLeftHome.vue";
 import Header from "@/components/Header.vue";
@@ -79,31 +79,7 @@ export default {
         Header,
     },
     watch: {},
-    methods: {
-        getListCoreValue() {
-            if (this.ajaxLock) return;
-            this.ajaxLock = true;
-            Axios.get("admin/coreValue").then((response) => {
-                if (response.data.status == "success") {
-                    this.coreValues = response.data.data;
-
-                    this.erros = "";
-                } else {
-                    this.errors = response.data.message;
-                }
-                this.ajaxLock = false;
-            });
-        },
-
-        getRandomColor() {
-            var letters = "0123456789ABCDEF";
-            var color = "#";
-            for (var i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        },
-    },
+    methods: {},
 };
 </script>
 <style scoped lang="scss">
@@ -127,7 +103,7 @@ export default {
     padding: 10px;
 }
 
-.list-friend {
+.list-user {
     width: 45%;
     margin: -18px auto 0 auto;
 }

@@ -9,7 +9,7 @@
         >
             <img
                 v-if="user.avatar"
-                :src="'http://127.0.0.1:8000/tmp_images/' + user.avatar"
+                :src="'http://127.0.0.1:8000/file_upload/' + user.avatar"
                 class="rounded-circle bg-secondary"
                 style="width: 110px; height: 110px"
             />

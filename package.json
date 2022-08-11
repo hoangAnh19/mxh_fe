@@ -10,6 +10,7 @@
         "start": "node server.js"
     },
     "dependencies": {
+        "@videojs-player/vue": "^1.0.0-beta.4",
         "@vuelidate/core": "^2.0.0-alpha.33",
         "@vuelidate/validators": "^2.0.0-alpha.26",
         "axios": "^0.24.0",
@@ -27,6 +28,7 @@
         "tiny-emitter": "^2.1.0",
         "v-click-outside": "^3.1.2",
         "v-viewer": "^1.6.4",
+        "video.js": "^7.20.1",
         "vue": "^3.0.0",
         "vue-3-socket.io": "^1.0.4",
         "vue-chart-3": "^3.1.8",

@@ -27,6 +27,17 @@
                 src="https://www.lightgalleryjs.com/images/demo/html5-video-poster.jpg"
             />
         </a>
+
+        <a
+            class="gallery-item"
+            data-video='{"source": [{"src":"http://127.0.0.1:8000/file_upload/1660068395.mp4"", "type":"video/mp4"}], "attributes": {"preload": false, "controls": true}}'
+        >
+            <img
+                width="200"
+                class="img-responsive"
+                src="https://www.lightgalleryjs.com/images/demo/html5-video-poster.jpg"
+            />
+        </a>
     </lightgallery>
 </template>
 

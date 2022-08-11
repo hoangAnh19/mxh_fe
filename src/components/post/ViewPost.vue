@@ -5,7 +5,7 @@
                 <img
                     v-if="post.user.avatar"
                     :src="
-                        'http://127.0.0.1:8000/tmp_images/' + post.user.avatar
+                        'http://127.0.0.1:8000/file_upload/' + post.user.avatar
                     "
                 />
                 <img v-else src="@/assets/image/default-user-avatar.png" />
@@ -28,17 +28,27 @@
                 >
                 <br />
                 <br />
+                <router-link
+                    class="link"
+                    :to="{ name: 'Post', params: { postId: post.id } }"
+                >
+                    {{ convertTime(post.created_at) }}
+                </router-link>
             </div>
+
             <div>
                 <b-icon
-                    v-if="
-                        !this.post.user_id_2 ||
-                        post.user.user_id_2 == this.owner.id
-                    "
+                    v-if="post.user_id == this.owner.id"
                     icon="three-dots"
-                    v-on:click="closeModal"
+                    v-on:click="isShowBrowse = true"
+                    v-click-outside="closeDot"
                     style="cursor: pointer"
                 ></b-icon>
+                <div class="browse" v-if="isShowBrowse">
+                    <div v-on:click="deletePost" class="browse-item">
+                        Xóa bài viết
+                    </div>
+                </div>
             </div>
         </div>
         <div class="main">
@@ -52,7 +62,7 @@
                             <img
                                 v-if="post.post_share.user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:8000/file_upload/' +
                                     post.post_share.user.avatar
                                 "
                             />
@@ -100,19 +110,6 @@
                             class="img"
                             style="overflow: hidden; position: relative"
                         >
-                            <div
-                                v-if="indexImage < countImage"
-                                class="next-right"
-                                v-on:click="nextImage(1)"
-                            >
-                                <b-icon icon="chevron-right"></b-icon>
-                            </div>
-                            <div v-if="indexImage > 1" class="next-left">
-                                <b-icon
-                                    icon="chevron-left"
-                                    v-on:click="nextImage(-1)"
-                                ></b-icon>
-                            </div>
                             <div class="images-wrapper">
                                 <div
                                     class="images"
@@ -123,7 +120,69 @@
                                         v-for="(image, index) in images_share"
                                         :key="index"
                                     >
-                                        <img :src="config.url.image + image" />
+                                        <div
+                                            class="file-image"
+                                            v-if="
+                                                this.arrayImageName.includes(
+                                                    image.slice(-3)
+                                                ) ||
+                                                this.arrayImageName.includes(
+                                                    image.slice(-4)
+                                                )
+                                            "
+                                        >
+                                            <lightgallery
+                                                :settings="{
+                                                    speed: 500,
+                                                    plugins: plugins,
+                                                }"
+                                            >
+                                                <a
+                                                    :href="
+                                                        config.url.image + image
+                                                    "
+                                                >
+                                                    <img
+                                                        :src="
+                                                            config.url.image +
+                                                            image
+                                                        "
+                                                    />
+                                                </a>
+                                            </lightgallery>
+                                        </div>
+                                        <div
+                                            class="file-doc"
+                                            v-if="
+                                                this.arrayFileName.includes(
+                                                    image.slice(-3)
+                                                ) ||
+                                                this.arrayFileName.includes(
+                                                    image.slice(-4)
+                                                )
+                                            "
+                                        >
+                                            <a :href="config.url.image + image">
+                                                {{ image }}
+                                            </a>
+                                            <br />
+                                        </div>
+                                        <div
+                                            class="file-video"
+                                            v-if="
+                                                this.arrayVideoName.includes(
+                                                    image.slice(-3)
+                                                )
+                                            "
+                                        >
+                                            <video-player
+                                                :src="config.url.image + image"
+                                                controls
+                                                :volume="0.6"
+                                                :width="700"
+                                                :height="400"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -136,19 +195,6 @@
                 class="img"
                 style="overflow: hidden; position: relative"
             >
-                <div
-                    v-if="indexImage < countImage"
-                    class="next-right"
-                    v-on:click="nextImage(1)"
-                >
-                    <b-icon icon="chevron-right"></b-icon>
-                </div>
-                <div v-if="indexImage > 1" class="next-left">
-                    <b-icon
-                        icon="chevron-left"
-                        v-on:click="nextImage(-1)"
-                    ></b-icon>
-                </div>
                 <div class="images-wrapper">
                     <div class="images" :id="'images' + post.id">
                         <div
@@ -156,17 +202,53 @@
                             v-for="(image, index) in images"
                             :key="index"
                         >
-                            <lightgallery
-                                :settings="{ speed: 500, plugins: plugins }"
+                            <div
+                                class="file-image"
+                                v-if="
+                                    this.arrayImageName.includes(
+                                        image.slice(-3)
+                                    ) ||
+                                    this.arrayImageName.includes(
+                                        image.slice(-4)
+                                    )
+                                "
                             >
-                                <a
-                                    :href="config.url.image + image"
-                                    data-lg-size="1406-1390"
+                                <lightgallery
+                                    :settings="{ speed: 500, plugins: plugins }"
                                 >
-                                    <img :src="config.url.image + image" />
+                                    <a :href="config.url.image + image">
+                                        <img :src="config.url.image + image" />
+                                    </a>
+                                </lightgallery>
+                            </div>
+                            <div
+                                class="file-doc"
+                                v-if="
+                                    this.arrayFileName.includes(
+                                        image.slice(-3)
+                                    ) ||
+                                    this.arrayFileName.includes(image.slice(-4))
+                                "
+                            >
+                                <a :href="config.url.image + image">
+                                    {{ image }}
                                 </a>
-                            </lightgallery>
-                            <!-- <img :src="config.url.image + image" /> -->
+                                <br />
+                            </div>
+                            <div
+                                class="file-video"
+                                v-if="
+                                    this.arrayVideoName.includes(
+                                        image.slice(-3)
+                                    )
+                                "
+                            >
+                                <video-player
+                                    :src="config.url.image + image"
+                                    controls
+                                    :volume="0.6"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -286,7 +368,7 @@
                         <img
                             v-if="owner.avatar"
                             :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
+                                'http://127.0.0.1:8000/file_upload/' +
                                 owner.avatar
                             "
                         />
@@ -321,7 +403,7 @@
                         <img
                             v-if="comment.user.avatar"
                             :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
+                                'http://127.0.0.1:8000/file_upload/' +
                                 comment.user.avatar
                             "
                         />
@@ -379,7 +461,7 @@
                                     <img
                                         v-if="answer.user.avatar"
                                         :src="
-                                            'http://127.0.0.1:8000/tmp_images/' +
+                                            'http://127.0.0.1:8000/file_upload/' +
                                             answer.user.avatar
                                         "
                                     />
@@ -419,7 +501,7 @@
                                 <img
                                     v-if="owner.avatar"
                                     :src="
-                                        'http://127.0.0.1:8000/tmp_images/' +
+                                        'http://127.0.0.1:8000/file_upload/' +
                                         owner.avatar
                                     "
                                 />
@@ -469,7 +551,7 @@
                                 <img
                                     v-if="post.user.avatar"
                                     :src="
-                                        'http://127.0.0.1:8000/tmp_images/' +
+                                        'http://127.0.0.1:8000/file_upload/' +
                                         post.user.avatar
                                     "
                                 />
@@ -488,6 +570,15 @@
                                     >{{ fullname(post.user) }}</router-link
                                 >
                                 <br />
+                                <router-link
+                                    class="link"
+                                    :to="{
+                                        name: 'Post',
+                                        params: { postId: post.id },
+                                    }"
+                                >
+                                    {{ convertTime(post.created_at) }}
+                                </router-link>
                             </div>
                         </div>
                         <div class="main">
@@ -499,19 +590,6 @@
                                 class="img"
                                 style="overflow: hidden; position: relative"
                             >
-                                <div
-                                    v-if="indexImage < countImage"
-                                    class="next-right"
-                                    v-on:click="nextImage(1)"
-                                >
-                                    <b-icon icon="chevron-right"></b-icon>
-                                </div>
-                                <div v-if="indexImage > 1" class="next-left">
-                                    <b-icon
-                                        icon="chevron-left"
-                                        v-on:click="nextImage(-1)"
-                                    ></b-icon>
-                                </div>
                                 <div class="images-wrapper">
                                     <div
                                         class="images"
@@ -567,7 +645,7 @@
                             <img
                                 v-if="item.user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:8000/file_upload/' +
                                     item.user.avatar
                                 "
                             />
@@ -617,7 +695,7 @@
                             <img
                                 v-if="item.user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:8000/file_upload/' +
                                     item.user.avatar
                                 "
                             />
@@ -660,6 +738,7 @@ import config from "@/config";
 import Lightgallery from "lightgallery/vue";
 import lgZoom from "lightgallery/plugins/zoom";
 import lgVideo from "lightgallery/plugins/video";
+import EventBus from "../../EventBus";
 
 export default {
     components: { Lightgallery },
@@ -686,7 +765,6 @@ export default {
             listComment: [],
             modal: false,
             dataShare: "",
-            type_show: 1,
             modal_like: false,
             modal_share: false,
             like_count: this.post.like_count ?? 0,
@@ -697,6 +775,10 @@ export default {
             page_share: 0,
             list_share: [],
             plugins: [lgZoom, lgVideo],
+            arrayFileName: ["mp3", "pdf", "docx"],
+            arrayVideoName: ["mp4"],
+            arrayImageName: ["png", "jpg", "jpeg", "jfif"],
+            isShowBrowse: false,
         };
     },
     created() {
@@ -760,6 +842,9 @@ export default {
                     alert("Đã có lỗi xảy ra, vui lòng thử lại");
                 });
         },
+        closeDot() {
+            this.isShowBrowse = false;
+        },
         closeModal() {
             this.modal = false;
         },
@@ -775,14 +860,7 @@ export default {
         focusComment() {
             this.$refs.comment.focus();
         },
-        nextImage(param) {
-            console.log(param);
-            this.indexImage += param;
-            this.positionX -= param * this.width_image;
-            var slidechuyen = document.getElementById("images" + this.post.id);
-            slidechuyen.style =
-                "transform: translateX(" + this.positionX + "px)";
-        },
+
         like(type) {
             Axios.post("like", {
                 post_id: this.post.id,
@@ -877,7 +955,6 @@ export default {
         },
         sharePost() {
             var post = {};
-            post.type_show = this.type_show;
             post.data = this.dataShare;
             post.post_id = this.post.post_id ? this.post.post_id : this.post.id;
             Axios.post("post/create", post)
@@ -933,6 +1010,22 @@ export default {
                     type: 3,
                 });
             }
+        },
+        deletePost() {
+            Axios.post("post/delete?post_id=" + this.post.id)
+                .then((response) => {
+                    if (response.data.status == "success") {
+                        this.display = false;
+
+                        alert("Xóa thành công");
+                        EventBus.$emit("deletPost");
+                    } else {
+                        alert("Bạn không có quyền xoá bài viết");
+                    }
+                })
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại");
+                });
         },
         getComment(options) {
             var url = "comment/get?";
@@ -1087,39 +1180,24 @@ export default {
     margin: auto;
 }
 .images {
-    display: flex;
     object-fit: contain;
-    max-height: 100%;
     transition: transform 0.25s linear;
 }
 .images-wrapper {
-    height: 450px;
     width: 100%;
     position: relative;
     left: 0;
 }
-.next-right,
-.next-left {
-    border-radius: 50%;
-    background: #7c7272;
-    padding: 3px;
-    line-height: 16px;
-    position: absolute;
-    top: 48%;
-    display: none;
-    z-index: 1;
+
+.file-image {
 }
-.img:hover .next-left,
-.img:hover .next-right {
-    cursor: pointer;
-    display: block;
+
+.file-video {
 }
-.next-left {
-    left: 0;
+
+.file-doc {
 }
-.next-right {
-    right: 0;
-}
+
 .interactive {
     border-top: 1px solid #f2f2f2;
     padding: 0 5px;
@@ -1296,7 +1374,7 @@ export default {
 }
 .link {
     text-decoration: none;
-    color: black;
+    color: #176cd4;
 }
 .list {
 }

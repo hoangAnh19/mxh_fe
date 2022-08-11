@@ -10,7 +10,7 @@
                 class="image"
                 :style="{
                     backgroundImage:
-                        'url(http://127.0.0.1:8000/tmp_images/' +
+                        'url(http://127.0.0.1:8000/file_upload/' +
                         image.src +
                         ')',
                 }"
@@ -81,7 +81,7 @@ export default {
 };
 </script>
 <style scoped lang="scss">
-.friend {
+.user {
     border-radius: 5px;
     box-shadow: 0 1px 3px rgba(26, 26, 26, 0.05) !important;
     text-align: left;

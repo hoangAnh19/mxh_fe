@@ -3,7 +3,7 @@
         <div class="avatar">
             <img
                 v-if="user.avatar"
-                :src="'http://127.0.0.1:8000/tmp_images/' + user.avatar"
+                :src="'http://127.0.0.1:8000/file_upload/' + user.avatar"
             />
             <img v-else src="@/assets/image/default-user-avatar.png" />
         </div>
@@ -19,7 +19,7 @@
             <div v-if="rol == 2">Kiểm duyệt viên</div>
         </div>
         <div class="control d-flex">
-            <div v-if="isManager && friend_ !== -1">
+            <div v-if="isManager">
                 <div
                     class="btn btn-outline-dark mx-2"
                     style="position: relative"
@@ -32,7 +32,7 @@
                     <div
                         v-if="optionManager"
                         v-click-outside="closeOptionManager"
-                        class="options-friend"
+                        class="options-user"
                         style="width: 180px"
                     >
                         <div
@@ -75,27 +75,19 @@
                         <div
                             style="border-bottom: 2px solid #f2f2f2"
                             v-on:click="kickMember"
-                            v-if="sta !== config.member.status.prevent"
+                            v-if="sta == config.member.status.member"
                         >
                             Kick khỏi phòng/ban
-                        </div>
-                        <div
-                            v-on:click="preventMember"
-                            v-if="sta !== config.member.status.prevent"
-                        >
-                            Chặn
-                        </div>
-                        <div
-                            v-on:click="cancelPreventMember"
-                            v-if="sta == config.member.status.prevent"
-                        >
-                            Bỏ chặn
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div
+        style="border-bottom: 2px solid #f2f2f2"
+        v-if="sta == config.member.status.pending"
+    ></div>
 </template>
 <script>
 // @ is an alias to /src
@@ -110,41 +102,10 @@ export default {
         status: null,
         isManager: Boolean,
     },
-    created() {
-        if ((this.user["relationship2"] ?? []).length) {
-            this.friend_ = this.user["relationship2"][0]["type_friend"];
-        } else if ((this.user["relationship1"] ?? []).length) {
-            switch (this.user["relationship1"][0]["type_friend"]) {
-                case 0:
-                    this.friend_ = 0;
-                    break;
-                case 1:
-                    this.friend_ = 1;
-                    break;
-                case 2:
-                    this.friend_ = 3;
-                    break;
-                case 3:
-                    this.friend_ = 2;
-                    break;
-                case 5:
-                    this.friend_ = -1;
-                    break;
-            }
-        } else {
-            if (
-                this.user.id === JSON.parse(localStorage.getItem("userInfo")).id
-            ) {
-                this.friend_ = -1;
-            } else this.friend_ = 0;
-        }
-    },
+    created() {},
     data() {
         return {
             config: config,
-            friend_: -1,
-            optionFriend: false,
-            optionFeedback: false,
             optionManager: false,
             rol: this.role,
             sta: this.status,
@@ -153,22 +114,6 @@ export default {
     watch: {},
     computed: {},
     methods: {
-        addFriend() {
-            Axios.post("relationship/request_friend", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.friend_ = 2;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
         browserMember() {
             if (confirm("Bạn có muốn duyệt thành viên này")) {
                 Axios.post("group/browser-member", {
@@ -208,105 +153,11 @@ export default {
                     });
             }
         },
-        cancelPreventMember() {
-            if (confirm("Bạn có muốn bỏ chặn thành viên này")) {
-                Axios.post("group/cancel-prevent-member", {
-                    member_id: this.user.id,
-                    group_id: this.$route.params.groupId,
-                })
-                    .then((response) => {
-                        if (response.data.status == "success") {
-                            EventBus.$emit("deleteMember", this.user.id);
-                        } else {
-                            alert(response.data.message);
-                        }
-                        this.optionManager = false;
-                    })
-                    .catch(() => {
-                        this.optionManager = false;
 
-                        alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                    });
-            }
-        },
-        preventMember() {
-            if (confirm("Bạn có muốn chặn thành viên này")) {
-                Axios.post("group/prevent-member", {
-                    member_id: this.user.id,
-                    group_id: this.$route.params.groupId,
-                })
-                    .then((response) => {
-                        if (response.data.status == "success") {
-                            EventBus.$emit("deleteMember", this.user.id);
-                        } else {
-                            alert(response.data.message);
-                        }
-                        this.optionManager = false;
-                    })
-                    .catch(() => {
-                        this.optionManager = false;
-
-                        alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                    });
-            }
-        },
-        closeOptionFriend() {
-            this.optionFriend = false;
-        },
-        closeOptionFeedback() {
-            this.optionFeedback = false;
-        },
         closeOptionManager() {
             this.optionManager = false;
         },
-        unFriend() {
-            Axios.post("relationship/cancel_friend", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.friend_ = 0;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
-        unRequestFriend() {
-            Axios.post("relationship/cancel_request_friend", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.friend_ = 0;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
-        acceptFriend() {
-            Axios.post("relationship/accept_friend", {
-                user_id: this.user.id,
-            })
-                .then((response) => {
-                    if (response.data.status == "success") {
-                        this.friend_ = 1;
-                    } else {
-                        alert(response.data.message);
-                        this.$router.push({ name: "Home" });
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
+
         assign(role) {
             var confi;
             switch (role) {
@@ -334,7 +185,6 @@ export default {
                 })
                     .then((response) => {
                         if (response.data.status == "success") {
-                            this.friend_ = 1;
                             this.rol = role;
                         } else {
                             alert(response.data.message);
@@ -368,7 +218,7 @@ export default {
     color: black;
     text-decoration: none;
 }
-.options-friend {
+.options-user {
     background: white;
     padding: 10px;
     border-radius: 5px;

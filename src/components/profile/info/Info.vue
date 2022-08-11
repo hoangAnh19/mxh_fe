@@ -286,7 +286,7 @@
                 <div v-if="!change.workplace" class="item row">
                     <b-col class="label fw-bold" cols="4">
                         <b-icon icon="briefcase"></b-icon>
-                        Vị trí công việc</b-col
+                        Đơn vị</b-col
                     >
                     <b-col cols="5">{{
                         user.workplace ?? "Chưa cập nhập"
@@ -303,7 +303,7 @@
                 <div v-else class="item row">
                     <b-col class="label fw-bold" cols="4">
                         <b-icon icon="briefcase"></b-icon>
-                        Vị trí công việc</b-col
+                        Đơn vị</b-col
                     >
                     <b-col cols="5"
                         ><input
@@ -530,7 +530,7 @@ export default {
             }
             if (this.isErrors) return;
 
-            Axios.put("user", object).then((response) => {
+            Axios.post("user", object).then((response) => {
                 if (response.data.status == "success") {
                     this.change = {
                         username: false,
@@ -550,9 +550,9 @@ export default {
                     if (response.data.errors.phone)
                         this.errors.phone = response.data.errors.phone[0];
                 }
-                console.log("clickkk");
             });
         },
+      
     },
     props: {
         user: Object,

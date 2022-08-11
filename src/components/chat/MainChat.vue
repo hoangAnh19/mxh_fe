@@ -4,7 +4,7 @@
             <div class="avatar">
                 <img
                     v-if="chat.avatar"
-                    :src="'http://127.0.0.1:8000/tmp_images/' + chat.avatar"
+                    :src="'http://127.0.0.1:8000/file_upload/' + chat.avatar"
                 />
                 <img v-else src="@/assets/image/default-user-avatar.png" />
             </div>
@@ -19,7 +19,7 @@
                         <img
                             v-if="chat.avatar"
                             :src="
-                                'http://127.0.0.1:8000/tmp_images/' +
+                                'http://127.0.0.1:8000/file_upload/' +
                                 chat.avatar
                             "
                         />
@@ -177,7 +177,16 @@ export default {
             isBottom: false,
             ajaxLock: false,
             file: "",
-            arrayFileName: ["pdf", "docx", "png", "jpg", "mp3", "mp4", "jfif"],
+            arrayFileName: [
+                "pdf",
+                "docx",
+                "png",
+                "jpg",
+                "jpeg",
+                "mp3",
+                "mp4",
+                "jfif",
+            ],
         };
     },
     watch: {

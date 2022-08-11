@@ -19,7 +19,7 @@
                             <img
                                 v-if="owner.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:8000/file_upload/' +
                                     owner.avatar
                                 "
                             />
@@ -61,7 +61,7 @@
                             class="image"
                             v-for="image in images"
                             :key="image"
-                            :src="'http://127.0.0.1:8000/tmp_images/' + image"
+                            :src="'http://127.0.0.1:8000/file_upload/' + image"
                         />
                     </div>
                 </div>
@@ -147,7 +147,7 @@ export default {
             if (this.typeImage === 1) object.avatar = this.images[0];
             else object.cover = this.images[0];
             console.log(object);
-            await Axios.put("user/uploadAvatar", object)
+            await Axios.post("user/uploadAvatar", object)
                 .then((response) => {
                     if (response.data.status == "success") {
                         this.images = [];

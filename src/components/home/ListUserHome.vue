@@ -1,5 +1,5 @@
 <template>
-    <div class="list-friend-home">
+    <div class="list-user-home">
         <div class="header d-flex justify-content-between">
             <div class="title">Danh bạ trực tuyến</div>
             <div class="d-flex">
@@ -13,17 +13,13 @@
         <div class="body">
             <div v-if="!listUser.length" class="no-message"></div>
             <div v-else>
-                <div
-                    v-for="user in listUser"
-                    :key="user"
-                    v-on:click="selectNewMessage(user)"
-                >
+                <div v-for="user in listUser" :key="user">
                     <div v-if="user" class="d-flex user-online">
                         <div class="avatar">
                             <img
                                 v-if="user.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:8000/file_upload/' +
                                     user.avatar
                                 "
                             />
@@ -54,7 +50,6 @@
 // @ is an alias to /src
 // import Axios from "@/components/Axios.js";
 import EventBus from "@/EventBus.js";
-import Axios from "@/components/Axios.js";
 
 export default {
     name: "ListUserHome",
@@ -63,22 +58,13 @@ export default {
         user: Object,
     },
 
-    mounted() {
-        EventBus.$on("closeUserDialog", () => {
-            this.modalDialog = false;
-        });
-    },
     async created() {
-        var app = this;
         EventBus.$emit("get_list_on_off");
         EventBus.$on("on-off", (data) => {
-            app.listUser[data.id] = data.user;
+            this.listUser[data.id] = data.user;
         });
         EventBus.$on("list_on_off", (data) => {
             this.listUser = data;
-        });
-        EventBus.$on("listUser", (data) => {
-            this.listUserClick = data;
         });
     },
     data() {
@@ -86,67 +72,10 @@ export default {
             countUser: 0,
             listUser: [],
             openChat: false,
-            listUserClick: [],
             modalDialog: false,
         };
     },
-    methods: {
-        async getMessage(id, page) {
-            await Axios.get("chat/getMessage?id=" + id + "&page=" + page)
-                .then((res) => {
-                    if (res.data.status == "success") {
-                        if (!this.listUser[id].message) {
-                            this.listUser[id].message = res.data.data;
-                        } else {
-                            this.listUser[id].message = this.listUser[
-                                id
-                            ].message.concat(res.data.data);
-                        }
-                    }
-                })
-                .catch(() => {
-                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                });
-        },
-        async selectNewMessage(user) {
-            var user_id = user.id;
-            var app = this;
-            if (!app.listUser[user_id]) {
-                await Axios.get(`user?user_id=${user_id}`).then((response) => {
-                    if (response.data.status == "success") {
-                        app.listUser[user_id] = { ...response.data.data };
-                        console.log(app.listUser[user_id]);
-                        app.listUser[user_id].connect = false;
-                        app.listUser[user_id].time_of = null;
-                        EventBus.$emit("on-off", {
-                            id: user_id,
-                            user: app.listUser[user_id],
-                        });
-                    }
-                });
-            }
-            app.modalDialog = true;
-            app.listUser[user_id].select = true;
-            if (!app.listUser[user_id].message) {
-                Axios.get("chat/getByIdUser?user_id=" + user_id)
-                    .then((res) => {
-                        var item = res.data;
-                        if (item.user_1) {
-                            app.listUser[user_id].is_one = false;
-                        } else {
-                            app.listUser[user_id].is_one = true;
-                        }
-                    })
-                    .catch(() => {
-                        alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
-                        this.ajaxLock = false;
-                    });
-                this.getMessage(user_id, 1);
-                console.log("app", app.listUser[user_id].message);
-            }
-            this.createNewMessage = false;
-        },
-    },
+    methods: {},
     computed: {},
 };
 </script>
@@ -156,7 +85,7 @@ export default {
     font-weight: 600;
     font-size: 16px;
 }
-.list-friend-home {
+.list-user-home {
     position: fixed;
     right: 0;
     top: 70px;
@@ -168,15 +97,15 @@ export default {
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
 }
-.list-friend-home:hover::-webkit-scrollbar {
+.list-user-home:hover::-webkit-scrollbar {
     width: 5px !important;
     background: #f2f2f2;
 }
-.list-friend-home::-webkit-scrollbar {
+.list-user-home::-webkit-scrollbar {
     width: 5px !important;
     background: #f2f2f2;
 }
-.list-friend-home:hover::-webkit-scrollbar-thumb {
+.list-user-home:hover::-webkit-scrollbar-thumb {
     background: #646668;
     height: 100px;
     border-radius: 5px;

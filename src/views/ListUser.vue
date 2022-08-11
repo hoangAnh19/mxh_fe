@@ -27,7 +27,7 @@ export default {
     },
     data() {
         return {
-            component: 3,
+            component: 1,
         };
     },
     created() {

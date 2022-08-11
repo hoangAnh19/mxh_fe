@@ -8,7 +8,7 @@
                     <img
                         v-if="owner.avatar"
                         :src="
-                            'http://127.0.0.1:8000/tmp_images/' + owner.avatar
+                            'http://127.0.0.1:8000/file_upload/' + owner.avatar
                         "
                     />
                     <img v-else src="@/assets/image/default-user-avatar.png" />
@@ -29,7 +29,7 @@
                             <img
                                 v-if="owner.avatar"
                                 :src="
-                                    'http://127.0.0.1:8000/tmp_images/' +
+                                    'http://127.0.0.1:8000/file_upload/' +
                                     owner.avatar
                                 "
                             />
@@ -71,7 +71,7 @@
                             class="image"
                             v-for="image in images"
                             :key="image"
-                            :src="'http://127.0.0.1:8000/tmp_images/' + image"
+                            :src="'http://127.0.0.1:8000/file_upload/' + image"
                         />
                     </div>
                 </div>
@@ -82,6 +82,13 @@
                         style="width: 100%"
                     >
                         Thêm ảnh
+                    </button>
+                    <button
+                        class="btn btn-secondary mt-1"
+                        v-on:click="selectButtonVideo"
+                        style="width: 100%"
+                    >
+                        Thêm video, file tài liệu
                     </button>
                     <button
                         class="btn btn-primary mt-1"
@@ -95,6 +102,12 @@
                         hidden
                         type="file"
                         v-on:change="uploadImage($event)"
+                    />
+                    <input
+                        ref="inputVideo"
+                        hidden
+                        type="file"
+                        v-on:change="uploadVideo($event)"
                     />
                 </div>
             </div>
@@ -175,22 +188,44 @@ export default {
         selectButtonImage() {
             this.$refs.inputImage.click();
         },
+        selectButtonVideo() {
+            this.$refs.inputVideo.click();
+        },
         uploadImage(event) {
-            // if (
-            //     !(
-            //         event.target.files[0].type === "image/jpeg" ||
-            //         event.target.files[0].type === "image/png"
-            //     )
-            // ) {
-            //     alert("Ảnh không đúng định dạng");
-            //     return;
-            // }
+            if (
+                !(
+                    event.target.files[0].type === "image/jpeg" ||
+                    event.target.files[0].type === "image/png"
+                )
+            ) {
+                alert("Ảnh không đúng định dạng");
+                return;
+            }
             var formData = new FormData();
-            formData.append("file", event.target.files[0]);
-            Axios.post("image1/upload", formData)
+            formData.append("image", event.target.files[0]);
+            Axios.post("image/upload", formData)
                 .then((response) => {
                     if (response.data.status == "success") {
                         this.images.push(response.data.data);
+                        alert("Đã tải ảnh lên thành công");
+                    } else {
+                        alert(response.data.message);
+                    }
+                })
+                .catch(() => {
+                    alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
+                });
+        },
+
+        uploadVideo(event) {
+            var formData = new FormData();
+            formData.append("file", event.target.files[0]);
+            Axios.post("file/upload", formData)
+                .then((response) => {
+                    if (response.data.status == "success") {
+                        this.message = response.data.data;
+                        this.images.push(response.data.data);
+                        alert("Đã tải file lên thành công");
                     } else {
                         alert(response.data.message);
                     }

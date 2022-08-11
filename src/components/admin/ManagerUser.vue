@@ -172,24 +172,7 @@ export default {
             });
         },
 
-        async banUser(id) {
-            Axios.put("admin/banUser?id=" + id).then((response) => {
-                if (response.data.status == "success") {
-                    console.log("success");
-                }
-            });
-            await this.getListuser();
-        },
-
-        async activeUser(id) {
-            Axios.put("admin/activeUser?id=" + id).then((response) => {
-                if (response.data.status == "success") {
-                    console.log("success");
-                }
-            });
-            await this.getListuser();
-        },
-        async assign($user_id, $role) {
+        assign($user_id, $role) {
             this.user_id = $user_id;
             this.role = $role;
             var confi;
@@ -228,7 +211,7 @@ export default {
             }
             console.log(confi);
             if (confi) {
-                Axios.put(
+                Axios.post(
                     "admin/assignRole?user_id=" +
                         this.user_id +
                         "&role=" +
@@ -243,7 +226,7 @@ export default {
                         alert("Đã có lỗi xảy ra, vui lòng thử lại sau");
                     });
             }
-            await this.getListuser();
+            this.getListuser(1);
         },
     },
 };
